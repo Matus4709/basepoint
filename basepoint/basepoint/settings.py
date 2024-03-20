@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'app',
 ]
 
 MIDDLEWARE = [
@@ -66,7 +67,7 @@ TEMPLATES = [
         },
     },
 ]
-
+AUTH_USER_MODEL = "app.Account"
 WSGI_APPLICATION = 'basepoint.wsgi.application'
 
 
@@ -75,8 +76,12 @@ WSGI_APPLICATION = 'basepoint.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'basepoint',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',   # Jeśli baza danych działa lokalnie
+        'PORT': '3306',            # Domyślny port MySQL (3306)
     }
 }
 

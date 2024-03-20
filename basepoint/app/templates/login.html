@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+</head>
+<body>
+    {{user}}
+    {% if user.is_authenticated %}
+    Zalogowano
+    {% else %}
+    Nie Zalogowano
+    {% endif %}
+    <h2>Login</h2>
+    <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <label for="id_email">Email:</label>
+    <input type="email" id="id_email" name="email" required>
+    <label for="id_password">Password:</label>
+    <input type="password" id="id_password" name="password" required>
+    <button type="submit">Login</button>
+</form>
+</body>
+</html>
