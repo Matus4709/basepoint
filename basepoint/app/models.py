@@ -29,7 +29,9 @@ class Account(AbstractBaseUser, PermissionsMixin):
     company_name = models.CharField(max_length=100, null=True)
     phone_number = models.CharField(max_length=20, null=True)
     name_contact = models.CharField(max_length=50, null=True)
-    surname_contact = models.CharField(max_length=50, null=True)
+    city = models.CharField(max_length=50, null=True)
+    address = models.CharField(max_length=50, null=True)
+    postcode = models.CharField(max_length=6, null=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
