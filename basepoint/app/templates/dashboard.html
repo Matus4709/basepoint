@@ -1,0 +1,31 @@
+
+{% if user_type == 'owner' %}
+    <p>Witaj właścicielu!</p>
+    <h2>Informacje o koncie właściciela:</h2>
+    {% for account in account_data %}
+        <p>Email: {{ account.email }}</p>
+        <p>Country: {{ account.country }}</p>
+        <p>NIP: {{ account.NIP }}</p>
+        <p>Company Name: {{ account.company_name }}</p>
+    
+    {% endfor %}
+    
+    
+
+{% elif user_type == 'employee' %}
+    <p>Witaj pracowniku!</p>
+    <h2>Informacje o koncie właściciela:</h2>
+    {% for account in data %}
+        <p>Kraj: {{ account.country }}</p>
+        <p>Telefon: {{ account.phone_number }}</p>
+        <p>NIP: {{ account.NIP }}</p>
+        <p>Nazwa firmy: {{ account.company_name }}</p>
+        <p>Osoba kontaktowa: {{ account.name_contact }}</p>
+        <p>Miasto: {{ account.city }}</p>
+        <p>Adres: {{ account.address }}</p>
+        <p>Kod pocztowy: {{ account.postcode }}</p>
+    
+    {% endfor %}
+{% else %}
+    <p>Witaj gościu!</p>
+{% endif %}

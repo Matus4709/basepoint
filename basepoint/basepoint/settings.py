@@ -67,8 +67,9 @@ TEMPLATES = [
         },
     },
 ]
-AUTH_USER_MODEL = "app.Account"
+
 WSGI_APPLICATION = 'basepoint.wsgi.application'
+
 
 
 # Database
@@ -82,6 +83,10 @@ DATABASES = {
         'PASSWORD': '',
         'HOST': 'localhost',   # Jeśli baza danych działa lokalnie
         'PORT': '3306',            # Domyślny port MySQL (3306)
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+            'sql_mode': 'STRICT_TRANS_TABLES',
+        },
     }
 }
 
@@ -126,3 +131,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'app.Worker'
