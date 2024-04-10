@@ -2,11 +2,6 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 from django.contrib.auth.hashers import make_password
 
-USER_TYPE_CHOICES = (
-    ('owner', 'Właściciel sklepu'),
-    ('employee', 'Pracownik'),
-)
-
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -14,6 +9,7 @@ class CustomUserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
+        user.is_active = False
         user.save(using=self._db)
         return user
 
@@ -48,65 +44,25 @@ class Account(AbstractBaseUser, PermissionsMixin):
     city = models.CharField(max_length=50, null=True)
     address = models.CharField(max_length=50, null=True)
     postcode = models.CharField(max_length=6, null=True)
+    user_type = models.CharField(max_length=10, default='owner')
+    
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default='owner')
+    is_active = models.BooleanField(default=True)
     groups = models.ManyToManyField(Group, related_name='account_set')  # Dodaj related_name
     user_permissions = models.ManyToManyField(Permission, related_name='account_set')  # Dodaj related_name
 
-    def get_owner_data(self):
-        owner_data = {
-            'NIP': self.NIP,
-            'company_name': self.company_name,
-            'name_contact': self.name_contact,
-            # Dodaj inne pola, które chcesz pobierać
-        }
-        return owner_data
-    
+    #Worker
+    name = models.CharField(max_length=50,null=True,blank=True)
+    last_name = models.CharField(max_length=50,null=True,blank=True)
+    owner_id = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
 
     def __str__(self):
         return self.email
-
-class Worker(AbstractBaseUser):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='worker')
-    name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    email = models.EmailField(unique=True)
-    user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default='employee')
-
-    USERNAME_FIELD = 'email'
-
-    objects = CustomUserManager()
-
-    def __str__(self):
-        return f"{self.name} {self.last_name}"
-
-    def get_account_data(self):
-        account_data = {
-            'email': self.account.email,
-            'country': self.account.country,
-            'NIP': self.account.NIP,
-            'company_name': self.account.company_name,
-            # Dodaj inne pola, które chcesz pobierać
-        }
-        return account_data
-    
-    def set_password(self, raw_password):
-        self.password = make_password(raw_password)
-
-    def get_account_data(self):
-        account_data = {
-            'email': self.account.email,
-            'country': self.account.country,
-            'NIP': self.account.NIP,
-            'company_name': self.account.company_name,
-            # Dodaj inne pola, które chcesz pobierać
-        }
-        return account_data
-
 
 class Actions(models.Model):
     action_taken = models.CharField(max_length=100)
