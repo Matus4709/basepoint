@@ -1,6 +1,5 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
 from django.db import models
-from django.contrib.auth.hashers import make_password
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -13,27 +12,6 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_worker(self, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', False)
-        extra_fields.setdefault('is_superuser', False)
-        extra_fields.setdefault('user_type', 'employee')  # Domyślny typ użytkownika dla pracownika
-
-        return self.create_user(email, password, **extra_fields)
-
-    def get_by_natural_key(self, email):
-        return self.get(email=email)
-
-    def create_superuser(self, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-
-    def get_owners(self):
-        return self.get_queryset().filter(user_type='owner')
-
-    def get_employees(self):
-        return self.get_queryset().filter(user_type='employee')
-    
-
 class Account(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     country = models.CharField(max_length=50, null=True)
@@ -45,17 +23,17 @@ class Account(AbstractBaseUser, PermissionsMixin):
     address = models.CharField(max_length=50, null=True)
     postcode = models.CharField(max_length=6, null=True)
     user_type = models.CharField(max_length=10, default='owner')
-    
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-    groups = models.ManyToManyField(Group, related_name='account_set')  # Dodaj related_name
-    user_permissions = models.ManyToManyField(Permission, related_name='account_set')  # Dodaj related_name
-
+    is_active = models.BooleanField(default=False)
+    activation_token = models.CharField(max_length=255, null=True, blank=True)
     #Worker
     name = models.CharField(max_length=50,null=True,blank=True)
     last_name = models.CharField(max_length=50,null=True,blank=True)
     owner_id = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+
+    groups = models.ManyToManyField(Group, related_name='account_set')  # Dodaj related_name
+    user_permissions = models.ManyToManyField(Permission, related_name='account_set')  # Dodaj related_name
 
     objects = CustomUserManager()
 
