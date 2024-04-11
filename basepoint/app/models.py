@@ -27,6 +27,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     activation_token = models.CharField(max_length=255, null=True, blank=True)
+    reset_password_token = models.CharField(max_length=255, null=True, blank=True)
     #Worker
     name = models.CharField(max_length=50,null=True,blank=True)
     last_name = models.CharField(max_length=50,null=True,blank=True)

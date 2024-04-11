@@ -6,7 +6,8 @@ from django.contrib.auth.hashers import make_password
 from django.http import HttpResponse
 import secrets
 import smtplib, ssl
-
+import os
+from dotenv import load_dotenv
 
 
 def login_view(request):
@@ -113,8 +114,7 @@ def register_view(request):
             """, [hashed_password,email,country,NIP,company_name,phone_number,name_contact,city,address,postcode,False,'owner',False,token])
         
         # Wysyłanie e-maila z potwierdzeniem
-        import os
-        from dotenv import load_dotenv
+        
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         load_dotenv(os.path.join(BASE_DIR, '.env'))
         port = os.getenv('PORT')
@@ -197,3 +197,66 @@ def dashboard(request):
     else:
         # Kod dla niezalogowanych użytkowników
         return redirect('login')
+    
+def reset_password_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        token = secrets.token_hex(20)
+
+        # Zapisanie tokena resetu do bazy danych
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                UPDATE app_account SET reset_password_token = (%s) WHERE email = (%s)
+            """, [token,email])
+        #Wysyłanie maila
+        BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        load_dotenv(os.path.join(BASE_DIR, '.env'))
+        port = os.getenv('PORT')
+        smtp_server = os.getenv('SMTP_SERVER')
+        # sender_email = os.getenv('EMAIL_HOST_USER')
+        sender_email = 'pichniarczykmarek@gmail.com'
+        smtp_password = os.getenv('EMAIL_HOST_PASSWORD')
+
+        message = """Subject: Resetowanie hasla - BASEPOINT
+
+            Witaj {email}, kliknij w ponizszy link, aby zresetowac swoje haslo:\n\n http://127.0.0.1:8000/reset-password-confirm/{token}/
+            """.format(email=email, token=token)
+        print (sender_email)
+
+
+        ssl_con = ssl.create_default_context()
+        with smtplib.SMTP_SSL(smtp_server, port, context=ssl_con) as server:
+                server.login(sender_email, smtp_password)
+                server.sendmail(sender_email, email, message)
+    
+        return HttpResponse("Sprawdź swój e-mail, aby aktywować konto.")
+
+    return render(request, 'reset_password_view.html')
+
+def reset_password(request, token):
+    with connection.cursor() as cursor:
+        # Sprawdzenie czy istnieje użytkownik z podanym tokenem aktywacyjnym
+        cursor.execute("SELECT email FROM app_account WHERE reset_password_token = %s", [token])
+        user_mail = cursor.fetchone()
+
+        if not user_mail:
+            return HttpResponse("Nieprawidłowy token resetowania hasła!")
+
+        if request.method == 'POST':
+            password1 = request.POST.get('password1')
+            password2 = request.POST.get('password2')
+
+            if password1 != password2:
+                messages.error(request, 'Hasła nie są identyczne.')
+                return redirect('login')
+            # Walidacja bezpieczeństwa hasła
+            if len(password1) < 8:
+                messages.error(request, 'Hasło jest za krótkie. Minimum 8 znaków.')
+                return redirect('login')
+            hashed_password = make_password(password1)
+            # Zmiana hasła
+            cursor.execute("UPDATE app_account SET password = %s, reset_password_token = NULL WHERE reset_password_token = %s", [hashed_password,token])
+            return HttpResponse("Twoje hasło zostało zmienione. Możesz się teraz <a href='/login'>zalogować</href>.")
+        
+    return render(request, 'reset_password_confirm.html')
+  
