@@ -5,9 +5,11 @@ from django.db import connection
 from django.contrib.auth.hashers import make_password
 from django.http import HttpResponse
 import secrets
-import smtplib, ssl
 import os
 from dotenv import load_dotenv
+
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 
 def login_view(request):
@@ -56,24 +58,21 @@ def create_worker(request):
                 """, [name,lastname,email,user_type,hashed_password,False,False,owner_user_id,token])
             
             # Wysyłanie e-maila z potwierdzeniem
-            import os
-            from dotenv import load_dotenv
             BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
             load_dotenv(os.path.join(BASE_DIR, '.env'))
-            port = os.getenv('PORT')
-            smtp_server = os.getenv('SMTP_SERVER')
-            sender_email = os.getenv('EMAIL_HOST_USER')
-            smtp_password = os.getenv('EMAIL_HOST_PASSWORD')
-
-            message = """Subject: Potwierdzenie rejestracji - BASEPOINT
-
-            Witaj {email}, kliknij w ponizszy link, aby aktywowac konto:\n\n http://127.0.0.1:8000/activate/{token}/
-            """.format(email=email, token=token)
-
-            ssl_con = ssl.create_default_context()
-            with smtplib.SMTP_SSL(smtp_server, port, context=ssl_con) as server:
-                server.login(sender_email, smtp_password)
-                server.sendmail(sender_email, email, message)
+            message = Mail(
+                from_email='pichniarczykmarek@gmail.com',
+                to_emails=email,
+                subject='Potwierdzenie rejestracji - BASEPOINT',
+                html_content='Witaj {email}, kliknij w ponizszy link, aby aktywowac konto:\n\n http://127.0.0.1:8000/activate/{token}/'.format(email=email, token=token))
+            try:
+                sg = SendGridAPIClient( os.getenv('API_SENDGRID'))
+                response = sg.send(message)
+                print(response.status_code)
+                print(response.body)
+                print(response.headers)
+            except Exception as e:
+                print(e)
             
             return HttpResponse("Sprawdź swój e-mail, aby aktywować konto.")
     else:
@@ -114,23 +113,22 @@ def register_view(request):
             """, [hashed_password,email,country,NIP,company_name,phone_number,name_contact,city,address,postcode,False,'owner',False,token])
         
         # Wysyłanie e-maila z potwierdzeniem
-        
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         load_dotenv(os.path.join(BASE_DIR, '.env'))
-        port = os.getenv('PORT')
-        smtp_server = os.getenv('SMTP_SERVER')
-        sender_email = os.getenv('EMAIL_HOST_USER')
-        smtp_password = os.getenv('EMAIL_HOST_PASSWORD')
-
-        message = """Subject: Potwierdzenie rejestracji - BASEPOINT
-
-        Witaj {email}, kliknij w ponizszy link, aby aktywowac konto:\n\n http://127.0.0.1:8000/activate/{token}/
-        """.format(email=email, token=token)
-
-        ssl_con = ssl.create_default_context()
-        with smtplib.SMTP_SSL(smtp_server, port, context=ssl_con) as server:
-            server.login(sender_email, smtp_password)
-            server.sendmail(sender_email, email, message)
+        message = Mail(
+            from_email='pichniarczykmarek@gmail.com',
+            to_emails=email,
+            subject='Potwierdzenie rejestracji - BASEPOINT',
+            html_content='Witaj {email}, kliknij w ponizszy link, aby aktywowac konto:\n\n http://127.0.0.1:8000/activate/{token}/'.format(email=email, token=token))
+        
+        try:
+            sg = SendGridAPIClient( os.getenv('API_SENDGRID'))
+            response = sg.send(message)
+            print(response.status_code)
+            print(response.body)
+            print(response.headers)
+        except Exception as e:
+            print(e)
         
         return HttpResponse("Sprawdź swój e-mail, aby aktywować konto.")
     
@@ -208,27 +206,27 @@ def reset_password_view(request):
             cursor.execute("""
                 UPDATE app_account SET reset_password_token = (%s) WHERE email = (%s)
             """, [token,email])
-        #Wysyłanie maila
+
+
+
+
+        # Wysyłanie e-maila z potwierdzeniem
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         load_dotenv(os.path.join(BASE_DIR, '.env'))
-        port = os.getenv('PORT')
-        smtp_server = os.getenv('SMTP_SERVER')
-        # sender_email = os.getenv('EMAIL_HOST_USER')
-        sender_email = 'pichniarczykmarek@gmail.com'
-        smtp_password = os.getenv('EMAIL_HOST_PASSWORD')
-
-        message = """Subject: Resetowanie hasla - BASEPOINT
-
-            Witaj {email}, kliknij w ponizszy link, aby zresetowac swoje haslo:\n\n http://127.0.0.1:8000/reset-password-confirm/{token}/
-            """.format(email=email, token=token)
-        print (sender_email)
-
-
-        ssl_con = ssl.create_default_context()
-        with smtplib.SMTP_SSL(smtp_server, port, context=ssl_con) as server:
-                server.login(sender_email, smtp_password)
-                server.sendmail(sender_email, email, message)
-    
+        message = Mail(
+            from_email='pichniarczykmarek@gmail.com',
+            to_emails=email,
+            subject='Potwierdzenie rejestracji - BASEPOINT',
+            html_content = 'Witaj {email}, kliknij w poniższy link, aby zresetować swoje hasło:\n\nhttp://127.0.0.1:8000/reset-password-confirm/{token}/'.format(email=email, token=token))
+        try:
+            sg = SendGridAPIClient( os.getenv('API_SENDGRID'))
+            response = sg.send(message)
+            print(response.status_code)
+            print(response.body)
+            print(response.headers)
+        except Exception as e:
+            print(e)
+        
         return HttpResponse("Sprawdź swój e-mail, aby aktywować konto.")
 
     return render(request, 'reset_password_view.html')
