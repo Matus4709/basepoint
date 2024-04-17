@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %} 
+Lista Pracowników - BASEPOINT 
+{% endblock title %}
+{% block content %}
+<div class="container col-md-8">  
+    <div class="jumbotron jumbotron-fluid rounded mt-5" style="background-color: white;">
+      <div class="container">
+        <div class="table-responsive">
+            <table class="table ">
+              <thead>
+                <tr>
+                  <th class="p-3" scope="col">Imię i nazwisko</th>
+                  <th class="p-3" scope="col">E-mail</th>
+                  <th class="" scope="col"><a href="/create-worker/"><button type="button" class="btn btn-success">Dodaj pracownika</button></a>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for worker in workers %}
+
+                <tr>
+                <form action="{% url 'delete_worker' worker.id %}" method="post">
+                    {% csrf_token %}
+                  <td class="p-3">{{ worker.name }} {{ worker.last_name }}</td>
+                  <td class="p-3">{{ worker.email }}</td>
+                  <td class="p-3"><button type="submit" class="btn btn-danger">Usuń konto</button></td>
+                </form>
+                </tr>
+                {% endfor %}
+              </tbody>
+          
+            </table>
+          </div>
+      </div>
+    </div>
+  
+  </div>
+
+{% endblock content %}

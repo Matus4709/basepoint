@@ -30,6 +30,16 @@ def login_view(request):
 
 def create_worker(request):
     user_type = request.user.user_type
+    user_id = request.user.id
+    with connection.cursor() as cursor:
+                
+                cursor.execute("SELECT * FROM app_account WHERE id = %s", [user_id])
+                rows = cursor.fetchall()
+                # Konwersja wyników z krotki na listę słowników
+                columns = [col[0] for col in cursor.description]
+                account_data = [dict(zip(columns, row)) for row in rows]
+
+
     if user_type == 'owner':
         if request.method == 'POST':
             email = request.POST.get('email')
@@ -74,11 +84,11 @@ def create_worker(request):
             except Exception as e:
                 print(e)
             
-            return HttpResponse("Sprawdź swój e-mail, aby aktywować konto.")
+            return HttpResponse("Link aktywacyjny został wysłany na adres mail.")
     else:
         return redirect('dashboard')
 
-    return render(request, 'create_worker.html')
+    return render(request, 'create_worker.html',{'user_type':user_type, 'account_data':account_data})
 
 def register_view(request):
     if request.method == 'POST':
@@ -177,19 +187,21 @@ def dashboard(request):
                 account_data = [dict(zip(columns, row)) for row in rows]
 
             return render(request, 'dashboard.html', {'user_type': user_type,'account_data':account_data})
+        
         elif user_type == 'employee':
             email = request.user.email
             owner_id = get_owner_id(email)
+            user_id = request.user.id
             with connection.cursor() as cursor:
                 
-                cursor.execute("SELECT country, NIP, company_name, phone_number, name_contact, city, address, postcode FROM app_account WHERE %s = id;", [owner_id])
+                cursor.execute("SELECT * FROM app_account WHERE %s = id;", [user_id])
                 rows = cursor.fetchall()
                 # Konwersja wyników z krotki na listę słowników
                 columns = [col[0] for col in cursor.description]
-                data = [dict(zip(columns, row)) for row in rows]
+                account_data = [dict(zip(columns, row)) for row in rows]
             
 
-            return render(request, 'dashboard.html', {'user_type': user_type,'data':data})
+            return render(request, 'dashboard.html', {'user_type': user_type,'account_data':account_data})
         else:
             pass
     else:
@@ -258,3 +270,124 @@ def reset_password(request, token):
         
     return render(request, 'reset_password_confirm.html')
   
+def workers_list(request):
+    user_type = request.user.user_type
+    user_id = request.user.id
+    if user_type == 'owner':
+        with connection.cursor() as cursor:
+                
+                cursor.execute("SELECT * FROM app_account WHERE id = %s", [user_id])
+                rows = cursor.fetchall()
+                # Konwersja wyników z krotki na listę słowników
+                columns = [col[0] for col in cursor.description]
+                account_data = [dict(zip(columns, row)) for row in rows]
+
+        with connection.cursor() as cursor:
+                
+                cursor.execute("SELECT * FROM `app_account` WHERE owner_id_id = %s", [user_id])
+                rows = cursor.fetchall()
+                # Konwersja wyników z krotki na listę słowników
+                columns = [col[0] for col in cursor.description]
+                workers_data = [dict(zip(columns, row)) for row in rows]
+    else:
+        return HttpResponse('Brak dostępu do tej opcji!')
+    return render(request, 'workers_list.html',{'workers':workers_data,'account_data':account_data})
+
+def delete_worker(request, id):
+    user_type = request.user.user_type
+    if user_type == 'owner':
+        with connection.cursor() as cursor:
+                
+                cursor.execute("SELECT * FROM app_account WHERE id = %s", [user_id])
+                rows = cursor.fetchall()
+                # Konwersja wyników z krotki na listę słowników
+                columns = [col[0] for col in cursor.description]
+                account_data = [dict(zip(columns, row)) for row in rows]
+        with connection.cursor() as cursor:
+                cursor.execute("DELETE FROM `app_account` WHERE id =  %s", [id])
+        return render(request, 'workers_list.html',{'account_data':account_data})
+    
+
+    else:
+        return HttpResponse('Brak dostępu do tej opcji!')
+    
+def my_account(request):
+    user_type = request.user.user_type
+    user_id = request.user.id
+    if user_type == 'owner' or user_type == 'employee':
+        with connection.cursor() as cursor:
+                
+                cursor.execute("SELECT * FROM app_account WHERE id = %s", [user_id])
+                rows = cursor.fetchall()
+                # Konwersja wyników z krotki na listę słowników
+                columns = [col[0] for col in cursor.description]
+                account_data = [dict(zip(columns, row)) for row in rows]
+        return render(request,'my_account.html',{'account_data':account_data,'user_type':user_type})
+    else:
+        return HttpResponse('Brak dostępu!')
+    
+def delete_account(request):
+    user_type = request.user.user_type
+    if user_type == 'owner':
+        user_id = request.user.id
+        with connection.cursor() as cursor:
+                cursor.execute("DELETE FROM `app_account` WHERE id =  %s", [user_id])
+        return HttpResponse('Usunięto konto.')
+    else:
+        return HttpResponse('Brak dostępu!')
+    
+def edit_account(request):
+    user_type = request.user.user_type
+    user_id = request.user.id
+    if user_type == 'owner':
+        with connection.cursor() as cursor:
+                
+                cursor.execute("SELECT * FROM app_account WHERE id = %s", [user_id])
+                rows = cursor.fetchall()
+                # Konwersja wyników z krotki na listę słowników
+                columns = [col[0] for col in cursor.description]
+                account_data = [dict(zip(columns, row)) for row in rows]
+
+        if request.method == 'POST':
+            email = request.POST.get('email')
+            country = request.POST.get('country')
+            NIP = request.POST.get('NIP')
+            company_name = request.POST.get('company_name')
+            address = request.POST.get('address')
+            city = request.POST.get('city')
+            postcode = request.POST.get('postcode')
+            phone_number = request.POST.get('phone_number')
+            name_contact = request.POST.get('name_contact')
+
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    UPDATE app_account
+                    SET email = %s, country = %s, NIP = %s, company_name = %s, address = %s, city = %s, postcode = %s, phone_number = %s, name_contact = %s
+                    WHERE id = %s
+                """, [email,country,NIP,company_name,address,city,postcode,phone_number,name_contact,user_id])
+            return HttpResponse('Zaktualizowano dane.')
+
+        return render(request, 'edit_account.html', {'account_data':account_data, 'user_type':user_type})
+    if user_type == 'employee':
+        with connection.cursor() as cursor:
+                
+                cursor.execute("SELECT * FROM app_account WHERE id = %s", [user_id])
+                rows = cursor.fetchall()
+                # Konwersja wyników z krotki na listę słowników
+                columns = [col[0] for col in cursor.description]
+                account_data = [dict(zip(columns, row)) for row in rows]
+
+        if request.method == 'POST':
+            name = request.POST.get('name')
+            last_name = request.POST.get('last_name')
+
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    UPDATE app_account
+                    SET name = %s, last_name = %s
+                    WHERE id = %s
+                """, [name,last_name,user_id])
+            return HttpResponse('Zaktualizowano dane.')
+        return render(request, 'edit_account_worker.html', {'account_data':account_data, 'user_type':user_type})
+    else:    
+        return HttpResponse('Brak dostępu!')

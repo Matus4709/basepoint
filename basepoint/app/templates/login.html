@@ -14,14 +14,6 @@
   <div class="jumbotron jumbotron-fluid rounded mt-5" style="background-color: white;">
     <div class="container">
       <h1 class="h5 p-2 opacity-50">Logowanie</h1>
-
-      <!-- TYMCZASOWE POMOCNICZE -->
-        <div class="lead">{% if user.is_authenticated %} 
-            {{user}}, witaj!
-            {% else %}
-            Nie zalogowano
-            {% endif %}</div>
-        <!-- TYMCZASOWE POMOCNICZE - KONIEC -->
         {% if error_message %}
             <p>{{ error_message }}</p>
         {% endif %}

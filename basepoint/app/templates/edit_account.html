@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %} 
+Edytuj konto - BASEPOINT 
+{% endblock title %}
+{% block content %}
+
+{% if user_type == 'owner' %}
+
+<div class="container col-md-6">  
+    <div class="jumbotron jumbotron-fluid rounded mt-5 p-5" style="background-color: white;">
+      <div class="container">
+        <form method="post">
+          {% csrf_token %}
+            {% for account in account_data %}
+            <div class="form-group">
+                <div class="row">
+                <label class="col-md-4 control-label p-2 fs-6 fw-bolder" for="textinput">E-mail</label>  
+                <input id="textinput" name="email" value="{{ account.email }}" class="col-md-8 border rounded p-2">
+
+                <label class="col-md-4 control-label p-2 fs-6 fw-bolder mt-3" for="textinput">Kraj</label>  
+                <input id="textinput" name="country" value="{{ account.country }}" class="col-md-8 border rounded p-2 mt-3">
+
+                <label class="col-md-4 control-label p-2 fs-6 fw-bolder mt-3" for="textinput">NIP</label>  
+                <input id="textinput" name="NIP" value="{{ account.NIP }}" class="col-md-8 border rounded p-2 mt-3">
+
+                <label class="col-md-4 control-label p-2 fs-6 fw-bolder mt-3" for="textinput">Nazwa firmy</label>  
+                <input id="textinput" name="company_name" value="{{ account.company_name }}" class="col-md-8 border rounded p-2 mt-3">
+                
+                <label class="col-md-4 control-label p-2 fs-6 fw-bolder mt-3" for="textinput">Adres</label>  
+                <input id="textinput" name="address" value="{{ account.address }}" class="col-md-8 border rounded p-2 mt-3">
+
+                <label class="col-md-4 control-label p-2 fs-6 fw-bolder mt-3" for="textinput">Miasto</label>  
+                <input id="textinput" name="city" value="{{ account.city }}" class="col-md-8 border rounded p-2 mt-3">
+
+                <label class="col-md-4 control-label p-2 fs-6 fw-bolder mt-3" for="textinput">Kod pocztowy</label>  
+                <input id="textinput" name="postcode" value="{{ account.postcode }}" class="col-md-8 border rounded p-2 mt-3">
+
+                <label class="col-md-4 control-label p-2 fs-6 fw-bolder mt-3" for="textinput">Telefon</label>  
+                <input id="textinput" name="phone_number" value="{{ account.phone_number }}" class="col-md-8 border rounded p-2 mt-3">
+
+                <label class="col-md-4 control-label p-2 fs-6 fw-bolder mt-3" for="textinput">Osoba kontaktowa</label>  
+                <input id="textinput" name="name_contact" value="{{ account.name_contact }}" class="col-md-8 border rounded p-2 mt-3">
+
+                <button type="submit" class="btn btn-success mt-3 col-md-2 offset-4">Zapisz</button>
+                
+                </div>
+            
+            </div>
+
+            {% endfor %}
+        </form>
+      </div>
+    </div>
+  </div>
+
+{% endif %}
+    
+
+
+{% endblock content %}
