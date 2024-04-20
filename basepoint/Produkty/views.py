@@ -11,7 +11,6 @@ def getAllCategory(request):
 
 
 def getOneCategory(request, id): #id
-
     #getAllCategoryName = Kategories.objects.all() #  (request) ->, -> (getAllCategoryName) (to co będzie wyswietlane decydujemy w modelu w tym przypadku name)
     #jeden = Kategories.objects.get(pk=1) #kategoria o danym id
     #getCategoryProducts = Products.objects.filter(kategory=5) # Pobierz produkty pod daną kategorią
@@ -19,8 +18,28 @@ def getOneCategory(request, id): #id
     return HttpResponse(getCategoryName.name)
 
 
-
-def getAll(request):
+def getAllProducts(request):
     allProducts = Products.objects.all()
-    return HttpResponse(allProducts)
+    data = {'produkty': allProducts}
+    return render(request, 'allProductsView.html', data)
+
+
+def getOneProduct(request, id):
+    getProduct = Products.objects.get(pk=id)
+    data = {'getProduct': getProduct}
+    return render(request,'specificProduct.html',data)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
