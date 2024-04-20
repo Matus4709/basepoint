@@ -12,6 +12,8 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 import requests
 from django.conf import settings
+import json
+
 
 def login_view(request):
     if request.method == 'POST':
@@ -391,62 +393,71 @@ def edit_account(request):
     else:    
         return HttpResponse('Brak dostępu!')
     
-
-
-import requests
-import json
-
 CLIENT_ID = settings.ALLEGRO_CLIENT_ID
 CLIENT_SECRET = settings.ALLEGRO_CLIENT_SECRET
 TOKEN_URL = "https://allegro.pl.allegrosandbox.pl/auth/oauth/token"
 
 def get_access_token(request):
-    try:
-        data = {'grant_type': 'client_credentials'}
-        access_token_response = requests.post(TOKEN_URL, data=data, verify=False,
-                                              allow_redirects=False, auth=(CLIENT_ID, CLIENT_SECRET))
-        tokens = json.loads(access_token_response.text)
-        access_token = tokens['access_token']
-        
-        # Zapisanie tokena dostępu w sesji
-        request.session['access_token'] = access_token
-        return access_token
-    except requests.exceptions.HTTPError as err:
-        raise SystemExit(err)
-
+    if request.user.is_authenticated:
+        try:
+            data = {'grant_type': 'client_credentials'}
+            access_token_response = requests.post(TOKEN_URL, data=data, verify=False,
+                                                allow_redirects=False, auth=(CLIENT_ID, CLIENT_SECRET))
+            tokens = json.loads(access_token_response.text)
+            access_token = tokens['access_token']
+            
+            # Zapisanie tokena dostępu w sesji
+            request.session['access_token'] = access_token
+            return access_token
+        except requests.exceptions.HTTPError as err:
+            raise SystemExit(err)
+    else:
+        return redirect('welcome')
 def offers(request):
-    access_token = request.session.get('access_token')
-    print(access_token)
-    if not access_token:
-        # Jeśli brakuje tokena dostępu, uzyskaj nowy
-        access_token = get_access_token(request)
-    
-    headers = {
-        'Authorization': f'Bearer {access_token}',
-        'Accept': 'application/vnd.allegro.public.v1+json',
-    }
-    
-    response = requests.get('https://api.allegro.pl./order/events', headers=headers)
-    
-    # Sprawdzenie odpowiedzi
-    if response.status_code != 200:
-        print(response.status_code)
-        return render(request, 'error.html', {'message': 'Nie udało się pobrać zamówień z Allegro.'})
+    if request.user.is_authenticated:
+        access_token = request.session.get('access_token')
+        print(access_token)
+        if not access_token:
+            # Jeśli brakuje tokena dostępu, uzyskaj nowy
+            access_token = get_access_token(request)
         
-    offers_data = response.json()
-    offers = offers_data['events']
-    
-    return render(request, 'index.html', {'offers': offers})
+        headers = {
+            'Authorization': f'Bearer {access_token}',
+            'Accept': 'application/vnd.allegro.public.v1+json',
+        }
+        
+        response = requests.get('https://api.allegro.pl./order/events', headers=headers)
+        
+        # Sprawdzenie odpowiedzi
+        if response.status_code != 200:
+            print(response.status_code)
+            return render(request, 'error.html', {'message': 'Nie udało się pobrać zamówień z Allegro.'})
+            
+        offers_data = response.json()
+        offers = offers_data['events']
+        
+        return render(request, 'index.html', {'offers': offers})
+    else:
+            return redirect('welcome')
 
 def orders_list(request):
-    return render(request,'orders/orders-list.html')
+    if request.user.is_authenticated:
+        return render(request,'orders/orders-list.html')
+    else:
+        return redirect('welcome')
 
 def invoices(request):
-    return render(request, 'orders/invoices.html')
-
+    if request.user.is_authenticated:
+        return render(request, 'orders/invoices.html')
+    else:
+       return redirect('welcome')
+   
 def statistics(request):
-    return render(request, 'orders/statistics.html')
-
+    if request.user.is_authenticated:
+        return render(request, 'orders/statistics.html')
+    else:
+        return redirect('welcome')
+    
 def welcome(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
