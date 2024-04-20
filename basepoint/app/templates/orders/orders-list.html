@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %} 
+Lista zamówień - BASEPOINT 
+{% endblock title %}
+{% block content %}
+
+<div class="container">
+    <div class="content mt-5 col-md-10 offset-1 bg-light rounded">
+        <div class="row ">
+            <div class="col-md-3 offset-1 pt-2">
+                <p class="fw-bold fw-1" style="opacity: 50%;">
+                    <li class="nav-item dropdown " style="list-style-type: none;">
+                        <a class="nav-link dropdown-toggle fw-bold fw-1" style="opacity: 50%;" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Zamówienia</a>
+                        <ul class="dropdown-menu text-center">
+                          <li><a class="dropdown-item " href="#">Nowe</a></li>
+                          <li><a class="dropdown-item" href="#">Do wysłania</a></li>
+                          <li><a class="dropdown-item" href="#">Wysłane</a></li>
+                          <li><a class="dropdown-item" href="#">Anulowane</a></li>
+                          <li><a class="dropdown-item" href="#">Kosz</a></li>
+                        </ul>
+                      </li>
+                </p>
+            </div>
+            <div class="col-md-6 offset-1">
+                <form method="post">
+                    <div class="form-group row mt-3">
+                      <label for="text" class="col-3 col-form-label"></label> 
+                      <div class="col-8 ">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <div class="input-group-text">
+                              <i class="fa fa-search p-1"></i>
+                            </div>
+                          </div> 
+                          <input id="text" name="search-orders" placeholder="Szukaj..." type="text" class="form-control">
+                        </div>
+                      </div>
+                    </div> 
+                </form>
+            </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <hr style="opacity: 25%;">
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-10 offset-1">
+                    <table class="table text-center">
+                        <thead>
+                          <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Numer</th>
+                            <th scope="col">Imie i nazwisko</th>
+                            <th scope="col">Przedmioty</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Kwota</th>
+                            <th scope="col">Wysyłka</th>
+                            <th scope="col">Data</th>
+                            <th scope="col">PDF</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th>
+                                <li class="nav-item dropdown "style="list-style-type:none;">
+                                    <a class="nav-link dropdown-toggle btn btn-success p-1 text-light fw-light" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Status</a>
+                                    <ul class="dropdown-menu text-center">
+                                      <li><a class="dropdown-item text-success" href="#">Nowe</a></li>
+                                      <li><a class="dropdown-item text-success" href="#">Do wysłania</a></li>
+                                      <li><a class="dropdown-item text-success" href="#">Wysłane</a></li>
+                                      <li><a class="dropdown-item text-success" href="#">Anulowane</a></li>
+                                    </ul>
+                                  </li>
+                            </th>
+                            <!-- <th><button class="btn btn-success">Status</button></th> -->
+                            <td>Numer</td>
+                            <td>Imie i nazwisko</td>
+                            <td>Przedmioty</td>
+                            <td>Nowe</td>
+                            <td>310 PLN</td>
+                            <td>InPost Paczkomaty</td>
+                            <td>24/02/2024</td>
+                            <td><a href="#" style="color: black;"><i class="fa fa-download"></i></a></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+        
+    </div>
+</div>
+
+{% endblock content %}

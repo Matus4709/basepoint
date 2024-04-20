@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %} 
+Lista zamówień - BASEPOINT 
+{% endblock title %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 offset-1 rounded shadow bg-light mt-5" >
+            <div class="row mt-3">
+                <div class="col-md-8 offset-2">
+                    <select class="form-select" aria-label="Default select example">
+                        <option selected>Zakres</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                      </select>
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-md-8 offset-2">
+                    <select class="form-select" aria-label="Default select example">
+                        <option selected>Zakres</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                      </select>
+                </div>
+            </div>
+            <div class="row mt-3 mb-3">
+                <div class="col-md-8 offset-2">
+                    <button class="btn btn-success w-100">Pokaż</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 offset-1 rounded shadow bg-light mt-5" style="height: 200px;">
+           <div class="row">
+                <p class="fw-bold fw-1 pt-3" style="opacity: 50%;">
+                    Ilość i wartość zamówień
+                </p>
+           </div>
+           <div class="row">
+            <div class="col-md-6">
+                PyCharts_1
+            </div>
+            <div class="col-md-6">
+                PyCharts_2
+            </div>
+           </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 offset-1 rounded shadow bg-light mt-5" style="height: 200px;">
+            <p class="fw-bold fw-1 pt-3" style="opacity: 50%;">
+                Zamówień
+            </p>
+            <p class="fw-normal" style="opacity: 50%; margin-top: -20px;">
+                w określonym czasie
+            </p>
+            <p class="fw-bold text-success fs-1 pt-2 text-center">0</p>
+        </div>
+        <div class="col-md-4 offset-2 rounded shadow bg-light mt-5" >
+            <p class="fw-bold fw-1 pt-3" style="opacity: 50%;">
+                Podsumowanie
+            </p>
+            <p class="fw-normal " style="opacity: 50%;">
+                Łączna wartość: <span class="ms-5 ps-5">0,00 PLN</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

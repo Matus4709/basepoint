@@ -10,7 +10,8 @@ from dotenv import load_dotenv
 
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-
+import requests
+from django.conf import settings
 
 def login_view(request):
     if request.method == 'POST':
@@ -160,7 +161,7 @@ def activate(request, token):
 
 def logout_view(request):
     logout(request)
-    return redirect('login')  # Przykładowa nazwa strony logowania
+    return redirect('welcome')  # Przykładowa nazwa strony logowania
 
 def get_owner_id(email):
     with connection.cursor() as cursor:
@@ -218,9 +219,6 @@ def reset_password_view(request):
             cursor.execute("""
                 UPDATE app_account SET reset_password_token = (%s) WHERE email = (%s)
             """, [token,email])
-
-
-
 
         # Wysyłanie e-maila z potwierdzeniem
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -295,6 +293,7 @@ def workers_list(request):
 
 def delete_worker(request, id):
     user_type = request.user.user_type
+    user_id = request.user.id
     if user_type == 'owner':
         with connection.cursor() as cursor:
                 
@@ -391,3 +390,64 @@ def edit_account(request):
         return render(request, 'edit_account_worker.html', {'account_data':account_data, 'user_type':user_type})
     else:    
         return HttpResponse('Brak dostępu!')
+    
+
+
+import requests
+import json
+
+CLIENT_ID = settings.ALLEGRO_CLIENT_ID
+CLIENT_SECRET = settings.ALLEGRO_CLIENT_SECRET
+TOKEN_URL = "https://allegro.pl.allegrosandbox.pl/auth/oauth/token"
+
+def get_access_token(request):
+    try:
+        data = {'grant_type': 'client_credentials'}
+        access_token_response = requests.post(TOKEN_URL, data=data, verify=False,
+                                              allow_redirects=False, auth=(CLIENT_ID, CLIENT_SECRET))
+        tokens = json.loads(access_token_response.text)
+        access_token = tokens['access_token']
+        
+        # Zapisanie tokena dostępu w sesji
+        request.session['access_token'] = access_token
+        return access_token
+    except requests.exceptions.HTTPError as err:
+        raise SystemExit(err)
+
+def offers(request):
+    access_token = request.session.get('access_token')
+    print(access_token)
+    if not access_token:
+        # Jeśli brakuje tokena dostępu, uzyskaj nowy
+        access_token = get_access_token(request)
+    
+    headers = {
+        'Authorization': f'Bearer {access_token}',
+        'Accept': 'application/vnd.allegro.public.v1+json',
+    }
+    
+    response = requests.get('https://api.allegro.pl./order/events', headers=headers)
+    
+    # Sprawdzenie odpowiedzi
+    if response.status_code != 200:
+        print(response.status_code)
+        return render(request, 'error.html', {'message': 'Nie udało się pobrać zamówień z Allegro.'})
+        
+    offers_data = response.json()
+    offers = offers_data['events']
+    
+    return render(request, 'index.html', {'offers': offers})
+
+def orders_list(request):
+    return render(request,'orders/orders-list.html')
+
+def invoices(request):
+    return render(request, 'orders/invoices.html')
+
+def statistics(request):
+    return render(request, 'orders/statistics.html')
+
+def welcome(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+    return render(request, 'welcome.html')
