@@ -16,10 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from Produkty.views import getAll
+#from Produkty.views import getAll, getOneCategory
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('app.urls')),
-    path('produkty', getAll),
+    path('',include('Produkty.urls'))
 ]
