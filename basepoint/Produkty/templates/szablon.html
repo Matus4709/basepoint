@@ -16,45 +16,46 @@
 <nav class="navbar navbar-expand-lg  p-3" style="background-color: #fff;">
     <div class="collapse navbar-collapse " id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item ">
-          <a class="nav-link" style="margin-right: 2rem;" href="/">Strona Główna</a>
-        </li>
 
-        <li class="nav-item dropdown "style="margin-right: 2rem;">
-          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Zamówienia</a>
-          <ul class="dropdown-menu text-center">
-            <li><a class="dropdown-item " href="/orders-list/">Lista zamówień</a></li>
-            <li><a class="dropdown-item" href="/invoices/">Faktury</a></li>
-            <li><a class="dropdown-item" href="/statistics/">Statystyki</a></li>
-            {% comment %} <li><a class="dropdown-item" href="#">Statusy zamówień</a></li> {% endcomment %}
-          </ul>
-        </li>
+          <li class="nav-item ">
+            <a class="nav-link" style="margin-right: 2rem;" href="/">Strona Główna</a>
+          </li>
 
-        <li class="nav-item">
-          <a class="nav-link" style="margin-right: 2rem;" href="#">Produkty</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" style="margin-right: 2rem;" href="#">Integracje</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" style="margin-right: 2rem;"  href="#">Pomoc i kontakt</a>
-        </li>
-    </div>
-    <div class="col-md-1"style="background-color: #fff;"></div>
-      <li class="nav-item dropdown "style="margin-right: 2rem;list-style-type:none;">
-        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">{% for account in account_data %}{{ account.email }}{% endfor %}</a>
-        <ul class="dropdown-menu text-center" style='list-style-type:none;'>
-          <li><a class="dropdown-item" href="/my-account/">Moje Konto</a></li>
-          <li><a class="dropdown-item" href="/workers-list/">Profile Pracowników</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="/logout">Wyloguj</a></li>
-        </ul>
-      </li>
+          <li class="nav-item dropdown "style="margin-right: 2rem;">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Zamówienia</a>
+            <ul class="dropdown-menu text-center">
+              <li><a class="dropdown-item " href="/orders-list/">Lista zamówień</a></li>
+              <li><a class="dropdown-item" href="/invoices/">Faktury</a></li>
+              <li><a class="dropdown-item" href="/statistics/">Statystyki</a></li>
+              {% comment %} <li><a class="dropdown-item" href="#">Statusy zamówień</a></li> {% endcomment %}
+            </ul>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" style="margin-right: 2rem;" href="#">Produkty</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" style="margin-right: 2rem;" href="#">Integracje</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" style="margin-right: 2rem;"  href="#">Pomoc i kontakt</a>
+          </li>
+
+        <div class="col-md-1"style="background-color: #fff;">
+          <li class="nav-item dropdown "style="margin-right: 2rem;list-style-type:none;">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">{% for account in account_data %}{{ account.email }}{% endfor %}</a>
+            <ul class="dropdown-menu text-center" style='list-style-type:none;'>
+              <li><a class="dropdown-item" href="/my-account/">Moje Konto</a></li>
+              <li><a class="dropdown-item" href="/workers-list/">Profile Pracowników</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/logout">Wyloguj</a></li>
+            </ul>
+          </li>
+        </div>
       </ul>
-    </div>
-  </nav>
+</nav>
 
-  <div class="col-md-2" style="background-color: #fff;"></div>
+      <div class="col-md-2" style="background-color: #fff;"></div>
 </div>
 
 

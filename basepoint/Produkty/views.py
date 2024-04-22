@@ -1,3 +1,5 @@
+from multiprocessing import connection
+
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import *
@@ -28,6 +30,28 @@ def getOneProduct(request, id):
     getProduct = Products.objects.get(pk=id)
     data = {'getProduct': getProduct}
     return render(request,'specificProduct.html',data)
+
+def addNewProduct(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        amount = request.POST.get('amount')
+        price = request.POST.get('price')
+        #category = request.POST.get('category')
+
+        '''
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                      INSERT INTO produkty_products (name, description, amount, price, category)
+                      VALUES (%s, %s, %s, %s, %s)
+                  """, [name, description, amount, price, category])
+        '''
+
+        newProduct = Products(name=name, description=description, amount=amount, price=price)
+        newProduct.save()
+
+    return render(request, 'addNewProduct.html', {})
+
 
 
 

@@ -23,4 +23,5 @@ urlpatterns = [
     path('produkty/<id>', getOneProduct),
     path('kategorie/', getAllCategory),
     path('kategorie/<id>', getOneCategory),
+    path('dodajProdukt/', addNewProduct),
 ] 
