@@ -10,30 +10,30 @@ Lista zamówień - BASEPOINT
         <div class="row ">
             <div class="col-md-3 offset-1 pt-2">
                 <p class="fw-bold fw-1" style="opacity: 50%;">
-                    <li class="nav-item dropdown " style="list-style-type: none;">
-                        <a class="nav-link dropdown-toggle fw-bold fw-1" style="opacity: 50%;" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Zamówienia</a>
-                        <ul class="dropdown-menu text-center">
-                          <li><a class="dropdown-item " href="#">Nowe</a></li>
-                          <li><a class="dropdown-item" href="#">Do wysłania</a></li>
-                          <li><a class="dropdown-item" href="#">Wysłane</a></li>
-                          <li><a class="dropdown-item" href="#">Anulowane</a></li>
-                          <li><a class="dropdown-item" href="#">Kosz</a></li>
-                        </ul>
-                      </li>
+                  <li class="nav-item dropdown " style="list-style-type: none;">
+                    <a class="nav-link dropdown-toggle fw-bold fw-1" style="opacity: 50%;" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Zamówienia</a>
+                    <ul class="dropdown-menu text-center">
+                        <li><a class="dropdown-item" href="#" data-status="NEW">Nowe</a></li>
+                        <li><a class="dropdown-item" href="#" data-status="READY_FOR_SHIPMENT">Do wysłania</a></li>
+                        <li><a class="dropdown-item" href="#" data-status="SENT">Wysłane</a></li>
+                        <li><a class="dropdown-item" href="#" data-status="CANCELLED">Anulowane</a></li>
+                        <li><a class="dropdown-item" href="#" data-status="CANCELLED">Kosz</a></li>
+                    </ul>
+                </li>                
                 </p>
             </div>
             <div class="col-md-6 offset-1">
-                <form method="post">
+                <form action="" method="GET">
                     <div class="form-group row mt-3">
                       <label for="text" class="col-3 col-form-label"></label> 
                       <div class="col-8 ">
                         <div class="input-group">
                           <div class="input-group-prepend">
-                            <div class="input-group-text">
-                              <i class="fa fa-search p-1"></i>
+                            <div class="input-group-text"><form >
+                              <button type="submit" style="border:none;"><i class="fa fa-search p-1"></i></button>
                             </div>
-                          </div> 
-                          <input id="text" name="search-orders" placeholder="Szukaj..." type="text" class="form-control">
+                          </div>
+                           <input id="text" type="search" name="search_orders" placeholder="Szukaj..." type="text" class="form-control">
                         </div>
                       </div>
                     </div> 
@@ -47,50 +47,130 @@ Lista zamówień - BASEPOINT
             </div>
             
             <div class="row">
-                <div class="col-md-10 offset-1">
-                    <table class="table text-center">
-                        <thead>
-                          <tr>
-                            <th scope="col"></th>
-                            <th scope="col">Numer</th>
-                            <th scope="col">Imie i nazwisko</th>
-                            <th scope="col">Przedmioty</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Kwota</th>
-                            <th scope="col">Wysyłka</th>
-                            <th scope="col">Data</th>
-                            <th scope="col">PDF</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <th>
-                                <li class="nav-item dropdown "style="list-style-type:none;">
-                                    <a class="nav-link dropdown-toggle btn btn-success p-1 text-light fw-light" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Status</a>
-                                    <ul class="dropdown-menu text-center">
-                                      <li><a class="dropdown-item text-success" href="#">Nowe</a></li>
-                                      <li><a class="dropdown-item text-success" href="#">Do wysłania</a></li>
-                                      <li><a class="dropdown-item text-success" href="#">Wysłane</a></li>
-                                      <li><a class="dropdown-item text-success" href="#">Anulowane</a></li>
+                <div class="col-md-12 ">
+                  <table class="table table-responsive text-center">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            {% comment %} <th>Numer</th> {% endcomment %}
+                            <th>E-Mail</th>
+                            <th>Przedmioty</th>
+                            <th>Status</th>
+                            <th>Kwota</th>
+                            <th>Wysyłka</th>
+                            <th>Data</th>
+                            <th>PDF</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for event in allegro_data %}
+                        <tr>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-success dropdown-toggle" type="button" id="statusDropdown" data-bs-toggle="dropdown" aria-expanded="false">Status</button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item text-success" href="#">Nowe</a></li>
+                                        <li><a class="dropdown-item text-success" href="#">Do wysłania</a></li>
+                                        <li><a class="dropdown-item text-success" href="#">Wysłane</a></li>
+                                        <li><a class="dropdown-item text-success" href="#">Anulowane</a></li>
                                     </ul>
-                                  </li>
-                            </th>
-                            <!-- <th><button class="btn btn-success">Status</button></th> -->
-                            <td>Numer</td>
-                            <td>Imie i nazwisko</td>
-                            <td>Przedmioty</td>
-                            <td>Nowe</td>
-                            <td>310 PLN</td>
-                            <td>InPost Paczkomaty</td>
-                            <td>24/02/2024</td>
+                                </div>
+                            </td>
+                            {% comment %} <td>{{ event.id }}</td> {% endcomment %}
+                            <td>{{ event.order.buyer.email }}</td>
+                            <td>
+                                <ul>
+                                    {% for item in event.order.lineItems %}
+                                        {{ item.offer.name }}, 
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>
+                              {% comment %} {% if event.order.checkoutForms.0.fulfillment.status == 'SENT' or event.order.checkoutForms.0.fulfillment.status == 'PICKED_UP' or event.order.checkoutForms.0.fulfillment.status == 'READY_FOR_PICKUP' %}
+                                  Wysłane
+                              {% elif event.order.checkoutForms.0.fulfillment.status == 'NEW' or event.order.checkoutForms.0.fulfillment.status == 'PROCESSING' %}
+                                  Nowe
+                              {% elif event.order.checkoutForms.0.fulfillment.status == 'READY_FOR_SHIPMENT' %}
+                                  Do wysłania
+                              {% elif event.order.checkoutForms.0.fulfillment.status == 'SUSPENDED' %}
+                                  Anulowane
+                              {% endif %} {% endcomment %}
+                              {{event.order.checkoutForms.0.fulfillment.status}}
+                            </td>
+                            <td>{{ event.total_amount }} PLN</td>
+                            <td>{{ event.order.checkoutForms.0.delivery.method.name }}</td>
+                            <td>
+                              {{ event.occurredAt }}
+                            </td>
                             <td><a href="#" style="color: black;"><i class="fa fa-download"></i></a></td>
-                          </tr>
-                        </tbody>
-                      </table>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <nav aria-label="Page navigation example">
+                  <ul class="pagination justify-content-center">
+                      {% if allegro_data.has_previous %}
+                          <li class="page-item">
+                              <a class="page-link text-dark" href="?page=1" aria-label="First">
+                                  <span aria-hidden="true">&laquo;</span>
+                                  <span class="sr-only">Pierwsza</span>
+                              </a>
+                          </li>
+                          <li class="page-item">
+                              <a class="page-link text-dark" href="?page={{ allegro_data.previous_page_number }}" aria-label="Previous">
+                                  <span aria-hidden="true">&lsaquo;</span>
+                                  <span class="sr-only">Poprzednia</span>
+                              </a>
+                          </li>
+                      {% else %}
+                          <li class="page-item disabled">
+                              <span class="page-link text-dark">&laquo;</span>
+                          </li>
+                      {% endif %}
+              
+                      <li class="page-item disabled">
+                          <span class="page-link">
+                              Strona {{ allegro_data.number }} z {{ allegro_data.paginator.num_pages }}
+                          </span>
+                      </li>
+              
+                      {% if allegro_data.has_next %}
+                          <li class="page-item">
+                              <a class="page-link text-dark" href="?page={{ allegro_data.next_page_number }}" aria-label="Next">
+                                  <span aria-hidden="true">&rsaquo;</span>
+                                  <span class="sr-only">Następna</span>
+                              </a>
+                          </li>
+                          <li class="page-item">
+                              <a class="page-link text-dark" href="?page={{ allegro_data.paginator.num_pages }}" aria-label="Last">
+                                  <span aria-hidden="true">&raquo;</span>
+                                  <span class="sr-only">Ostatnia</span>
+                              </a>
+                          </li>
+                      {% else %}
+                          <li class="page-item disabled">
+                              <span class="page-link text-dark">&raquo;</span>
+                          </li>
+                      {% endif %}
+                  </ul>
+              </nav>
                 </div>
             </div>
         
     </div>
 </div>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
 
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', function(event) {
+            event.preventDefault();
+            const filterValues = event.target.getAttribute('data-status').split(',');
+            const filterStatus = filterValues.join('&status=');
+            window.location.href = `/orders-list/?status=${filterStatus}`;
+        });
+    });
+});
+</script>
 {% endblock content %}

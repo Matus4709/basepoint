@@ -77,7 +77,6 @@ class Documents(models.Model):
 class Orders(models.Model):
     order_date = models.DateTimeField(auto_now_add=True)
     amount_products = models.IntegerField()
-    status = models.ForeignKey(Statues, on_delete=models.CASCADE, related_name='orders_by_status')
     summary_price = models.DecimalField(max_digits=10, decimal_places=2)
     documents_document_id = models.ForeignKey(Documents, on_delete=models.CASCADE)
     statues_status_id = models.ForeignKey(Statues, on_delete=models.CASCADE, related_name='orders_by_statues')

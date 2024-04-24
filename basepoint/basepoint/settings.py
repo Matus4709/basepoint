@@ -132,7 +132,3 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'app.Account'
-
-ALLEGRO_CLIENT_ID = '7242f745f3eb41af9b395159ad5b8562'
-ALLEGRO_CLIENT_SECRET = '9dNq0b6m8j3wPvdgF97elLYEY0x2Klusx94T9xgwtGUEJYanOaB2VoYXj3M2neZ7'
-ALLEGRO_REDIRECT_URI = 'http://localhost:8000'

@@ -3,16 +3,16 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db import connection
 from django.contrib.auth.hashers import make_password
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 import secrets
 import os
 from dotenv import load_dotenv
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-import requests
 from django.conf import settings
 import json
+from datetime import datetime
 
 
 def login_view(request):
@@ -393,68 +393,136 @@ def edit_account(request):
     else:    
         return HttpResponse('Brak dostępu!')
     
-CLIENT_ID = settings.ALLEGRO_CLIENT_ID
-CLIENT_SECRET = settings.ALLEGRO_CLIENT_SECRET
-TOKEN_URL = "https://allegro.pl.allegrosandbox.pl/auth/oauth/token"
-
-def get_access_token(request):
-    if request.user.is_authenticated:
-        try:
-            data = {'grant_type': 'client_credentials'}
-            access_token_response = requests.post(TOKEN_URL, data=data, verify=False,
-                                                allow_redirects=False, auth=(CLIENT_ID, CLIENT_SECRET))
-            tokens = json.loads(access_token_response.text)
-            access_token = tokens['access_token']
-            
-            # Zapisanie tokena dostępu w sesji
-            request.session['access_token'] = access_token
-            return access_token
-        except requests.exceptions.HTTPError as err:
-            raise SystemExit(err)
-    else:
-        return redirect('welcome')
-def offers(request):
-    if request.user.is_authenticated:
-        access_token = request.session.get('access_token')
-        print(access_token)
-        if not access_token:
-            # Jeśli brakuje tokena dostępu, uzyskaj nowy
-            access_token = get_access_token(request)
-        
-        headers = {
-            'Authorization': f'Bearer {access_token}',
-            'Accept': 'application/vnd.allegro.public.v1+json',
-        }
-        
-        response = requests.get('https://api.allegro.pl./order/events', headers=headers)
-        
-        # Sprawdzenie odpowiedzi
-        if response.status_code != 200:
-            print(response.status_code)
-            return render(request, 'error.html', {'message': 'Nie udało się pobrać zamówień z Allegro.'})
-            
-        offers_data = response.json()
-        offers = offers_data['events']
-        
-        return render(request, 'index.html', {'offers': offers})
-    else:
-            return redirect('welcome')
-
 def orders_list(request):
     if request.user.is_authenticated:
-        return render(request,'orders/orders-list.html')
+        user_type = request.user.user_type
+        user_id = request.user.id
+        if user_type == 'owner':
+            with connection.cursor() as cursor:
+                    
+                    cursor.execute("SELECT * FROM app_account WHERE id = %s", [user_id])
+                    rows = cursor.fetchall()
+                    # Konwersja wyników z krotki na listę słowników
+                    columns = [col[0] for col in cursor.description]
+                    account_data = [dict(zip(columns, row)) for row in rows]
+        #Pobieranie JSON 
+        with open('app/sample_order_events.json', 'r', encoding='utf-8') as file:
+            data = json.load(file)
+        # with open('app/sample_order_events_allegro.json', 'w') as file:
+        #     file.truncate(0)
+        
+    
+        allegro_data = data.get('events', [])
+        
+        for event in data.get('events', []):
+                total_amount = sum(
+                    float(item['price']['amount']) * item['quantity'] 
+                    for item in event['order']['lineItems']
+                )
+                total_amount = round(total_amount,2)
+                event['total_amount'] = total_amount
+
+                total_quantity = sum(
+                    item['quantity']
+                    for item in event['order']['lineItems']
+                    )
+
+                time_str = event['occurredAt']
+                dt_object = datetime.fromisoformat(time_str.replace('Z', '+00:00'))
+                formatted_time = dt_object.strftime('%d-%m-%Y %H:%M')
+                
+                event['occurredAt'] = formatted_time
+                # status_order = event['order']['checkoutForms'][0]['fulfillment']['status']
+                # if status_order == 'SENT' or 'PICKED_UP' or 'READY_FOR_PICKUP':
+                #      status_order = 3
+                # if status_order == 'NEW' or 'PROCESSING':
+                #      status_order = 1
+                # if status_order == 'READY_FOR_SHIPMENT':
+                #      status_order = 2
+                # if status_order == 'SUSPENDED.':
+                #     status_order = 4
+
+
+        #Sortowanie według daty od najstarszego zamówienie, aby odwrócić należy dodać na końcu ,reverse=True
+        allegro_data = sorted(allegro_data, key=lambda x: datetime.strptime(x['occurredAt'], '%d-%m-%Y %H:%M'))
+
+        #Paginacja strony
+        paginator = Paginator(allegro_data,5)
+        page = request.GET.get('page')
+        try:
+            allegro_data = paginator.page(page)
+        except PageNotAnInteger:
+            # Jeżeli 'page' nie jest liczbą całkowitą, pokaż pierwszą stronę
+            allegro_data = paginator.page(1)
+        except EmptyPage:
+            # Jeżeli 'page' jest poza zakresem, pokaż ostatnią stronę
+            allegro_data = paginator.page(paginator.num_pages)
+        
+        #Wyszukiwanie
+        search_orders = request.GET.get('search_orders')
+        if search_orders and allegro_data:
+            allegro_data = [event for event in allegro_data if search_orders.lower() in event.get('order', {}).get('buyer', {}).get('email', '').lower()]
+        
+       # Filtrowanie po statusie
+        status_filters = {
+            'SENT': ['SENT', 'PICKED_UP', 'READY_FOR_PICKUP'],
+            'NEW': ['NEW', 'PROCESSING'],
+            'READY_FOR_SHIPMENT': ['READY_FOR_SHIPMENT'],
+            'CANCELLED': ['SUSPENDED', 'CANCELLED']
+            }
+        status = request.GET.get('status')
+        print(status)
+        if status in status_filters:
+            allowed_statuses = status_filters[status]
+            allegro_data = [event for event in allegro_data if event['order']['checkoutForms'][0]['fulfillment']['status'] in allowed_statuses]
+
+        context = {
+            'account_data': account_data,
+            'user_type': user_type,
+            'allegro_data': allegro_data
+        }
+
+        return render(request,'orders/orders-list.html',context)
     else:
         return redirect('welcome')
 
 def invoices(request):
     if request.user.is_authenticated:
-        return render(request, 'orders/invoices.html')
+        user_type = request.user.user_type
+        user_id = request.user.id
+        if user_type == 'owner':
+            with connection.cursor() as cursor:
+                    
+                    cursor.execute("SELECT * FROM app_account WHERE id = %s", [user_id])
+                    rows = cursor.fetchall()
+                    # Konwersja wyników z krotki na listę słowników
+                    columns = [col[0] for col in cursor.description]
+                    account_data = [dict(zip(columns, row)) for row in rows]
+        context = {
+            'account_data': account_data,
+            'user_type': user_type
+        }
+        return render(request, 'orders/invoices.html',context)
     else:
        return redirect('welcome')
    
 def statistics(request):
     if request.user.is_authenticated:
-        return render(request, 'orders/statistics.html')
+        user_type = request.user.user_type
+        user_id = request.user.id
+        if user_type == 'owner':
+            with connection.cursor() as cursor:
+                    
+                    cursor.execute("SELECT * FROM app_account WHERE id = %s", [user_id])
+                    rows = cursor.fetchall()
+                    # Konwersja wyników z krotki na listę słowników
+                    columns = [col[0] for col in cursor.description]
+                    account_data = [dict(zip(columns, row)) for row in rows]
+        context = {
+            'account_data': account_data,
+            'user_type': user_type
+        }
+        return render(request, 'orders/statistics.html',context)
     else:
         return redirect('welcome')
     

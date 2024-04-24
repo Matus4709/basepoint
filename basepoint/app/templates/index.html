@@ -7,14 +7,9 @@
     <h1>Oferty z Allegro</h1>
     
     <ul>
-    {% for offer in offers %}
+    {% for event in events %}
         <li>
-
-            {{offer}}
-            <h2>{{ offer.name }}</h2>
-
-            <p>Cena: {{ offer.sellingMode.price.amount }} {{ offer.sellingMode.price.currency }}</p>
-            <!-- Dodaj więcej informacji o ofercie -->
+            {{ event }}
         </li>
     {% endfor %}
     </ul>

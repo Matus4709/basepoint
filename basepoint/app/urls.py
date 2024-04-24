@@ -16,14 +16,11 @@ urlpatterns = [
     path('my-account/delete-account/', delete_account, name='delete_account'),
     path('my-account/edit-account/', edit_account, name='edit_account'),
     path('my-account/edit-account-worker/', edit_account, name='edit_account'),
-
-    path('get_access_token/', views.get_access_token, name='get_access_token'),
-
-    path('offers/', views.offers, name='offers'),
-    path('orders-list/', views.orders_list, name='orders-list'),
     path('invoices/', views.invoices, name='invoices'),
     path('statistics/', views.statistics, name='statistics'),
     path('', views.welcome, name='welcome'),
+    path('orders-list/', views.orders_list, name='orders_list'),
+
 
     # Inne ścieżki URL dla innych widoków
 ]

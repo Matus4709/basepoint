@@ -1,0 +1,2774 @@
+{
+    "events": [
+        {
+            "id": "0",
+            "order": {
+                "seller": {
+                    "id": "437848322"
+                },
+                "buyer": {
+                    "id": "fc08e398-29c6-4754-8731-ab40c3db4ac9",
+                    "email": "olkotobiasz@example.net",
+                    "login": "majstereksebastian",
+                    "guest": false,
+                    "preferences": {
+                        "language": "pl-PL"
+                    }
+                },
+                "lineItems": [
+                    {
+                        "id": "92ddf57c-8c0e-42e3-b164-a98444adc14b",
+                        "offer": {
+                            "id": "0f25360a",
+                            "name": "Koszulka",
+                            "external": {
+                                "id": "AH-39305"
+                            }
+                        },
+                        "quantity": 3,
+                        "originalPrice": {
+                            "amount": "22.59",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "22.59",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-03T16:03:34Z"
+                    },
+                    {
+                        "id": "920cb97a-85c9-4ed6-a6e8-4f0de15f3399",
+                        "offer": {
+                            "id": "06f5a4bd",
+                            "name": "Koszulka",
+                            "external": {
+                                "id": "AH-77988"
+                            }
+                        },
+                        "quantity": 2,
+                        "originalPrice": {
+                            "amount": "189.65",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "189.65",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-17T12:29:12Z"
+                    },
+                    {
+                        "id": "2f7a6303-4698-4320-9628-716464de361d",
+                        "offer": {
+                            "id": "21251f42",
+                            "name": "Kurtka",
+                            "external": {
+                                "id": "AH-31063"
+                            }
+                        },
+                        "quantity": 2,
+                        "originalPrice": {
+                            "amount": "172.6",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "172.6",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-23T01:45:12Z"
+                    },
+                    {
+                        "id": "5d0f847e-cd0e-4e3b-8cda-249edbede4aa",
+                        "offer": {
+                            "id": "18f3bb9c",
+                            "name": "Buty",
+                            "external": {
+                                "id": "AH-46819"
+                            }
+                        },
+                        "quantity": 3,
+                        "originalPrice": {
+                            "amount": "104.21",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "104.21",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-09T09:10:19Z"
+                    }
+                ],
+                "checkoutForms": [
+                    {
+                        "id": "856878af-a1e1-42cb-9111-29b0bc6f752f",
+                        "messageToSeller": "Pisarz tydzień natychmiast papier.",
+                        "buyer": {
+                            "id": "d7286903-b535-4b4c-979a-e64339a46536",
+                            "email": "sandra80@example.com",
+                            "login": "filuseryk",
+                            "firstName": "Kalina",
+                            "lastName": "Węgier",
+                            "companyName": null,
+                            "guest": false,
+                            "personalIdentity": "96021097558",
+                            "phoneNumber": null,
+                            "preferences": {
+                                "language": "pl-PL"
+                            },
+                            "address": {
+                                "street": "Zacisze",
+                                "city": "Sopot",
+                                "postCode": "87-168",
+                                "countryCode": "PL"
+                            }
+                        },
+                        "payment": {
+                            "id": "6f6143a6-6c56-44cd-85dd-c22d510eede5",
+                            "type": "CASH_ON_DELIVERY",
+                            "provider": "P24",
+                            "finishedAt": "2024-04-03T22:53:28Z",
+                            "paidAmount": {
+                                "amount": "22.59",
+                                "currency": "PLN"
+                            },
+                            "reconciliation": {
+                                "amount": "22.59",
+                                "currency": "PLN"
+                            },
+                            "features": [
+                                "ALLEGRO_PAY"
+                            ]
+                        },
+                        "status": "READY_FOR_PROCESSING",
+                        "fulfillment": {
+                            "status": "SUSPENDED",
+                            "shipmentSummary": {
+                                "lineItemsSent": "SOME"
+                            }
+                        },
+                        "delivery": {
+                            "address": {
+                                "firstName": "Bruno",
+                                "lastName": "Adamów",
+                                "street": "Dobra",
+                                "city": "Gniezno",
+                                "zipCode": "25-087",
+                                "countryCode": "PL",
+                                "companyName": null,
+                                "phoneNumber": null,
+                                "modifiedAt": null
+                            },
+                            "method": {
+                                "id": "220d5132-c33a-4178-9cb2-0ad5bcb14773",
+                                "name": "Allegro Paczkomaty InPost"
+                            },
+                            "pickupPoint": {
+                                "id": "POZ08A",
+                                "name": "Paczkomat POZ08A",
+                                "description": "Stacja paliw BP",
+                                "address": {}
+                            },
+                            "cost": {
+                                "amount": "22.59",
+                                "currency": "PLN"
+                            },
+                            "time": {
+                                "from": "2024-04-09T04:14:12Z",
+                                "to": "2024-04-27T14:08:18Z",
+                                "guaranteed": {
+                                    "from": "2024-04-13T21:58:13Z",
+                                    "to": "2024-04-30T05:13:39Z"
+                                },
+                                "dispatch": {
+                                    "from": "2024-04-19T11:58:35Z",
+                                    "to": "2024-04-25T10:43:33Z"
+                                }
+                            },
+                            "smart": true,
+                            "calculatedNumberOfPackages": 1
+                        },
+                        "invoice": {
+                            "required": true,
+                            "address": {
+                                "street": "Borowa",
+                                "city": "Cieszyn",
+                                "zipCode": "06-472",
+                                "countryCode": "PL",
+                                "company": {
+                                    "name": "Udix Sp. z o.o.",
+                                    "taxId": null
+                                },
+                                "naturalPerson": {
+                                    "firstName": "Damian",
+                                    "lastName": "Stochaj"
+                                }
+                            },
+                            "dueDate": "2024-04-13"
+                        },
+                        "lineItems": [
+                            {
+                                "id": "92ddf57c-8c0e-42e3-b164-a98444adc14b",
+                                "offer": {
+                                    "id": "0f25360a",
+                                    "name": "Koszulka",
+                                    "external": {
+                                        "id": "AH-39305"
+                                    }
+                                },
+                                "quantity": 3,
+                                "originalPrice": {
+                                    "amount": "22.59",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "22.59",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-03T16:03:34Z"
+                            },
+                            {
+                                "id": "920cb97a-85c9-4ed6-a6e8-4f0de15f3399",
+                                "offer": {
+                                    "id": "06f5a4bd",
+                                    "name": "Koszulka",
+                                    "external": {
+                                        "id": "AH-77988"
+                                    }
+                                },
+                                "quantity": 2,
+                                "originalPrice": {
+                                    "amount": "189.65",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "189.65",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-17T12:29:12Z"
+                            },
+                            {
+                                "id": "2f7a6303-4698-4320-9628-716464de361d",
+                                "offer": {
+                                    "id": "21251f42",
+                                    "name": "Kurtka",
+                                    "external": {
+                                        "id": "AH-31063"
+                                    }
+                                },
+                                "quantity": 2,
+                                "originalPrice": {
+                                    "amount": "172.6",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "172.6",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-23T01:45:12Z"
+                            },
+                            {
+                                "id": "5d0f847e-cd0e-4e3b-8cda-249edbede4aa",
+                                "offer": {
+                                    "id": "18f3bb9c",
+                                    "name": "Buty",
+                                    "external": {
+                                        "id": "AH-46819"
+                                    }
+                                },
+                                "quantity": 3,
+                                "originalPrice": {
+                                    "amount": "104.21",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "104.21",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-09T09:10:19Z"
+                            }
+                        ],
+                        "surcharges": [
+                            {
+                                "id": "de301b4c-1399-4ff5-b9a3-f3d35df376a1",
+                                "type": "CASH_ON_DELIVERY",
+                                "provider": "P24",
+                                "finishedAt": "2024-04-13T15:17:46Z",
+                                "paidAmount": {
+                                    "amount": "22.59",
+                                    "currency": "PLN"
+                                },
+                                "reconciliation": {
+                                    "amount": "22.59",
+                                    "currency": "PLN"
+                                },
+                                "features": [
+                                    "ALLEGRO_PAY"
+                                ]
+                            }
+                        ],
+                        "discounts": [
+                            {
+                                "type": "COUPON"
+                            }
+                        ],
+                        "note": {
+                            "text": "Pasek kupować kontakt potrawa badać rozwiązanie."
+                        },
+                        "marketplace": {
+                            "id": "allegro-pl"
+                        },
+                        "summary": {
+                            "totalToPay": {
+                                "amount": "22.59",
+                                "currency": "PLN"
+                            }
+                        },
+                        "updatedAt": "2024-04-08T05:19:33Z",
+                        "revision": "8b931c7f-60df-4cee-a879-18c76a05649e"
+                    }
+                ],
+                "marketplace": {
+                    "id": "allegro-pl"
+                }
+            },
+            "type": "READY_FOR_PROCESSING",
+            "occurredAt": "2024-04-14T11:33:24Z"
+        },
+        {
+            "id": "1",
+            "order": {
+                "seller": {
+                    "id": "437848322"
+                },
+                "buyer": {
+                    "id": "53f648bf-0f1d-4dbc-aecd-0ca5b8658de8",
+                    "email": "elzbietapreuss@example.net",
+                    "login": "michal86",
+                    "guest": false,
+                    "preferences": {
+                        "language": "pl-PL"
+                    }
+                },
+                "lineItems": [
+                    {
+                        "id": "2beef9ef-360d-4b77-a538-e8cedb6c1a3f",
+                        "offer": {
+                            "id": "4e47d17b",
+                            "name": "Rękawiczki",
+                            "external": {
+                                "id": "AH-92187"
+                            }
+                        },
+                        "quantity": 1,
+                        "originalPrice": {
+                            "amount": "106.61",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "106.61",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-14T20:33:09Z"
+                    },
+                    {
+                        "id": "3a3a1486-087f-4645-b825-8a60a9217e7c",
+                        "offer": {
+                            "id": "738c6615",
+                            "name": "Koszulka",
+                            "external": {
+                                "id": "AH-84217"
+                            }
+                        },
+                        "quantity": 1,
+                        "originalPrice": {
+                            "amount": "43.62",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "43.62",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-04T14:59:21Z"
+                    }
+                ],
+                "checkoutForms": [
+                    {
+                        "id": "1a1e89c2-eedc-4d43-9dd5-ae2b88318673",
+                        "messageToSeller": "Dokonać broń dział język stanowić przemysł.",
+                        "buyer": {
+                            "id": "63908d0c-001c-4341-8c9b-a176f8f2cfd6",
+                            "email": "cyprianbudkiewicz@example.com",
+                            "login": "wiktor47",
+                            "firstName": "Tola",
+                            "lastName": "Kuba",
+                            "companyName": null,
+                            "guest": false,
+                            "personalIdentity": "87123153978",
+                            "phoneNumber": null,
+                            "preferences": {
+                                "language": "pl-PL"
+                            },
+                            "address": {
+                                "street": "Dolna",
+                                "city": "Kielce",
+                                "postCode": "33-855",
+                                "countryCode": "PL"
+                            }
+                        },
+                        "payment": {
+                            "id": "adf283af-4dd8-4b18-9640-d2a27cc1e555",
+                            "type": "CASH_ON_DELIVERY",
+                            "provider": "P24",
+                            "finishedAt": "2024-04-08T17:32:57Z",
+                            "paidAmount": {
+                                "amount": "106.61",
+                                "currency": "PLN"
+                            },
+                            "reconciliation": {
+                                "amount": "106.61",
+                                "currency": "PLN"
+                            },
+                            "features": [
+                                "ALLEGRO_PAY"
+                            ]
+                        },
+                        "status": "READY_FOR_PROCESSING",
+                        "fulfillment": {
+                            "status": "READY_FOR_PICKUP",
+                            "shipmentSummary": {
+                                "lineItemsSent": "SOME"
+                            }
+                        },
+                        "delivery": {
+                            "address": {
+                                "firstName": "Anna Maria",
+                                "lastName": "Żok",
+                                "street": "Targowa",
+                                "city": "Mikołów",
+                                "zipCode": "83-527",
+                                "countryCode": "PL",
+                                "companyName": null,
+                                "phoneNumber": null,
+                                "modifiedAt": null
+                            },
+                            "method": {
+                                "id": "9077b2d8-d6a8-4826-bf16-14eb1041806c",
+                                "name": "Allegro Paczkomaty InPost"
+                            },
+                            "pickupPoint": {
+                                "id": "POZ08A",
+                                "name": "Paczkomat POZ08A",
+                                "description": "Stacja paliw BP",
+                                "address": {}
+                            },
+                            "cost": {
+                                "amount": "106.61",
+                                "currency": "PLN"
+                            },
+                            "time": {
+                                "from": "2024-04-07T13:26:35Z",
+                                "to": "2024-04-27T14:50:34Z",
+                                "guaranteed": {
+                                    "from": "2024-04-23T09:38:36Z",
+                                    "to": "2024-04-26T19:36:09Z"
+                                },
+                                "dispatch": {
+                                    "from": "2024-04-01T09:09:15Z",
+                                    "to": "2024-04-25T10:52:11Z"
+                                }
+                            },
+                            "smart": true,
+                            "calculatedNumberOfPackages": 1
+                        },
+                        "invoice": {
+                            "required": true,
+                            "address": {
+                                "street": "Modrzewiowa",
+                                "city": "Wołomin",
+                                "zipCode": "27-912",
+                                "countryCode": "PL",
+                                "company": {
+                                    "name": "Udix Sp. z o.o.",
+                                    "taxId": null
+                                },
+                                "naturalPerson": {
+                                    "firstName": "Kornel",
+                                    "lastName": "Maćczak"
+                                }
+                            },
+                            "dueDate": "2024-04-10"
+                        },
+                        "lineItems": [
+                            {
+                                "id": "2beef9ef-360d-4b77-a538-e8cedb6c1a3f",
+                                "offer": {
+                                    "id": "4e47d17b",
+                                    "name": "Rękawiczki",
+                                    "external": {
+                                        "id": "AH-92187"
+                                    }
+                                },
+                                "quantity": 1,
+                                "originalPrice": {
+                                    "amount": "106.61",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "106.61",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-14T20:33:09Z"
+                            },
+                            {
+                                "id": "3a3a1486-087f-4645-b825-8a60a9217e7c",
+                                "offer": {
+                                    "id": "738c6615",
+                                    "name": "Koszulka",
+                                    "external": {
+                                        "id": "AH-84217"
+                                    }
+                                },
+                                "quantity": 1,
+                                "originalPrice": {
+                                    "amount": "43.62",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "43.62",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-04T14:59:21Z"
+                            }
+                        ],
+                        "surcharges": [
+                            {
+                                "id": "1893ffc6-2f63-4a4d-9ba6-396f6d9670bd",
+                                "type": "CASH_ON_DELIVERY",
+                                "provider": "P24",
+                                "finishedAt": "2024-04-09T08:45:03Z",
+                                "paidAmount": {
+                                    "amount": "106.61",
+                                    "currency": "PLN"
+                                },
+                                "reconciliation": {
+                                    "amount": "106.61",
+                                    "currency": "PLN"
+                                },
+                                "features": [
+                                    "ALLEGRO_PAY"
+                                ]
+                            }
+                        ],
+                        "discounts": [
+                            {
+                                "type": "COUPON"
+                            }
+                        ],
+                        "note": {
+                            "text": "Dokładny przyjemny tak zwyczaj kosztować przeciwny pragnąć."
+                        },
+                        "marketplace": {
+                            "id": "allegro-pl"
+                        },
+                        "summary": {
+                            "totalToPay": {
+                                "amount": "106.61",
+                                "currency": "PLN"
+                            }
+                        },
+                        "updatedAt": "2024-04-19T19:37:17Z",
+                        "revision": "9601f0d9-9ab1-4a1e-88b2-23c560faef43"
+                    }
+                ],
+                "marketplace": {
+                    "id": "allegro-pl"
+                }
+            },
+            "type": "READY_FOR_PROCESSING",
+            "occurredAt": "2024-04-02T10:38:20Z"
+        },
+        {
+            "id": "2",
+            "order": {
+                "seller": {
+                    "id": "437848322"
+                },
+                "buyer": {
+                    "id": "49850ee3-48c7-4158-a260-314be726a04a",
+                    "email": "zmoniuszko@example.com",
+                    "login": "fidorprzemyslaw",
+                    "guest": false,
+                    "preferences": {
+                        "language": "pl-PL"
+                    }
+                },
+                "lineItems": [
+                    {
+                        "id": "42e31579-0d3b-40ea-b87c-cccd6253e20b",
+                        "offer": {
+                            "id": "5b95310f",
+                            "name": "Koszulka",
+                            "external": {
+                                "id": "AH-27639"
+                            }
+                        },
+                        "quantity": 2,
+                        "originalPrice": {
+                            "amount": "112.41",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "112.41",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-15T03:29:39Z"
+                    },
+                    {
+                        "id": "1e0781f9-975f-47f6-a665-2d7cf30d8727",
+                        "offer": {
+                            "id": "fb2d0b6f",
+                            "name": "Spodnie",
+                            "external": {
+                                "id": "AH-69217"
+                            }
+                        },
+                        "quantity": 2,
+                        "originalPrice": {
+                            "amount": "79.83",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "79.83",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-13T01:59:34Z"
+                    },
+                    {
+                        "id": "bad1f497-63b8-4acb-afa2-d46a34027b01",
+                        "offer": {
+                            "id": "d9aef4b7",
+                            "name": "Koszulka",
+                            "external": {
+                                "id": "AH-63508"
+                            }
+                        },
+                        "quantity": 1,
+                        "originalPrice": {
+                            "amount": "50.45",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "50.45",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-16T05:50:52Z"
+                    }
+                ],
+                "checkoutForms": [
+                    {
+                        "id": "75ce2997-4f28-47da-bf86-f70b37ba4f3a",
+                        "messageToSeller": "Mieszkaniec radio właściciel dziewczyna katolicki miękki.",
+                        "buyer": {
+                            "id": "d52eca1f-6f46-4fe8-a83e-3ab006a35b18",
+                            "email": "xcapala@example.com",
+                            "login": "melaniatrawka",
+                            "firstName": "Kornelia",
+                            "lastName": "Feret",
+                            "companyName": null,
+                            "guest": false,
+                            "personalIdentity": "02270998937",
+                            "phoneNumber": null,
+                            "preferences": {
+                                "language": "pl-PL"
+                            },
+                            "address": {
+                                "street": "Ogrodowa",
+                                "city": "Żywiec",
+                                "postCode": "21-311",
+                                "countryCode": "PL"
+                            }
+                        },
+                        "payment": {
+                            "id": "889fddf1-670f-46e5-bf83-381a7d4d2d4c",
+                            "type": "CASH_ON_DELIVERY",
+                            "provider": "P24",
+                            "finishedAt": "2024-04-06T12:13:20Z",
+                            "paidAmount": {
+                                "amount": "112.41",
+                                "currency": "PLN"
+                            },
+                            "reconciliation": {
+                                "amount": "112.41",
+                                "currency": "PLN"
+                            },
+                            "features": [
+                                "ALLEGRO_PAY"
+                            ]
+                        },
+                        "status": "READY_FOR_PROCESSING",
+                        "fulfillment": {
+                            "status": "READY_FOR_PICKUP",
+                            "shipmentSummary": {
+                                "lineItemsSent": "SOME"
+                            }
+                        },
+                        "delivery": {
+                            "address": {
+                                "firstName": "Sandra",
+                                "lastName": "Jarmużek",
+                                "street": "Ludowa",
+                                "city": "Kutno",
+                                "zipCode": "30-995",
+                                "countryCode": "PL",
+                                "companyName": null,
+                                "phoneNumber": null,
+                                "modifiedAt": null
+                            },
+                            "method": {
+                                "id": "6e967dbb-81dc-4680-8217-6fcc6358c5b7",
+                                "name": "Allegro Paczkomaty InPost"
+                            },
+                            "pickupPoint": {
+                                "id": "POZ08A",
+                                "name": "Paczkomat POZ08A",
+                                "description": "Stacja paliw BP",
+                                "address": {}
+                            },
+                            "cost": {
+                                "amount": "112.41",
+                                "currency": "PLN"
+                            },
+                            "time": {
+                                "from": "2024-04-02T11:29:09Z",
+                                "to": "2024-04-29T14:09:05Z",
+                                "guaranteed": {
+                                    "from": "2024-04-15T12:42:16Z",
+                                    "to": "2024-04-26T16:38:25Z"
+                                },
+                                "dispatch": {
+                                    "from": "2024-04-23T21:45:17Z",
+                                    "to": "2024-04-25T03:25:21Z"
+                                }
+                            },
+                            "smart": true,
+                            "calculatedNumberOfPackages": 1
+                        },
+                        "invoice": {
+                            "required": true,
+                            "address": {
+                                "street": "Dębowa",
+                                "city": "Jasło",
+                                "zipCode": "53-805",
+                                "countryCode": "PL",
+                                "company": {
+                                    "name": "Udix Sp. z o.o.",
+                                    "taxId": null
+                                },
+                                "naturalPerson": {
+                                    "firstName": "Inga",
+                                    "lastName": "Bajak"
+                                }
+                            },
+                            "dueDate": "2024-04-16"
+                        },
+                        "lineItems": [
+                            {
+                                "id": "42e31579-0d3b-40ea-b87c-cccd6253e20b",
+                                "offer": {
+                                    "id": "5b95310f",
+                                    "name": "Koszulka",
+                                    "external": {
+                                        "id": "AH-27639"
+                                    }
+                                },
+                                "quantity": 2,
+                                "originalPrice": {
+                                    "amount": "112.41",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "112.41",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-15T03:29:39Z"
+                            },
+                            {
+                                "id": "1e0781f9-975f-47f6-a665-2d7cf30d8727",
+                                "offer": {
+                                    "id": "fb2d0b6f",
+                                    "name": "Spodnie",
+                                    "external": {
+                                        "id": "AH-69217"
+                                    }
+                                },
+                                "quantity": 2,
+                                "originalPrice": {
+                                    "amount": "79.83",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "79.83",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-13T01:59:34Z"
+                            },
+                            {
+                                "id": "bad1f497-63b8-4acb-afa2-d46a34027b01",
+                                "offer": {
+                                    "id": "d9aef4b7",
+                                    "name": "Koszulka",
+                                    "external": {
+                                        "id": "AH-63508"
+                                    }
+                                },
+                                "quantity": 1,
+                                "originalPrice": {
+                                    "amount": "50.45",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "50.45",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-16T05:50:52Z"
+                            }
+                        ],
+                        "surcharges": [
+                            {
+                                "id": "b1b6a735-3070-4ec6-a7a4-33c9d17f6318",
+                                "type": "CASH_ON_DELIVERY",
+                                "provider": "P24",
+                                "finishedAt": "2024-04-08T15:28:27Z",
+                                "paidAmount": {
+                                    "amount": "112.41",
+                                    "currency": "PLN"
+                                },
+                                "reconciliation": {
+                                    "amount": "112.41",
+                                    "currency": "PLN"
+                                },
+                                "features": [
+                                    "ALLEGRO_PAY"
+                                ]
+                            }
+                        ],
+                        "discounts": [
+                            {
+                                "type": "COUPON"
+                            }
+                        ],
+                        "note": {
+                            "text": "Mieć 1000 słowo chwila szkodliwy."
+                        },
+                        "marketplace": {
+                            "id": "allegro-pl"
+                        },
+                        "summary": {
+                            "totalToPay": {
+                                "amount": "112.41",
+                                "currency": "PLN"
+                            }
+                        },
+                        "updatedAt": "2024-04-19T08:10:39Z",
+                        "revision": "d34aae33-bf49-413d-88cf-9ba2db8c6432"
+                    }
+                ],
+                "marketplace": {
+                    "id": "allegro-pl"
+                }
+            },
+            "type": "READY_FOR_PROCESSING",
+            "occurredAt": "2024-04-07T20:25:41Z"
+        },
+        {
+            "id": "3",
+            "order": {
+                "seller": {
+                    "id": "437848322"
+                },
+                "buyer": {
+                    "id": "cb2bcc28-938a-49f6-8191-06910d6bd55d",
+                    "email": "marcelinasankiewicz@example.com",
+                    "login": "smoragkajetan",
+                    "guest": false,
+                    "preferences": {
+                        "language": "pl-PL"
+                    }
+                },
+                "lineItems": [
+                    {
+                        "id": "bfbdbc0d-8bc3-46ec-923c-c6527ff89678",
+                        "offer": {
+                            "id": "a89d19e1",
+                            "name": "Koszulka",
+                            "external": {
+                                "id": "AH-10232"
+                            }
+                        },
+                        "quantity": 2,
+                        "originalPrice": {
+                            "amount": "156.82",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "156.82",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-06T14:56:27Z"
+                    },
+                    {
+                        "id": "e450fcbf-d273-46ad-a93d-d63a6587fada",
+                        "offer": {
+                            "id": "de263cc6",
+                            "name": "Buty",
+                            "external": {
+                                "id": "AH-20235"
+                            }
+                        },
+                        "quantity": 2,
+                        "originalPrice": {
+                            "amount": "108.72",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "108.72",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-10T07:37:41Z"
+                    },
+                    {
+                        "id": "501b42a4-768c-47bb-8e84-aabcc53cf289",
+                        "offer": {
+                            "id": "f05621f3",
+                            "name": "Koszulka",
+                            "external": {
+                                "id": "AH-13698"
+                            }
+                        },
+                        "quantity": 3,
+                        "originalPrice": {
+                            "amount": "74.92",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "74.92",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-23T04:03:51Z"
+                    }
+                ],
+                "checkoutForms": [
+                    {
+                        "id": "daa77e8e-5333-468e-a877-6a46a5aa3a0d",
+                        "messageToSeller": "Kartka mebel większość głupiec zbyt.",
+                        "buyer": {
+                            "id": "59726f92-dc28-4f50-b3c3-261479c6aa7c",
+                            "email": "jedrzejkucab@example.org",
+                            "login": "dniemira",
+                            "firstName": "Nikodem",
+                            "lastName": "Wydmuch",
+                            "companyName": null,
+                            "guest": false,
+                            "personalIdentity": "85121798463",
+                            "phoneNumber": null,
+                            "preferences": {
+                                "language": "pl-PL"
+                            },
+                            "address": {
+                                "street": "Brzozowa",
+                                "city": "Bełchatów",
+                                "postCode": "39-622",
+                                "countryCode": "PL"
+                            }
+                        },
+                        "payment": {
+                            "id": "f4142276-fbfa-469f-a870-098cf50f2ae2",
+                            "type": "CASH_ON_DELIVERY",
+                            "provider": "P24",
+                            "finishedAt": "2024-04-14T18:07:47Z",
+                            "paidAmount": {
+                                "amount": "156.82",
+                                "currency": "PLN"
+                            },
+                            "reconciliation": {
+                                "amount": "156.82",
+                                "currency": "PLN"
+                            },
+                            "features": [
+                                "ALLEGRO_PAY"
+                            ]
+                        },
+                        "status": "READY_FOR_PROCESSING",
+                        "fulfillment": {
+                            "status": "PICKED_UP",
+                            "shipmentSummary": {
+                                "lineItemsSent": "SOME"
+                            }
+                        },
+                        "delivery": {
+                            "address": {
+                                "firstName": "Adrian",
+                                "lastName": "Waleczek",
+                                "street": "Dworska",
+                                "city": "Żary",
+                                "zipCode": "69-050",
+                                "countryCode": "PL",
+                                "companyName": null,
+                                "phoneNumber": null,
+                                "modifiedAt": null
+                            },
+                            "method": {
+                                "id": "47721666-01d8-48d0-ac7a-d739291882e3",
+                                "name": "Allegro Paczkomaty InPost"
+                            },
+                            "pickupPoint": {
+                                "id": "POZ08A",
+                                "name": "Paczkomat POZ08A",
+                                "description": "Stacja paliw BP",
+                                "address": {}
+                            },
+                            "cost": {
+                                "amount": "156.82",
+                                "currency": "PLN"
+                            },
+                            "time": {
+                                "from": "2024-04-02T23:03:29Z",
+                                "to": "2024-04-27T20:28:17Z",
+                                "guaranteed": {
+                                    "from": "2024-04-24T17:22:55Z",
+                                    "to": "2024-04-29T06:46:01Z"
+                                },
+                                "dispatch": {
+                                    "from": "2024-04-05T02:52:36Z",
+                                    "to": "2024-04-25T05:00:11Z"
+                                }
+                            },
+                            "smart": true,
+                            "calculatedNumberOfPackages": 1
+                        },
+                        "invoice": {
+                            "required": true,
+                            "address": {
+                                "street": "Leśna",
+                                "city": "Mysłowice",
+                                "zipCode": "19-543",
+                                "countryCode": "PL",
+                                "company": {
+                                    "name": "Udix Sp. z o.o.",
+                                    "taxId": null
+                                },
+                                "naturalPerson": {
+                                    "firstName": "Andrzej",
+                                    "lastName": "Rapa"
+                                }
+                            },
+                            "dueDate": "2024-04-11"
+                        },
+                        "lineItems": [
+                            {
+                                "id": "bfbdbc0d-8bc3-46ec-923c-c6527ff89678",
+                                "offer": {
+                                    "id": "a89d19e1",
+                                    "name": "Koszulka",
+                                    "external": {
+                                        "id": "AH-10232"
+                                    }
+                                },
+                                "quantity": 2,
+                                "originalPrice": {
+                                    "amount": "156.82",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "156.82",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-06T14:56:27Z"
+                            },
+                            {
+                                "id": "e450fcbf-d273-46ad-a93d-d63a6587fada",
+                                "offer": {
+                                    "id": "de263cc6",
+                                    "name": "Buty",
+                                    "external": {
+                                        "id": "AH-20235"
+                                    }
+                                },
+                                "quantity": 2,
+                                "originalPrice": {
+                                    "amount": "108.72",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "108.72",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-10T07:37:41Z"
+                            },
+                            {
+                                "id": "501b42a4-768c-47bb-8e84-aabcc53cf289",
+                                "offer": {
+                                    "id": "f05621f3",
+                                    "name": "Koszulka",
+                                    "external": {
+                                        "id": "AH-13698"
+                                    }
+                                },
+                                "quantity": 3,
+                                "originalPrice": {
+                                    "amount": "74.92",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "74.92",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-23T04:03:51Z"
+                            }
+                        ],
+                        "surcharges": [
+                            {
+                                "id": "2c379f6a-c115-4cdd-9ffe-e8f385b5c200",
+                                "type": "CASH_ON_DELIVERY",
+                                "provider": "P24",
+                                "finishedAt": "2024-04-18T12:10:42Z",
+                                "paidAmount": {
+                                    "amount": "156.82",
+                                    "currency": "PLN"
+                                },
+                                "reconciliation": {
+                                    "amount": "156.82",
+                                    "currency": "PLN"
+                                },
+                                "features": [
+                                    "ALLEGRO_PAY"
+                                ]
+                            }
+                        ],
+                        "discounts": [
+                            {
+                                "type": "COUPON"
+                            }
+                        ],
+                        "note": {
+                            "text": "Grupa urząd w kształcie mięso."
+                        },
+                        "marketplace": {
+                            "id": "allegro-pl"
+                        },
+                        "summary": {
+                            "totalToPay": {
+                                "amount": "156.82",
+                                "currency": "PLN"
+                            }
+                        },
+                        "updatedAt": "2024-04-01T19:47:36Z",
+                        "revision": "e3d7949d-27a1-4e78-9bf0-993b101ccace"
+                    }
+                ],
+                "marketplace": {
+                    "id": "allegro-pl"
+                }
+            },
+            "type": "READY_FOR_PROCESSING",
+            "occurredAt": "2024-04-08T15:47:54Z"
+        },
+        {
+            "id": "4",
+            "order": {
+                "seller": {
+                    "id": "437848322"
+                },
+                "buyer": {
+                    "id": "696c9881-a6cd-4e5d-835b-8375fd72b774",
+                    "email": "palbin@example.net",
+                    "login": "fabian61",
+                    "guest": false,
+                    "preferences": {
+                        "language": "pl-PL"
+                    }
+                },
+                "lineItems": [
+                    {
+                        "id": "8eb183c7-7837-44c1-934a-f3477e848b91",
+                        "offer": {
+                            "id": "fcec7433",
+                            "name": "Kurtka",
+                            "external": {
+                                "id": "AH-64010"
+                            }
+                        },
+                        "quantity": 2,
+                        "originalPrice": {
+                            "amount": "163.58",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "163.58",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-08T23:00:24Z"
+                    },
+                    {
+                        "id": "390be64f-66cb-41a0-b1d9-5af6e3cdeb14",
+                        "offer": {
+                            "id": "17458838",
+                            "name": "Rękawiczki",
+                            "external": {
+                                "id": "AH-26985"
+                            }
+                        },
+                        "quantity": 1,
+                        "originalPrice": {
+                            "amount": "66.57",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "66.57",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-05T01:01:44Z"
+                    }
+                ],
+                "checkoutForms": [
+                    {
+                        "id": "0ab639a6-5d9f-4362-926d-4903c70b1603",
+                        "messageToSeller": "Zawartość mało wyrok niewielki ulegać przeszłość miesiąc.",
+                        "buyer": {
+                            "id": "aaa96e72-0c33-4efc-bd89-ce0d39d45caa",
+                            "email": "krzyskowanastazja@example.org",
+                            "login": "anastazja63",
+                            "firstName": "Anastazja",
+                            "lastName": "Pyza",
+                            "companyName": null,
+                            "guest": false,
+                            "personalIdentity": "80122378517",
+                            "phoneNumber": null,
+                            "preferences": {
+                                "language": "pl-PL"
+                            },
+                            "address": {
+                                "street": "Widok",
+                                "city": "Śrem",
+                                "postCode": "81-697",
+                                "countryCode": "PL"
+                            }
+                        },
+                        "payment": {
+                            "id": "01af9c7a-61e1-4d79-95a7-56b79985531b",
+                            "type": "CASH_ON_DELIVERY",
+                            "provider": "P24",
+                            "finishedAt": "2024-04-09T15:34:03Z",
+                            "paidAmount": {
+                                "amount": "163.58",
+                                "currency": "PLN"
+                            },
+                            "reconciliation": {
+                                "amount": "163.58",
+                                "currency": "PLN"
+                            },
+                            "features": [
+                                "ALLEGRO_PAY"
+                            ]
+                        },
+                        "status": "READY_FOR_PROCESSING",
+                        "fulfillment": {
+                            "status": "NEW",
+                            "shipmentSummary": {
+                                "lineItemsSent": "SOME"
+                            }
+                        },
+                        "delivery": {
+                            "address": {
+                                "firstName": "Tymon",
+                                "lastName": "Pawlos",
+                                "street": "Piłsudskiego",
+                                "city": "Kluczbork",
+                                "zipCode": "21-431",
+                                "countryCode": "PL",
+                                "companyName": null,
+                                "phoneNumber": null,
+                                "modifiedAt": null
+                            },
+                            "method": {
+                                "id": "be93a453-7cda-4b00-a9f4-cc57c5fa9c95",
+                                "name": "Allegro Paczkomaty InPost"
+                            },
+                            "pickupPoint": {
+                                "id": "POZ08A",
+                                "name": "Paczkomat POZ08A",
+                                "description": "Stacja paliw BP",
+                                "address": {}
+                            },
+                            "cost": {
+                                "amount": "163.58",
+                                "currency": "PLN"
+                            },
+                            "time": {
+                                "from": "2024-04-23T23:42:55Z",
+                                "to": "2024-04-25T02:38:13Z",
+                                "guaranteed": {
+                                    "from": "2024-04-02T13:59:01Z",
+                                    "to": "2024-04-26T17:07:22Z"
+                                },
+                                "dispatch": {
+                                    "from": "2024-04-18T05:49:22Z",
+                                    "to": "2024-04-25T09:13:21Z"
+                                }
+                            },
+                            "smart": true,
+                            "calculatedNumberOfPackages": 1
+                        },
+                        "invoice": {
+                            "required": true,
+                            "address": {
+                                "street": "Spokojna",
+                                "city": "Wałbrzych",
+                                "zipCode": "25-359",
+                                "countryCode": "PL",
+                                "company": {
+                                    "name": "Udix Sp. z o.o.",
+                                    "taxId": null
+                                },
+                                "naturalPerson": {
+                                    "firstName": "Michał",
+                                    "lastName": "Nabiałek"
+                                }
+                            },
+                            "dueDate": "2024-04-22"
+                        },
+                        "lineItems": [
+                            {
+                                "id": "8eb183c7-7837-44c1-934a-f3477e848b91",
+                                "offer": {
+                                    "id": "fcec7433",
+                                    "name": "Kurtka",
+                                    "external": {
+                                        "id": "AH-64010"
+                                    }
+                                },
+                                "quantity": 2,
+                                "originalPrice": {
+                                    "amount": "163.58",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "163.58",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-08T23:00:24Z"
+                            },
+                            {
+                                "id": "390be64f-66cb-41a0-b1d9-5af6e3cdeb14",
+                                "offer": {
+                                    "id": "17458838",
+                                    "name": "Rękawiczki",
+                                    "external": {
+                                        "id": "AH-26985"
+                                    }
+                                },
+                                "quantity": 1,
+                                "originalPrice": {
+                                    "amount": "66.57",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "66.57",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-05T01:01:44Z"
+                            }
+                        ],
+                        "surcharges": [
+                            {
+                                "id": "f40165d2-e72f-46d4-904b-83b9cc1b2bf0",
+                                "type": "CASH_ON_DELIVERY",
+                                "provider": "P24",
+                                "finishedAt": "2024-04-01T06:42:21Z",
+                                "paidAmount": {
+                                    "amount": "163.58",
+                                    "currency": "PLN"
+                                },
+                                "reconciliation": {
+                                    "amount": "163.58",
+                                    "currency": "PLN"
+                                },
+                                "features": [
+                                    "ALLEGRO_PAY"
+                                ]
+                            }
+                        ],
+                        "discounts": [
+                            {
+                                "type": "COUPON"
+                            }
+                        ],
+                        "note": {
+                            "text": "Przed straszny wizyta własny natychmiast wyrażać."
+                        },
+                        "marketplace": {
+                            "id": "allegro-pl"
+                        },
+                        "summary": {
+                            "totalToPay": {
+                                "amount": "163.58",
+                                "currency": "PLN"
+                            }
+                        },
+                        "updatedAt": "2024-04-11T20:50:01Z",
+                        "revision": "b4170fae-2e50-46f7-b469-5dafd95a5cf6"
+                    }
+                ],
+                "marketplace": {
+                    "id": "allegro-pl"
+                }
+            },
+            "type": "READY_FOR_PROCESSING",
+            "occurredAt": "2024-04-21T09:36:24Z"
+        },
+        {
+            "id": "5",
+            "order": {
+                "seller": {
+                    "id": "437848322"
+                },
+                "buyer": {
+                    "id": "71896359-8b11-4346-b8ea-f99744da96c5",
+                    "email": "julitaczulak@example.org",
+                    "login": "gzabka",
+                    "guest": false,
+                    "preferences": {
+                        "language": "pl-PL"
+                    }
+                },
+                "lineItems": [
+                    {
+                        "id": "3c4ad129-0822-4c97-b41a-006d8092b566",
+                        "offer": {
+                            "id": "b78a9d59",
+                            "name": "Koszulka",
+                            "external": {
+                                "id": "AH-92904"
+                            }
+                        },
+                        "quantity": 2,
+                        "originalPrice": {
+                            "amount": "169.58",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "169.58",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-07T23:35:41Z"
+                    }
+                ],
+                "checkoutForms": [
+                    {
+                        "id": "c7594118-fd61-4f19-a0d3-5850171cc2f9",
+                        "messageToSeller": "Sytuacja wybór nauczyciel babcia minerał całkowity.",
+                        "buyer": {
+                            "id": "e161183e-6595-43d4-9668-2dafb2a0d5de",
+                            "email": "emilbociek@example.com",
+                            "login": "franciszeksado",
+                            "firstName": "Krzysztof",
+                            "lastName": "Leoniuk",
+                            "companyName": null,
+                            "guest": false,
+                            "personalIdentity": "74060478899",
+                            "phoneNumber": null,
+                            "preferences": {
+                                "language": "pl-PL"
+                            },
+                            "address": {
+                                "street": "Chopina",
+                                "city": "Jastrzębie-Zdrój",
+                                "postCode": "39-922",
+                                "countryCode": "PL"
+                            }
+                        },
+                        "payment": {
+                            "id": "7d2c6cc2-f391-4531-90fe-0e6ec2cb2638",
+                            "type": "CASH_ON_DELIVERY",
+                            "provider": "P24",
+                            "finishedAt": "2024-04-21T11:44:45Z",
+                            "paidAmount": {
+                                "amount": "169.58",
+                                "currency": "PLN"
+                            },
+                            "reconciliation": {
+                                "amount": "169.58",
+                                "currency": "PLN"
+                            },
+                            "features": [
+                                "ALLEGRO_PAY"
+                            ]
+                        },
+                        "status": "READY_FOR_PROCESSING",
+                        "fulfillment": {
+                            "status": "NEW",
+                            "shipmentSummary": {
+                                "lineItemsSent": "SOME"
+                            }
+                        },
+                        "delivery": {
+                            "address": {
+                                "firstName": "Oskar",
+                                "lastName": "Dzierwa",
+                                "street": "Lipca",
+                                "city": "Grodzisk Mazowiecki",
+                                "zipCode": "08-211",
+                                "countryCode": "PL",
+                                "companyName": null,
+                                "phoneNumber": null,
+                                "modifiedAt": null
+                            },
+                            "method": {
+                                "id": "aaf352e0-c683-42ba-bd30-008c1ecb687e",
+                                "name": "Allegro Paczkomaty InPost"
+                            },
+                            "pickupPoint": {
+                                "id": "POZ08A",
+                                "name": "Paczkomat POZ08A",
+                                "description": "Stacja paliw BP",
+                                "address": {}
+                            },
+                            "cost": {
+                                "amount": "169.58",
+                                "currency": "PLN"
+                            },
+                            "time": {
+                                "from": "2024-04-22T00:37:30Z",
+                                "to": "2024-04-27T23:27:43Z",
+                                "guaranteed": {
+                                    "from": "2024-04-06T21:26:34Z",
+                                    "to": "2024-04-25T20:15:00Z"
+                                },
+                                "dispatch": {
+                                    "from": "2024-04-22T20:24:45Z",
+                                    "to": "2024-04-29T23:19:56Z"
+                                }
+                            },
+                            "smart": true,
+                            "calculatedNumberOfPackages": 1
+                        },
+                        "invoice": {
+                            "required": true,
+                            "address": {
+                                "street": "Osiedlowa",
+                                "city": "Bochnia",
+                                "zipCode": "16-462",
+                                "countryCode": "PL",
+                                "company": {
+                                    "name": "Udix Sp. z o.o.",
+                                    "taxId": null
+                                },
+                                "naturalPerson": {
+                                    "firstName": "Marcelina",
+                                    "lastName": "Sadura"
+                                }
+                            },
+                            "dueDate": "2024-04-26"
+                        },
+                        "lineItems": [
+                            {
+                                "id": "3c4ad129-0822-4c97-b41a-006d8092b566",
+                                "offer": {
+                                    "id": "b78a9d59",
+                                    "name": "Koszulka",
+                                    "external": {
+                                        "id": "AH-92904"
+                                    }
+                                },
+                                "quantity": 2,
+                                "originalPrice": {
+                                    "amount": "169.58",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "169.58",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-07T23:35:41Z"
+                            }
+                        ],
+                        "surcharges": [
+                            {
+                                "id": "275a5432-539a-4851-bbe9-6507390c5e55",
+                                "type": "CASH_ON_DELIVERY",
+                                "provider": "P24",
+                                "finishedAt": "2024-04-14T23:34:47Z",
+                                "paidAmount": {
+                                    "amount": "169.58",
+                                    "currency": "PLN"
+                                },
+                                "reconciliation": {
+                                    "amount": "169.58",
+                                    "currency": "PLN"
+                                },
+                                "features": [
+                                    "ALLEGRO_PAY"
+                                ]
+                            }
+                        ],
+                        "discounts": [
+                            {
+                                "type": "COUPON"
+                            }
+                        ],
+                        "note": {
+                            "text": "Narzędzie ile pełny matematyka czoło."
+                        },
+                        "marketplace": {
+                            "id": "allegro-pl"
+                        },
+                        "summary": {
+                            "totalToPay": {
+                                "amount": "169.58",
+                                "currency": "PLN"
+                            }
+                        },
+                        "updatedAt": "2024-04-09T02:48:43Z",
+                        "revision": "995af458-a0d7-4294-8222-6c5c221473f4"
+                    }
+                ],
+                "marketplace": {
+                    "id": "allegro-pl"
+                }
+            },
+            "type": "READY_FOR_PROCESSING",
+            "occurredAt": "2024-04-05T18:40:58Z"
+        },
+        {
+            "id": "6",
+            "order": {
+                "seller": {
+                    "id": "437848322"
+                },
+                "buyer": {
+                    "id": "ce2f4997-3e43-48c8-bb49-d896c6ee3e6b",
+                    "email": "marika98@example.org",
+                    "login": "monika53",
+                    "guest": false,
+                    "preferences": {
+                        "language": "pl-PL"
+                    }
+                },
+                "lineItems": [
+                    {
+                        "id": "8b0dcb8b-e12b-4cbd-af8b-7c4f02124f29",
+                        "offer": {
+                            "id": "f8baeab1",
+                            "name": "Kurtka",
+                            "external": {
+                                "id": "AH-14521"
+                            }
+                        },
+                        "quantity": 2,
+                        "originalPrice": {
+                            "amount": "168.33",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "168.33",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-01T02:29:29Z"
+                    },
+                    {
+                        "id": "4d6eaec6-d983-477c-83e5-d61f359adcd2",
+                        "offer": {
+                            "id": "10fd5b25",
+                            "name": "Buty",
+                            "external": {
+                                "id": "AH-31359"
+                            }
+                        },
+                        "quantity": 2,
+                        "originalPrice": {
+                            "amount": "100.09",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "100.09",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-17T00:47:12Z"
+                    },
+                    {
+                        "id": "2060e2d4-2dd3-4a48-8f3e-67f7b62e062e",
+                        "offer": {
+                            "id": "8134d1c7",
+                            "name": "Spodnie",
+                            "external": {
+                                "id": "AH-10823"
+                            }
+                        },
+                        "quantity": 2,
+                        "originalPrice": {
+                            "amount": "67.51",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "67.51",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-20T00:51:14Z"
+                    }
+                ],
+                "checkoutForms": [
+                    {
+                        "id": "87c9e600-15d2-43c3-b4c3-7eb652fd1454",
+                        "messageToSeller": "Ponieważ przyjąć plecy płaski.",
+                        "buyer": {
+                            "id": "a3d48abf-0dae-4327-89e3-3ab068c1bac1",
+                            "email": "skladanektobiasz@example.net",
+                            "login": "swlazlak",
+                            "firstName": "Franciszek",
+                            "lastName": "Kazimierczuk",
+                            "companyName": null,
+                            "guest": false,
+                            "personalIdentity": "10320269896",
+                            "phoneNumber": null,
+                            "preferences": {
+                                "language": "pl-PL"
+                            },
+                            "address": {
+                                "street": "Listopada",
+                                "city": "Grodzisk Mazowiecki",
+                                "postCode": "61-606",
+                                "countryCode": "PL"
+                            }
+                        },
+                        "payment": {
+                            "id": "15d9b801-2cc9-44bf-a70e-1b75d6a0e8e0",
+                            "type": "CASH_ON_DELIVERY",
+                            "provider": "P24",
+                            "finishedAt": "2024-04-01T13:58:22Z",
+                            "paidAmount": {
+                                "amount": "168.33",
+                                "currency": "PLN"
+                            },
+                            "reconciliation": {
+                                "amount": "168.33",
+                                "currency": "PLN"
+                            },
+                            "features": [
+                                "ALLEGRO_PAY"
+                            ]
+                        },
+                        "status": "READY_FOR_PROCESSING",
+                        "fulfillment": {
+                            "status": "NEW",
+                            "shipmentSummary": {
+                                "lineItemsSent": "SOME"
+                            }
+                        },
+                        "delivery": {
+                            "address": {
+                                "firstName": "Alex",
+                                "lastName": "Politowicz",
+                                "street": "Dolna",
+                                "city": "Wałcz",
+                                "zipCode": "85-191",
+                                "countryCode": "PL",
+                                "companyName": null,
+                                "phoneNumber": null,
+                                "modifiedAt": null
+                            },
+                            "method": {
+                                "id": "0d56d5f4-869d-447a-87fa-56e5c175ca43",
+                                "name": "Allegro Paczkomaty InPost"
+                            },
+                            "pickupPoint": {
+                                "id": "POZ08A",
+                                "name": "Paczkomat POZ08A",
+                                "description": "Stacja paliw BP",
+                                "address": {}
+                            },
+                            "cost": {
+                                "amount": "168.33",
+                                "currency": "PLN"
+                            },
+                            "time": {
+                                "from": "2024-04-10T14:46:15Z",
+                                "to": "2024-04-24T20:23:32Z",
+                                "guaranteed": {
+                                    "from": "2024-04-16T04:42:13Z",
+                                    "to": "2024-04-30T04:30:26Z"
+                                },
+                                "dispatch": {
+                                    "from": "2024-04-11T09:29:37Z",
+                                    "to": "2024-04-25T22:19:08Z"
+                                }
+                            },
+                            "smart": true,
+                            "calculatedNumberOfPackages": 1
+                        },
+                        "invoice": {
+                            "required": true,
+                            "address": {
+                                "street": "Rolna",
+                                "city": "Ząbki",
+                                "zipCode": "22-548",
+                                "countryCode": "PL",
+                                "company": {
+                                    "name": "Udix Sp. z o.o.",
+                                    "taxId": null
+                                },
+                                "naturalPerson": {
+                                    "firstName": "Mateusz",
+                                    "lastName": "Sławik"
+                                }
+                            },
+                            "dueDate": "2024-04-26"
+                        },
+                        "lineItems": [
+                            {
+                                "id": "8b0dcb8b-e12b-4cbd-af8b-7c4f02124f29",
+                                "offer": {
+                                    "id": "f8baeab1",
+                                    "name": "Kurtka",
+                                    "external": {
+                                        "id": "AH-14521"
+                                    }
+                                },
+                                "quantity": 2,
+                                "originalPrice": {
+                                    "amount": "168.33",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "168.33",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-01T02:29:29Z"
+                            },
+                            {
+                                "id": "4d6eaec6-d983-477c-83e5-d61f359adcd2",
+                                "offer": {
+                                    "id": "10fd5b25",
+                                    "name": "Buty",
+                                    "external": {
+                                        "id": "AH-31359"
+                                    }
+                                },
+                                "quantity": 2,
+                                "originalPrice": {
+                                    "amount": "100.09",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "100.09",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-17T00:47:12Z"
+                            },
+                            {
+                                "id": "2060e2d4-2dd3-4a48-8f3e-67f7b62e062e",
+                                "offer": {
+                                    "id": "8134d1c7",
+                                    "name": "Spodnie",
+                                    "external": {
+                                        "id": "AH-10823"
+                                    }
+                                },
+                                "quantity": 2,
+                                "originalPrice": {
+                                    "amount": "67.51",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "67.51",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-20T00:51:14Z"
+                            }
+                        ],
+                        "surcharges": [
+                            {
+                                "id": "dcb6d15b-29dd-4ce8-9d88-0bb3321effcd",
+                                "type": "CASH_ON_DELIVERY",
+                                "provider": "P24",
+                                "finishedAt": "2024-04-24T02:54:19Z",
+                                "paidAmount": {
+                                    "amount": "168.33",
+                                    "currency": "PLN"
+                                },
+                                "reconciliation": {
+                                    "amount": "168.33",
+                                    "currency": "PLN"
+                                },
+                                "features": [
+                                    "ALLEGRO_PAY"
+                                ]
+                            }
+                        ],
+                        "discounts": [
+                            {
+                                "type": "COUPON"
+                            }
+                        ],
+                        "note": {
+                            "text": "Wieczorem 5 całkiem."
+                        },
+                        "marketplace": {
+                            "id": "allegro-pl"
+                        },
+                        "summary": {
+                            "totalToPay": {
+                                "amount": "168.33",
+                                "currency": "PLN"
+                            }
+                        },
+                        "updatedAt": "2024-04-05T01:46:10Z",
+                        "revision": "b6745d4c-d685-4021-ae1b-d437f60052a9"
+                    }
+                ],
+                "marketplace": {
+                    "id": "allegro-pl"
+                }
+            },
+            "type": "READY_FOR_PROCESSING",
+            "occurredAt": "2024-04-18T13:11:45Z"
+        },
+        {
+            "id": "7",
+            "order": {
+                "seller": {
+                    "id": "437848322"
+                },
+                "buyer": {
+                    "id": "885871fc-a2fe-4915-bc25-970ad5ba167c",
+                    "email": "lukasz47@example.net",
+                    "login": "knycholgierd",
+                    "guest": false,
+                    "preferences": {
+                        "language": "pl-PL"
+                    }
+                },
+                "lineItems": [
+                    {
+                        "id": "1af76e63-dd8e-4021-b403-1c0c64b495d2",
+                        "offer": {
+                            "id": "f0307dbe",
+                            "name": "Kurtka",
+                            "external": {
+                                "id": "AH-30455"
+                            }
+                        },
+                        "quantity": 1,
+                        "originalPrice": {
+                            "amount": "142.71",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "142.71",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-15T05:03:35Z"
+                    },
+                    {
+                        "id": "1c998c9b-7710-4cf4-86ef-7d33b889bb82",
+                        "offer": {
+                            "id": "16341219",
+                            "name": "Koszulka",
+                            "external": {
+                                "id": "AH-73611"
+                            }
+                        },
+                        "quantity": 2,
+                        "originalPrice": {
+                            "amount": "161.48",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "161.48",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-17T00:27:20Z"
+                    },
+                    {
+                        "id": "e45f581a-85dc-412a-a269-6268c8444559",
+                        "offer": {
+                            "id": "044ca063",
+                            "name": "Kurtka",
+                            "external": {
+                                "id": "AH-32458"
+                            }
+                        },
+                        "quantity": 2,
+                        "originalPrice": {
+                            "amount": "32.16",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "32.16",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-21T16:32:28Z"
+                    }
+                ],
+                "checkoutForms": [
+                    {
+                        "id": "efbafd8e-c679-4efd-9fe1-b2a1cce6e518",
+                        "messageToSeller": "Jakiś rano energia właśnie pole dalej.",
+                        "buyer": {
+                            "id": "23d35d76-8f79-4899-bb6e-d68077679cc5",
+                            "email": "nmaraszek@example.net",
+                            "login": "jasicakamil",
+                            "firstName": "Marcel",
+                            "lastName": "Nieścioruk",
+                            "companyName": null,
+                            "guest": false,
+                            "personalIdentity": "16211425433",
+                            "phoneNumber": null,
+                            "preferences": {
+                                "language": "pl-PL"
+                            },
+                            "address": {
+                                "street": "Wieniawskiego",
+                                "city": "Bielsko-Biała",
+                                "postCode": "09-321",
+                                "countryCode": "PL"
+                            }
+                        },
+                        "payment": {
+                            "id": "fba8b868-f51e-4405-97b3-92474051a41f",
+                            "type": "CASH_ON_DELIVERY",
+                            "provider": "P24",
+                            "finishedAt": "2024-04-09T14:52:07Z",
+                            "paidAmount": {
+                                "amount": "142.71",
+                                "currency": "PLN"
+                            },
+                            "reconciliation": {
+                                "amount": "142.71",
+                                "currency": "PLN"
+                            },
+                            "features": [
+                                "ALLEGRO_PAY"
+                            ]
+                        },
+                        "status": "READY_FOR_PROCESSING",
+                        "fulfillment": {
+                            "status": "PICKED_UP",
+                            "shipmentSummary": {
+                                "lineItemsSent": "SOME"
+                            }
+                        },
+                        "delivery": {
+                            "address": {
+                                "firstName": "Franciszek",
+                                "lastName": "Tarach",
+                                "street": "Wypoczynkowa",
+                                "city": "Wyszków",
+                                "zipCode": "89-298",
+                                "countryCode": "PL",
+                                "companyName": null,
+                                "phoneNumber": null,
+                                "modifiedAt": null
+                            },
+                            "method": {
+                                "id": "638860a8-3517-467b-9fac-190ab9e26c85",
+                                "name": "Allegro Paczkomaty InPost"
+                            },
+                            "pickupPoint": {
+                                "id": "POZ08A",
+                                "name": "Paczkomat POZ08A",
+                                "description": "Stacja paliw BP",
+                                "address": {}
+                            },
+                            "cost": {
+                                "amount": "142.71",
+                                "currency": "PLN"
+                            },
+                            "time": {
+                                "from": "2024-04-16T17:18:17Z",
+                                "to": "2024-04-26T00:55:17Z",
+                                "guaranteed": {
+                                    "from": "2024-04-02T19:32:45Z",
+                                    "to": "2024-04-28T12:00:18Z"
+                                },
+                                "dispatch": {
+                                    "from": "2024-04-04T14:46:18Z",
+                                    "to": "2024-04-27T21:04:18Z"
+                                }
+                            },
+                            "smart": true,
+                            "calculatedNumberOfPackages": 1
+                        },
+                        "invoice": {
+                            "required": true,
+                            "address": {
+                                "street": "Wodna",
+                                "city": "Kraśnik",
+                                "zipCode": "76-862",
+                                "countryCode": "PL",
+                                "company": {
+                                    "name": "Udix Sp. z o.o.",
+                                    "taxId": null
+                                },
+                                "naturalPerson": {
+                                    "firstName": "Julianna",
+                                    "lastName": "Tasarz"
+                                }
+                            },
+                            "dueDate": "2024-04-01"
+                        },
+                        "lineItems": [
+                            {
+                                "id": "1af76e63-dd8e-4021-b403-1c0c64b495d2",
+                                "offer": {
+                                    "id": "f0307dbe",
+                                    "name": "Kurtka",
+                                    "external": {
+                                        "id": "AH-30455"
+                                    }
+                                },
+                                "quantity": 1,
+                                "originalPrice": {
+                                    "amount": "142.71",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "142.71",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-15T05:03:35Z"
+                            },
+                            {
+                                "id": "1c998c9b-7710-4cf4-86ef-7d33b889bb82",
+                                "offer": {
+                                    "id": "16341219",
+                                    "name": "Koszulka",
+                                    "external": {
+                                        "id": "AH-73611"
+                                    }
+                                },
+                                "quantity": 2,
+                                "originalPrice": {
+                                    "amount": "161.48",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "161.48",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-17T00:27:20Z"
+                            },
+                            {
+                                "id": "e45f581a-85dc-412a-a269-6268c8444559",
+                                "offer": {
+                                    "id": "044ca063",
+                                    "name": "Kurtka",
+                                    "external": {
+                                        "id": "AH-32458"
+                                    }
+                                },
+                                "quantity": 2,
+                                "originalPrice": {
+                                    "amount": "32.16",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "32.16",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-21T16:32:28Z"
+                            }
+                        ],
+                        "surcharges": [
+                            {
+                                "id": "b35f96b0-2ab2-487c-a739-8c87da4b1eb5",
+                                "type": "CASH_ON_DELIVERY",
+                                "provider": "P24",
+                                "finishedAt": "2024-04-18T14:08:40Z",
+                                "paidAmount": {
+                                    "amount": "142.71",
+                                    "currency": "PLN"
+                                },
+                                "reconciliation": {
+                                    "amount": "142.71",
+                                    "currency": "PLN"
+                                },
+                                "features": [
+                                    "ALLEGRO_PAY"
+                                ]
+                            }
+                        ],
+                        "discounts": [
+                            {
+                                "type": "COUPON"
+                            }
+                        ],
+                        "note": {
+                            "text": "Potrzebny artystyczny dobry."
+                        },
+                        "marketplace": {
+                            "id": "allegro-pl"
+                        },
+                        "summary": {
+                            "totalToPay": {
+                                "amount": "142.71",
+                                "currency": "PLN"
+                            }
+                        },
+                        "updatedAt": "2024-04-12T21:17:31Z",
+                        "revision": "4e32344e-9caa-452e-8f08-7663103b4a37"
+                    }
+                ],
+                "marketplace": {
+                    "id": "allegro-pl"
+                }
+            },
+            "type": "READY_FOR_PROCESSING",
+            "occurredAt": "2024-04-13T10:17:53Z"
+        },
+        {
+            "id": "8",
+            "order": {
+                "seller": {
+                    "id": "437848322"
+                },
+                "buyer": {
+                    "id": "bc76d527-493e-49e1-9bb9-67f0d7a4ff0a",
+                    "email": "kalinawyrobek@example.com",
+                    "login": "sylwia80",
+                    "guest": false,
+                    "preferences": {
+                        "language": "pl-PL"
+                    }
+                },
+                "lineItems": [
+                    {
+                        "id": "9e7b44ca-933a-4f86-be95-e2564d9cd9aa",
+                        "offer": {
+                            "id": "cb07d801",
+                            "name": "Kurtka",
+                            "external": {
+                                "id": "AH-98694"
+                            }
+                        },
+                        "quantity": 3,
+                        "originalPrice": {
+                            "amount": "71.68",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "71.68",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-08T06:07:41Z"
+                    },
+                    {
+                        "id": "da4459b7-f583-43c1-a35e-ccbde06d2f20",
+                        "offer": {
+                            "id": "a423168f",
+                            "name": "Spodnie",
+                            "external": {
+                                "id": "AH-14148"
+                            }
+                        },
+                        "quantity": 2,
+                        "originalPrice": {
+                            "amount": "181.0",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "181.0",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-05T16:59:48Z"
+                    }
+                ],
+                "checkoutForms": [
+                    {
+                        "id": "46fe09bc-3c4e-4a81-a7e1-e43b4c14ff8f",
+                        "messageToSeller": "Ja stanowisko czynić.",
+                        "buyer": {
+                            "id": "d967ef35-2fe5-4e55-8ce6-f0a5f5e30f19",
+                            "email": "qpernak@example.org",
+                            "login": "jbejm",
+                            "firstName": "Stefan",
+                            "lastName": "Piekarek",
+                            "companyName": null,
+                            "guest": false,
+                            "personalIdentity": "19261523670",
+                            "phoneNumber": null,
+                            "preferences": {
+                                "language": "pl-PL"
+                            },
+                            "address": {
+                                "street": "Polna",
+                                "city": "Wrocław",
+                                "postCode": "76-543",
+                                "countryCode": "PL"
+                            }
+                        },
+                        "payment": {
+                            "id": "ad4e6edc-23ab-4e4a-8060-f02ecdd5c742",
+                            "type": "CASH_ON_DELIVERY",
+                            "provider": "P24",
+                            "finishedAt": "2024-04-16T22:44:39Z",
+                            "paidAmount": {
+                                "amount": "71.68",
+                                "currency": "PLN"
+                            },
+                            "reconciliation": {
+                                "amount": "71.68",
+                                "currency": "PLN"
+                            },
+                            "features": [
+                                "ALLEGRO_PAY"
+                            ]
+                        },
+                        "status": "READY_FOR_PROCESSING",
+                        "fulfillment": {
+                            "status": "PICKED_UP",
+                            "shipmentSummary": {
+                                "lineItemsSent": "SOME"
+                            }
+                        },
+                        "delivery": {
+                            "address": {
+                                "firstName": "Dariusz",
+                                "lastName": "Satora",
+                                "street": "Sucharskiego",
+                                "city": "Zabrze",
+                                "zipCode": "10-533",
+                                "countryCode": "PL",
+                                "companyName": null,
+                                "phoneNumber": null,
+                                "modifiedAt": null
+                            },
+                            "method": {
+                                "id": "bc2afe05-cec4-4600-8f72-2ed054774d46",
+                                "name": "Allegro Paczkomaty InPost"
+                            },
+                            "pickupPoint": {
+                                "id": "POZ08A",
+                                "name": "Paczkomat POZ08A",
+                                "description": "Stacja paliw BP",
+                                "address": {}
+                            },
+                            "cost": {
+                                "amount": "71.68",
+                                "currency": "PLN"
+                            },
+                            "time": {
+                                "from": "2024-04-07T21:56:09Z",
+                                "to": "2024-04-28T04:22:10Z",
+                                "guaranteed": {
+                                    "from": "2024-04-13T22:37:18Z",
+                                    "to": "2024-04-26T17:51:02Z"
+                                },
+                                "dispatch": {
+                                    "from": "2024-04-02T10:09:41Z",
+                                    "to": "2024-04-25T18:04:52Z"
+                                }
+                            },
+                            "smart": true,
+                            "calculatedNumberOfPackages": 1
+                        },
+                        "invoice": {
+                            "required": true,
+                            "address": {
+                                "street": "Tylna",
+                                "city": "Środa Wielkopolska",
+                                "zipCode": "65-277",
+                                "countryCode": "PL",
+                                "company": {
+                                    "name": "Udix Sp. z o.o.",
+                                    "taxId": null
+                                },
+                                "naturalPerson": {
+                                    "firstName": "Maks",
+                                    "lastName": "Lesner"
+                                }
+                            },
+                            "dueDate": "2024-04-27"
+                        },
+                        "lineItems": [
+                            {
+                                "id": "9e7b44ca-933a-4f86-be95-e2564d9cd9aa",
+                                "offer": {
+                                    "id": "cb07d801",
+                                    "name": "Kurtka",
+                                    "external": {
+                                        "id": "AH-98694"
+                                    }
+                                },
+                                "quantity": 3,
+                                "originalPrice": {
+                                    "amount": "71.68",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "71.68",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-08T06:07:41Z"
+                            },
+                            {
+                                "id": "da4459b7-f583-43c1-a35e-ccbde06d2f20",
+                                "offer": {
+                                    "id": "a423168f",
+                                    "name": "Spodnie",
+                                    "external": {
+                                        "id": "AH-14148"
+                                    }
+                                },
+                                "quantity": 2,
+                                "originalPrice": {
+                                    "amount": "181.0",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "181.0",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-05T16:59:48Z"
+                            }
+                        ],
+                        "surcharges": [
+                            {
+                                "id": "e9916905-4b5f-4329-ba7f-5086741d6ba1",
+                                "type": "CASH_ON_DELIVERY",
+                                "provider": "P24",
+                                "finishedAt": "2024-04-07T05:00:57Z",
+                                "paidAmount": {
+                                    "amount": "71.68",
+                                    "currency": "PLN"
+                                },
+                                "reconciliation": {
+                                    "amount": "71.68",
+                                    "currency": "PLN"
+                                },
+                                "features": [
+                                    "ALLEGRO_PAY"
+                                ]
+                            }
+                        ],
+                        "discounts": [
+                            {
+                                "type": "COUPON"
+                            }
+                        ],
+                        "note": {
+                            "text": "! kanał nadmierny lewy dwa przez odczuwać Chrystus."
+                        },
+                        "marketplace": {
+                            "id": "allegro-pl"
+                        },
+                        "summary": {
+                            "totalToPay": {
+                                "amount": "71.68",
+                                "currency": "PLN"
+                            }
+                        },
+                        "updatedAt": "2024-04-20T10:46:51Z",
+                        "revision": "14a11d7a-9385-4d32-9644-2f34fcba8fff"
+                    }
+                ],
+                "marketplace": {
+                    "id": "allegro-pl"
+                }
+            },
+            "type": "READY_FOR_PROCESSING",
+            "occurredAt": "2024-04-17T08:20:41Z"
+        },
+        {
+            "id": "9",
+            "order": {
+                "seller": {
+                    "id": "437848322"
+                },
+                "buyer": {
+                    "id": "4e268b44-45ec-45d6-9d91-e8d718e6a6cc",
+                    "email": "jszlapka@example.com",
+                    "login": "jedrzej14",
+                    "guest": false,
+                    "preferences": {
+                        "language": "pl-PL"
+                    }
+                },
+                "lineItems": [
+                    {
+                        "id": "0baefdf8-eeac-4fed-b89b-a1473f6a00f0",
+                        "offer": {
+                            "id": "0532e390",
+                            "name": "Koszulka",
+                            "external": {
+                                "id": "AH-74235"
+                            }
+                        },
+                        "quantity": 1,
+                        "originalPrice": {
+                            "amount": "191.02",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "191.02",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-02T02:07:32Z"
+                    },
+                    {
+                        "id": "9244b154-036b-4213-a901-5e37a6eff0e1",
+                        "offer": {
+                            "id": "1ad2fefa",
+                            "name": "Kurtka",
+                            "external": {
+                                "id": "AH-77515"
+                            }
+                        },
+                        "quantity": 2,
+                        "originalPrice": {
+                            "amount": "139.99",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "139.99",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-09T09:50:17Z"
+                    },
+                    {
+                        "id": "05d11c43-0b04-419a-9d07-b91206fe941d",
+                        "offer": {
+                            "id": "a4672451",
+                            "name": "Buty",
+                            "external": {
+                                "id": "AH-63870"
+                            }
+                        },
+                        "quantity": 3,
+                        "originalPrice": {
+                            "amount": "70.38",
+                            "currency": "PLN"
+                        },
+                        "price": {
+                            "amount": "70.38",
+                            "currency": "PLN"
+                        },
+                        "boughtAt": "2024-04-06T14:35:42Z"
+                    }
+                ],
+                "checkoutForms": [
+                    {
+                        "id": "d26f9fc0-bc72-4f3a-a051-bafe8b85052f",
+                        "messageToSeller": "Pomysł wina rano białoruski muzeum wywołać.",
+                        "buyer": {
+                            "id": "7b428c92-3b49-45ac-9e95-db911e4038d9",
+                            "email": "kkalek@example.org",
+                            "login": "franciszek34",
+                            "firstName": "Sara",
+                            "lastName": "Biegała",
+                            "companyName": null,
+                            "guest": false,
+                            "personalIdentity": "98071899579",
+                            "phoneNumber": null,
+                            "preferences": {
+                                "language": "pl-PL"
+                            },
+                            "address": {
+                                "street": "Promienna",
+                                "city": "Kościerzyna",
+                                "postCode": "09-906",
+                                "countryCode": "PL"
+                            }
+                        },
+                        "payment": {
+                            "id": "8057dcb1-95cb-4289-aedb-4627af0150d4",
+                            "type": "CASH_ON_DELIVERY",
+                            "provider": "P24",
+                            "finishedAt": "2024-04-11T20:27:38Z",
+                            "paidAmount": {
+                                "amount": "191.02",
+                                "currency": "PLN"
+                            },
+                            "reconciliation": {
+                                "amount": "191.02",
+                                "currency": "PLN"
+                            },
+                            "features": [
+                                "ALLEGRO_PAY"
+                            ]
+                        },
+                        "status": "READY_FOR_PROCESSING",
+                        "fulfillment": {
+                            "status": "READY_FOR_PICKUP",
+                            "shipmentSummary": {
+                                "lineItemsSent": "SOME"
+                            }
+                        },
+                        "delivery": {
+                            "address": {
+                                "firstName": "Monika",
+                                "lastName": "Skwira",
+                                "street": "Leśna",
+                                "city": "Chojnice",
+                                "zipCode": "69-775",
+                                "countryCode": "PL",
+                                "companyName": null,
+                                "phoneNumber": null,
+                                "modifiedAt": null
+                            },
+                            "method": {
+                                "id": "e8d02196-6fc8-49b0-b1ba-144c442d1e83",
+                                "name": "Allegro Paczkomaty InPost"
+                            },
+                            "pickupPoint": {
+                                "id": "POZ08A",
+                                "name": "Paczkomat POZ08A",
+                                "description": "Stacja paliw BP",
+                                "address": {}
+                            },
+                            "cost": {
+                                "amount": "191.02",
+                                "currency": "PLN"
+                            },
+                            "time": {
+                                "from": "2024-04-07T11:19:24Z",
+                                "to": "2024-04-24T23:02:28Z",
+                                "guaranteed": {
+                                    "from": "2024-04-18T16:44:59Z",
+                                    "to": "2024-04-24T22:23:36Z"
+                                },
+                                "dispatch": {
+                                    "from": "2024-04-21T07:52:12Z",
+                                    "to": "2024-04-29T22:38:13Z"
+                                }
+                            },
+                            "smart": true,
+                            "calculatedNumberOfPackages": 1
+                        },
+                        "invoice": {
+                            "required": true,
+                            "address": {
+                                "street": "Szkolna",
+                                "city": "Kętrzyn",
+                                "zipCode": "78-830",
+                                "countryCode": "PL",
+                                "company": {
+                                    "name": "Udix Sp. z o.o.",
+                                    "taxId": null
+                                },
+                                "naturalPerson": {
+                                    "firstName": "Tobiasz",
+                                    "lastName": "Bondyra"
+                                }
+                            },
+                            "dueDate": "2024-04-27"
+                        },
+                        "lineItems": [
+                            {
+                                "id": "0baefdf8-eeac-4fed-b89b-a1473f6a00f0",
+                                "offer": {
+                                    "id": "0532e390",
+                                    "name": "Koszulka",
+                                    "external": {
+                                        "id": "AH-74235"
+                                    }
+                                },
+                                "quantity": 1,
+                                "originalPrice": {
+                                    "amount": "191.02",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "191.02",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-02T02:07:32Z"
+                            },
+                            {
+                                "id": "9244b154-036b-4213-a901-5e37a6eff0e1",
+                                "offer": {
+                                    "id": "1ad2fefa",
+                                    "name": "Kurtka",
+                                    "external": {
+                                        "id": "AH-77515"
+                                    }
+                                },
+                                "quantity": 2,
+                                "originalPrice": {
+                                    "amount": "139.99",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "139.99",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-09T09:50:17Z"
+                            },
+                            {
+                                "id": "05d11c43-0b04-419a-9d07-b91206fe941d",
+                                "offer": {
+                                    "id": "a4672451",
+                                    "name": "Buty",
+                                    "external": {
+                                        "id": "AH-63870"
+                                    }
+                                },
+                                "quantity": 3,
+                                "originalPrice": {
+                                    "amount": "70.38",
+                                    "currency": "PLN"
+                                },
+                                "price": {
+                                    "amount": "70.38",
+                                    "currency": "PLN"
+                                },
+                                "boughtAt": "2024-04-06T14:35:42Z"
+                            }
+                        ],
+                        "surcharges": [
+                            {
+                                "id": "a6adf6a7-e9f6-4950-89f0-81abe2638b5e",
+                                "type": "CASH_ON_DELIVERY",
+                                "provider": "P24",
+                                "finishedAt": "2024-04-04T07:42:26Z",
+                                "paidAmount": {
+                                    "amount": "191.02",
+                                    "currency": "PLN"
+                                },
+                                "reconciliation": {
+                                    "amount": "191.02",
+                                    "currency": "PLN"
+                                },
+                                "features": [
+                                    "ALLEGRO_PAY"
+                                ]
+                            }
+                        ],
+                        "discounts": [
+                            {
+                                "type": "COUPON"
+                            }
+                        ],
+                        "note": {
+                            "text": "Łatwy występować instytucja zając działanie próba położenie."
+                        },
+                        "marketplace": {
+                            "id": "allegro-pl"
+                        },
+                        "summary": {
+                            "totalToPay": {
+                                "amount": "191.02",
+                                "currency": "PLN"
+                            }
+                        },
+                        "updatedAt": "2024-04-16T08:59:00Z",
+                        "revision": "f3cdee54-3cf2-484c-8564-a1abcd455282"
+                    }
+                ],
+                "marketplace": {
+                    "id": "allegro-pl"
+                }
+            },
+            "type": "READY_FOR_PROCESSING",
+            "occurredAt": "2024-04-17T15:42:43Z"
+        }
+    ]
+}
