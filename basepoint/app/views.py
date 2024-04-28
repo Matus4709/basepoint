@@ -9,6 +9,8 @@ import smtplib, ssl
 import os
 from dotenv import load_dotenv
 
+from app.models import *
+
 
 def login_view(request):
     if request.method == 'POST':
@@ -259,4 +261,51 @@ def reset_password(request, token):
             return HttpResponse("Twoje hasło zostało zmienione. Możesz się teraz <a href='/login'>zalogować</href>.")
         
     return render(request, 'reset_password_confirm.html')
-  
+
+############################################################
+############################################################
+def getAllCategory(request):
+    getAllCategoryNames = Categories.objects.all()
+    return HttpResponse(getAllCategoryNames)
+
+
+def getOneCategory(request, id): #id
+    #getAllCategoryName = Kategories.objects.all() #  (request) ->, -> (getAllCategoryName) (to co będzie wyswietlane decydujemy w modelu w tym przypadku name)
+    #jeden = Kategories.objects.get(pk=1) #kategoria o danym id
+    #getCategoryProducts = Products.objects.filter(kategory=5) # Pobierz produkty pod daną kategorią
+    getCategoryName = Categories.objects.get(pk=id)
+    return HttpResponse(getCategoryName.name)
+
+
+def getAllProducts(request):
+    allProducts = Products.objects.all()
+    data = {'produkty': allProducts}
+    return render(request, 'allProductsView.html', data)
+
+
+def getOneProduct(request, id):
+    getProduct = Products.objects.get(pk=id)
+    data = {'getProduct': getProduct}
+    return render(request,'specificProduct.html',data)
+
+def addNewProduct(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        quantity = request.POST.get('quantity')
+        price = request.POST.get('price')
+        #category = request.POST.get('category')
+
+        '''
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                      INSERT INTO produkty_products (name, description, amount, price, category)
+                      VALUES (%s, %s, %s, %s, %s)
+                  """, [name, description, amount, price, category])
+        '''
+
+        newProduct = Products(name=name, description=description, quantity=quantity, price=price)
+        newProduct.save()
+
+    return render(request, 'addNewProduct.html', {})
+

@@ -48,18 +48,39 @@ class Actions(models.Model):
     action_time = models.DateTimeField(auto_now_add=True)
     action_result = models.CharField(max_length=100)
     # workers_worker_id = models.ForeignKey(Worker, on_delete=models.CASCADE)
-    
+
+
+class Categories(models.Model):
+    name = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.name
+
+
 class Products(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()
-    category = models.CharField(max_length=100)
-    graphic_url = models.CharField(max_length=1000)
+    banner = models.ImageField(default='fallback.png', blank=True)
+    category = models.ForeignKey(Categories, null=True, blank=True, on_delete=models.CASCADE)
     accounts_account_id = models.ForeignKey(Account, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
+
+
+# class Products(models.Model):
+#     name = models.CharField(max_length=100)
+#     description = models.TextField(null=True)
+#     price = models.DecimalField(max_digits=10, decimal_places=2)
+#     quantity = models.IntegerField()
+#     category = models.CharField(max_length=100)
+#     graphic_url = models.CharField(max_length=1000)
+#     accounts_account_id = models.ForeignKey(Account, on_delete=models.CASCADE)
+#
+#     def __str__(self):
+#         return self.name
     
 class Statues(models.Model):
     description_status = models.CharField(max_length=100)
@@ -122,3 +143,7 @@ class integrations(models.Model):
     name = models.CharField(max_length=100)
     token = models.CharField(max_length=255)
     accounts_account_id = models.ForeignKey(Account, on_delete=models.CASCADE)
+
+###########################################
+###########################################
+

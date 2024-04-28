@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import login_view, register_view,logout_view,create_worker,dashboard,activate,reset_password_view,reset_password
+from .views import *
 
 urlpatterns = [
     path('login/', login_view, name='login'),
@@ -11,4 +11,10 @@ urlpatterns = [
     path('reset-password-confirm/<str:token>/', reset_password, name='reset_password_confirm'),
     path('login/reset_password_view/', reset_password_view, name='reset_password_view'),
     # Inne ścieżki URL dla innych widoków
+    #######################################
+    path('produkty/', getAllProducts),
+    path('produkty/<id>', getOneProduct),
+    path('kategorie/', getAllCategory),
+    path('kategorie/<id>', getOneCategory),
+    path('dodajProdukt/', addNewProduct),
 ]

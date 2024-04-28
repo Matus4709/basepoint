@@ -1,0 +1,20 @@
+{% extends 'szablon.html'%}
+{% block content%}
+<table style="border-collapse: collapse; width: 100%;">
+  <thead>
+    <tr>
+      <th style="border-bottom: 1px solid black;">Nazwa</th>
+      <th style="border-bottom: 1px solid black;">Stan</th>
+      <th style="border-bottom: 1px solid black;">Cena</th>
+    </tr>
+  </thead>
+  <tbody>
+  {%for p in produkty%}
+    <tr>
+      <td>{{p.name}}</td>
+      <td>{{p.quantity}} szt.</td>
+      <td>{{p.price}} zł.</td>
+    </tr>
+  {%endfor%}
+  </tbody>
+{% endblock content%}
