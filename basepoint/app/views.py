@@ -301,16 +301,19 @@ def getOneProduct(request, id):
 #
 
 def addNewProduct(request, id):
-
+    allCategories = Categories.objects.all()
+    data = {'kategorie': allCategories}
     if request.method == 'POST':
         name = request.POST.get('name')
         description = request.POST.get('description')
         quantity = request.POST.get('quantity')
         price = request.POST.get('price')
+        category = request.POST.get('category')
         # Pobierz ID użytkownika z żądania
         user_id = id
+
         # Utwórz nowy produkt i przypisz ID użytkownika
         newProduct = Products(name=name, description=description, quantity=quantity, price=price,
-                              accounts_account_id_id=user_id)
+                              accounts_account_id_id=user_id, category_id=category)
         newProduct.save()
-    return render(request, 'addNewProduct.html', {})
+    return render(request, 'addNewProduct.html', data)
