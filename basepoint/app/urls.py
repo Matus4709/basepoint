@@ -12,9 +12,9 @@ urlpatterns = [
     path('login/reset_password_view/', reset_password_view, name='reset_password_view'),
     # Inne ścieżki URL dla innych widoków
     #######################################
-    path('produkty/', getAllProducts),
+    path('produkty/', getAllProducts, name='produkty'),
     path('produkty/<id>', getOneProduct),
     path('kategorie/', getAllCategory),
     path('kategorie/<id>', getOneCategory),
-    path('dodajProdukt/', addNewProduct),
+    path('dodajProdukt/<id>', addNewProduct),
 ]

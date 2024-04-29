@@ -288,24 +288,29 @@ def getOneProduct(request, id):
     data = {'getProduct': getProduct}
     return render(request,'specificProduct.html',data)
 
-def addNewProduct(request):
+# def addNewProduct(request):
+#     if request.method == 'POST':
+#         name = request.POST.get('name')
+#         description = request.POST.get('description')
+#         quantity = request.POST.get('quantity')
+#         price = request.POST.get('price')
+#         #category = request.POST.get('category')
+#         newProduct = Products(name=name, description=description, quantity=quantity, price=price)
+#         newProduct.save()
+#     return render(request, 'addNewProduct.html', {})
+#
+
+def addNewProduct(request, id):
+
     if request.method == 'POST':
         name = request.POST.get('name')
         description = request.POST.get('description')
         quantity = request.POST.get('quantity')
         price = request.POST.get('price')
-        #category = request.POST.get('category')
-
-        '''
-        with connection.cursor() as cursor:
-            cursor.execute("""
-                      INSERT INTO produkty_products (name, description, amount, price, category)
-                      VALUES (%s, %s, %s, %s, %s)
-                  """, [name, description, amount, price, category])
-        '''
-
-        newProduct = Products(name=name, description=description, quantity=quantity, price=price)
+        # Pobierz ID użytkownika z żądania
+        user_id = id
+        # Utwórz nowy produkt i przypisz ID użytkownika
+        newProduct = Products(name=name, description=description, quantity=quantity, price=price,
+                              accounts_account_id_id=user_id)
         newProduct.save()
-
     return render(request, 'addNewProduct.html', {})
-

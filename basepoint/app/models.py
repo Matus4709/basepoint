@@ -63,8 +63,9 @@ class Products(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()
     banner = models.ImageField(default='fallback.png', blank=True)
-    category = models.ForeignKey(Categories, null=True, blank=True, on_delete=models.CASCADE)
     accounts_account_id = models.ForeignKey(Account, on_delete=models.CASCADE)
+    category = models.ForeignKey(Categories, null=True, blank=True, on_delete=models.CASCADE)
+
 
     def __str__(self):
         return self.name
