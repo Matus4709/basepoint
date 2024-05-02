@@ -77,30 +77,27 @@ Lista zamówień - BASEPOINT
                                 </div>
                             </td>
                             {% comment %} <td>{{ event.id }}</td> {% endcomment %}
-                            <td>{{ event.order.buyer.email }}</td>
+                            <td>{{ event.2}}</td>
                             <td>
                                 <ul>
-                                    {% for item in event.order.lineItems %}
-                                        {{ item.offer.name }}, 
-                                    {% endfor %}
+                                    {{ event.3}}
                                 </ul>
                             </td>
                             <td>
-                              {% comment %} {% if event.order.checkoutForms.0.fulfillment.status == 'SENT' or event.order.checkoutForms.0.fulfillment.status == 'PICKED_UP' or event.order.checkoutForms.0.fulfillment.status == 'READY_FOR_PICKUP' %}
+                            {% if event.5 == 'SENT' or event.5 == 'PICKED_UP' or event.5 == 'READY_FOR_PICKUP' %}
                                   Wysłane
-                              {% elif event.order.checkoutForms.0.fulfillment.status == 'NEW' or event.order.checkoutForms.0.fulfillment.status == 'PROCESSING' %}
+                              {% elif event.5 == 'NEW' or event.5 == 'PROCESSING' %}
                                   Nowe
-                              {% elif event.order.checkoutForms.0.fulfillment.status == 'READY_FOR_SHIPMENT' %}
+                              {% elif event.5 == 'READY_FOR_SHIPMENT' %}
                                   Do wysłania
-                              {% elif event.order.checkoutForms.0.fulfillment.status == 'SUSPENDED' %}
+                              {% elif event.5 == 'SUSPENDED' %}
                                   Anulowane
-                              {% endif %} {% endcomment %}
-                              {{event.order.checkoutForms.0.fulfillment.status}}
+                              {% endif %}
                             </td>
-                            <td>{{ event.total_amount }} PLN</td>
-                            <td>{{ event.order.checkoutForms.0.delivery.method.name }}</td>
+                            <td>{{ event.4 }} PLN</td>
+                            <td>{{ event.6 }}</td>
                             <td>
-                              {{ event.occurredAt }}
+                                {{ event.7|date:"Y-m-d H:m" }} 
                             </td>
                             <td><a href="#" style="color: black;"><i class="fa fa-download"></i></a></td>
                         </tr>

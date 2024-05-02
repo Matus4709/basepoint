@@ -47,9 +47,9 @@ class Actions(models.Model):
     action_taken = models.CharField(max_length=100)
     action_time = models.DateTimeField(auto_now_add=True)
     action_result = models.CharField(max_length=100)
-    # workers_worker_id = models.ForeignKey(Worker, on_delete=models.CASCADE)
-    
+
 class Products(models.Model):
+    id = models.CharField(max_length=100, unique=True, null=False, primary_key=True)
     name = models.CharField(max_length=100)
     description = models.TextField(null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -74,40 +74,45 @@ class Documents(models.Model):
     def __str__(self):
         return self.document_number
 
-class Orders(models.Model):
-    order_date = models.DateTimeField(auto_now_add=True)
-    amount_products = models.IntegerField()
-    summary_price = models.DecimalField(max_digits=10, decimal_places=2)
-    documents_document_id = models.ForeignKey(Documents, on_delete=models.CASCADE)
-    statues_status_id = models.ForeignKey(Statues, on_delete=models.CASCADE, related_name='orders_by_statues')
-    
-    def __str__(self):
-        return str(self.documents_document_id)
 
 class Status_history(models.Model):
     date_of_change = models.DateTimeField(auto_now_add=True)
     status = models.ForeignKey(Statues, on_delete=models.CASCADE)
     who_changed = models.ForeignKey(Account, on_delete=models.CASCADE)
 
-class Product_has_orders(models.Model):
-    products_product_id = models.ForeignKey(Products, on_delete=models.CASCADE)
-    orders_order_id = models.ForeignKey(Orders, on_delete=models.CASCADE)
+
+class Customers(models.Model):
+    id = models.CharField(max_length=100, unique=True, null=False, primary_key=True)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.CharField(max_length=100)
+    phone = models.CharField(max_length=20, null=True)
 
 class Custumers_addresses(models.Model):
     country = models.CharField(max_length=50)
     city = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
     postal_code = models.CharField(max_length=20)
+    custumer_id = models.ForeignKey(Customers, on_delete=models.CASCADE)    
 
-class Customers(models.Model):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    email = models.CharField(max_length=100)
-    phone = models.CharField(max_length=20)
-
-class Customers_has_customers_addresses(models.Model):
-    customers_customer_id = models.ForeignKey(Customers, on_delete=models.CASCADE)
-    customers_addresses_address_id = models.ForeignKey(Custumers_addresses, on_delete=models.CASCADE)
+class Orders(models.Model):
+    id = models.CharField(max_length=100, unique=True, null=False, primary_key=True)
+    order_date = models.DateTimeField(auto_now_add=True)
+    amount_products = models.IntegerField()
+    summary_price = models.DecimalField(max_digits=10, decimal_places=2)
+    # documents_document_id = models.ForeignKey(Documents, on_delete=models.CASCADE)
+    statues_status_id = models.CharField(max_length=100)
+    seller = models.ForeignKey(Account,on_delete=models.DO_NOTHING)
+    customer = models.ForeignKey(Customers, on_delete=models.CASCADE)
+    delivery = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return str(self.documents_document_id)
+    
+class Product_has_orders(models.Model):
+    products_product_id = models.ForeignKey(Products, on_delete=models.CASCADE)
+    orders_order_id = models.ForeignKey(Orders, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
 
 class Contacts(models.Model):
     report_title = models.CharField(max_length=100)

@@ -397,9 +397,15 @@ def orders_list(request):
     if request.user.is_authenticated:
         user_type = request.user.user_type
         user_id = request.user.id
-        if user_type == 'owner':
-            with connection.cursor() as cursor:
-                    
+        if user_type == 'employee':
+              with connection.cursor() as cursor:
+                 cursor.execute("SELECT owner_id_id FROM app_account WHERE id = %s", [user_id])
+                 rows = cursor.fetchall()
+                 columns = [col[0] for col in cursor.description]
+                 owner_id = [dict(zip(columns, row)) for row in rows]
+        else:
+            owner_id = user_id
+        with connection.cursor() as cursor:            
                     cursor.execute("SELECT * FROM app_account WHERE id = %s", [user_id])
                     rows = cursor.fetchall()
                     # Konwersja wyników z krotki na listę słowników
@@ -408,44 +414,304 @@ def orders_list(request):
         #Pobieranie JSON 
         with open('app/sample_order_events.json', 'r', encoding='utf-8') as file:
             data = json.load(file)
-        # with open('app/sample_order_events_allegro.json', 'w') as file:
-        #     file.truncate(0)
-        
-    
-        allegro_data = data.get('events', [])
-        
-        for event in data.get('events', []):
-                total_amount = sum(
-                    float(item['price']['amount']) * item['quantity'] 
-                    for item in event['order']['lineItems']
-                )
-                total_amount = round(total_amount,2)
-                event['total_amount'] = total_amount
+        total_amount = 0
+        amount_products = 0
+            # Pętla po wszystkich zdarzeniach
+        for event in data['events']:
+                event_id = event['id']
+                event_type = event['type']
+                event_occurred_at = event['occurredAt']
+                order_details = event['order']
+                # Formularze płatności
+                checkout_forms = order_details['checkoutForms']
+                for form in checkout_forms:
+                    delivery = form['delivery']['method']['name']
+                    buyer_details = order_details['buyer']
+                    buyer_id = buyer_details['id']
+                    form_id = form['id']
+                    message_to_seller = form['messageToSeller']
+                    
+                    buyer_details_in_form = form['buyer']
+                    buyer_id_in_form = buyer_details_in_form['id']
+                    buyer_email_in_form = buyer_details_in_form['email']
+                    buyer_login_in_form = buyer_details_in_form['login']
+                    buyer_first_name = buyer_details_in_form['firstName']
+                    buyer_last_name = buyer_details_in_form['lastName']
+                    buyer_company_name = buyer_details_in_form['companyName']
+                    buyer_is_guest_in_form = buyer_details_in_form['guest']
+                    buyer_personal_identity = buyer_details_in_form['personalIdentity']
+                    buyer_phone_number = buyer_details_in_form['phoneNumber']
+                    buyer_language_in_form = buyer_details_in_form['preferences']['language']
+                    buyer_street = buyer_details_in_form['address']['street']
+                    buyer_city = buyer_details_in_form['address']['city']
+                    buyer_post_code = buyer_details_in_form['address']['postCode']
+                    buyer_country_code = buyer_details_in_form['address']['countryCode']
 
-                total_quantity = sum(
-                    item['quantity']
-                    for item in event['order']['lineItems']
-                    )
-
-                time_str = event['occurredAt']
-                dt_object = datetime.fromisoformat(time_str.replace('Z', '+00:00'))
-                formatted_time = dt_object.strftime('%d-%m-%Y %H:%M')
+                    # #Dodawnie do app_customers
+                    # with connection.cursor() as cursor:
+                    #     cursor.execute("""
+                    #         SELECT id FROM app_customers WHERE id = %s
+                    #         """, [buyer_id])
+                    #     result = cursor.fetchone()
+                    #     if result:
+                    #         print('Customer already exists')
+                    #     else:
+                    #         cursor.execute("""
+                    #             INSERT INTO app_customers (id, first_name, last_name, email, phone)
+                    #             VALUES (%s, %s, %s, %s, %s);
+                    #             """,[buyer_id, buyer_first_name, buyer_last_name, buyer_email_in_form, buyer_phone_number])
+                            
+                    # # Dodawnie do app_custumer_addreses
+                    # with connection.cursor() as cursor:
+                    #     cursor.execute("""
+                    #         SELECT id FROM app_custumers_addresses WHERE custumer_id_id = %s
+                    #         """, [buyer_id])
+                    #     result = cursor.fetchone()
+                    #     if result:
+                    #         print('Customer already exists')
+                    #     else:
+                    #         with connection.cursor() as cursor:
+                    #             cursor.execute("""
+                    #                 INSERT INTO app_custumers_addresses (country, city, address, postal_code, custumer_id_id)
+                    #                 VALUES (%s, %s, %s, %s, %s);
+                    #                 """, [buyer_country_code, buyer_city, buyer_street, buyer_post_code, buyer_id])
                 
-                event['occurredAt'] = formatted_time
-                # status_order = event['order']['checkoutForms'][0]['fulfillment']['status']
-                # if status_order == 'SENT' or 'PICKED_UP' or 'READY_FOR_PICKUP':
-                #      status_order = 3
-                # if status_order == 'NEW' or 'PROCESSING':
-                #      status_order = 1
-                # if status_order == 'READY_FOR_SHIPMENT':
-                #      status_order = 2
-                # if status_order == 'SUSPENDED.':
-                #     status_order = 4
+                # Szczegóły zamówienia
+                order_details = event['order']
+                seller_id = order_details['seller']['id']
+                checkout_forms = order_details['checkoutForms']
+                for form in checkout_forms:
+                     
+                    buyer_details = order_details['buyer']
+                    buyer_id = buyer_details['id']
+                    buyer_email = buyer_details['email']
+                    buyer_login = buyer_details['login']
+                    buyer_is_guest = buyer_details['guest']
+                    buyer_language = buyer_details['preferences']['language']
+                    payment_details = form['payment']
+                    payment_id = payment_details['id']
+                    payment_type = payment_details['type']
+                    payment_provider = payment_details['provider']
+                    payment_finished_at = payment_details['finishedAt']
+                    paid_amount = payment_details['paidAmount']['amount']
+                    paid_currency = payment_details['paidAmount']['currency']
+                    
+                    status = form['fulfillment']['status']    
+                    total_amount =  total_amount + float(paid_amount)
+                    total_amount = round(total_amount,2)
+                    event_occurred_at = datetime.strptime(event_occurred_at, '%Y-%m-%dT%H:%M:%SZ').strftime('%Y-%m-%d %H:%M:%S')
+                    
+                # # Dodawanie app_orders
+                # with connection.cursor() as cursor:
+                #         cursor.execute("""
+                #             SELECT id FROM app_orders WHERE id = %s
+                #             """, [event_id])
+                #         result = cursor.fetchone()
+                #         if result:
+                #             print('Order already exists')
+                #         else:
+                #             cursor.execute("""
+                #                 INSERT INTO app_orders (id, order_date, amount_products, summary_price, statues_status_id, seller_id, customer_id)
+                #                 VALUES (%s,%s,%s,%s,%s,%s,%s);
+                #                 """,[event_id,event_occurred_at,amount_products,total_amount,status,owner_id,buyer_id])
+                            
+                # Pozycje zamówienia
+                line_items = order_details['lineItems']
+                for line_item in line_items:
+                    line_item_id = line_item['id']
+                    offer_id = line_item['offer']['id']
+                    offer_name = line_item['offer']['name']
+                    offer_external_id = line_item['offer']['external']['id']
+                    quantity = line_item['quantity']
+                    original_price_amount = line_item['originalPrice']['amount']
+                    original_price_currency = line_item['originalPrice']['currency']
+                    price_amount = line_item['price']['amount']
+                    price_currency = line_item['price']['currency']
+                    bought_at = line_item['boughtAt']
 
+                    id_item = line_item['id']
+                    item_name = line_item['offer']['name']
+                    item_price = line_item['originalPrice']['amount']
+                    items_price = line_item['price']['amount']
+                    item_quantity = line_item['quantity']
+                    item_description = line_item['offer']['description']
+                    item_graphic_url = line_item['offer']['graphic_url']
+                    item_category = line_item['offer']['category']
 
-        #Sortowanie według daty od najstarszego zamówienie, aby odwrócić należy dodać na końcu ,reverse=True
-        allegro_data = sorted(allegro_data, key=lambda x: datetime.strptime(x['occurredAt'], '%d-%m-%Y %H:%M'))
+                    amount_products = amount_products + quantity
+                    
+                    # # Dodawanie app_products
+                    # with connection.cursor() as cursor:
+                    #     cursor.execute("""
+                    #         SELECT id FROM app_products WHERE id = %s
+                    #         """, [id_item])
+                    #     result = cursor.fetchone()
+                    #     if result:
+                    #         print('Product already exists')
+                    #     else:
+                    #         cursor.execute("""
+                    #             INSERT INTO app_products (id,name, description, price, quantity, category, graphic_url, accounts_account_id_id)
+                    #             VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
+                    #             """, [id_item,item_name,item_description,item_price,item_quantity,item_category,item_graphic_url,owner_id])
+                
+                
+                    # # Dodawnie do app_product_has_orders
+                    # with connection.cursor() as cursor:
+                    #      cursor.execute("""
+                    #                     INSERT INTO app_product_has_orders (orders_order_id_id, products_product_id_id,quantity)
+                    #                     VALUES (%s, %s, %s);
+                    #                     """, [event_id,id_item,quantity])
+                    
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT app_orders.id as order_id, app_customers.first_name as customer_name, app_customers.email as customer_email,
+                GROUP_CONCAT(CONCAT(app_products.name, ' (', app_product_has_orders.quantity, ')') SEPARATOR ', ') as products,
+                SUM(app_products.price * app_product_has_orders.quantity) as total_price,
+                app_orders.statues_status_id as status,
+                app_orders.delivery as delivery,
+                app_orders.order_date as order_date
+                FROM app_orders 
+                JOIN app_customers ON app_orders.customer_id = app_customers.id
+                JOIN app_custumers_addresses ON app_custumers_addresses.custumer_id_id = app_customers.id
+                JOIN app_product_has_orders ON app_orders.id = app_product_has_orders.orders_order_id_id
+                JOIN app_products ON app_product_has_orders.products_product_id_id = app_products.id
+                WHERE app_orders.seller_id = %s
+                GROUP BY app_orders.id
+                ORDER BY app_orders.order_date DESC;
+            """, [owner_id])
 
+            allegro_data = cursor.fetchall()
+                                                                        
+    #Wyszukiwanie
+    search_orders = request.GET.get('search_orders')
+    search_orders = str(search_orders) if search_orders else '%'  # Jeśli nie ma wartości, ustaw na dowolny ciąg
+
+    if search_orders and allegro_data:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT app_orders.id as order_id, app_customers.first_name as customer_name, app_customers.email as customer_email,
+                GROUP_CONCAT(CONCAT(app_products.name, ' (', app_product_has_orders.quantity, ')') SEPARATOR ', ') as products,
+                SUM(app_products.price * app_product_has_orders.quantity) as total_price,
+                app_orders.statues_status_id as status,
+                app_orders.delivery as delivery,
+                app_orders.order_date as order_date
+                FROM app_orders 
+                JOIN app_customers ON app_orders.customer_id = app_customers.id
+                JOIN app_custumers_addresses ON app_custumers_addresses.custumer_id_id = app_customers.id
+                JOIN app_product_has_orders ON app_orders.id = app_product_has_orders.orders_order_id_id
+                JOIN app_products ON app_product_has_orders.products_product_id_id = app_products.id
+                WHERE app_orders.seller_id = %s AND app_customers.email LIKE %s
+                GROUP BY app_orders.id
+                ORDER BY app_orders.order_date DESC;
+            """, [owner_id, f"%{search_orders}%"])
+            allegro_data = cursor.fetchall()
+        
+        # Filtrowanie po statusie
+        status_filters = {
+            'SENT': ['SENT', 'PICKED_UP', 'READY_FOR_PICKUP'],
+            'NEW': ['NEW', 'PROCESSING'],
+            'READY_FOR_SHIPMENT': ['READY_FOR_SHIPMENT'],
+            'CANCELLED': ['SUSPENDED', 'CANCELLED']
+            }
+        status = request.GET.get('status')
+        print(status)
+        if status == 'SENT' or 'PICKED_UP' or 'READY_FOR_PICKUP':
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    SELECT app_orders.id as order_id, app_customers.first_name as customer_name, app_customers.email as customer_email,
+                    GROUP_CONCAT(CONCAT(app_products.name, ' (', app_product_has_orders.quantity, ')') SEPARATOR ', ') as products,
+                    SUM(app_products.price * app_product_has_orders.quantity) as total_price,
+                    app_orders.statues_status_id as status,
+                    app_orders.delivery as delivery,
+                    app_orders.order_date as order_date
+                    FROM app_orders 
+                    JOIN app_customers ON app_orders.customer_id = app_customers.id
+                    JOIN app_custumers_addresses ON app_custumers_addresses.custumer_id_id = app_customers.id
+                    JOIN app_product_has_orders ON app_orders.id = app_product_has_orders.orders_order_id_id
+                    JOIN app_products ON app_product_has_orders.products_product_id_id = app_products.id
+                    WHERE app_orders.seller_id = %s AND app_orders.statues_status_id LIKE %s
+                    GROUP BY app_orders.id
+                    ORDER BY app_orders.order_date DESC;
+                """, [owner_id, status])
+                allegro_data = cursor.fetchall()
+        if status == 'NEW' or 'PROCESSING':
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    SELECT app_orders.id as order_id, app_customers.first_name as customer_name, app_customers.email as customer_email,
+                    GROUP_CONCAT(CONCAT(app_products.name, ' (', app_product_has_orders.quantity, ')') SEPARATOR ', ') as products,
+                    SUM(app_products.price * app_product_has_orders.quantity) as total_price,
+                    app_orders.statues_status_id as status,
+                    app_orders.delivery as delivery,
+                    app_orders.order_date as order_date
+                    FROM app_orders 
+                    JOIN app_customers ON app_orders.customer_id = app_customers.id
+                    JOIN app_custumers_addresses ON app_custumers_addresses.custumer_id_id = app_customers.id
+                    JOIN app_product_has_orders ON app_orders.id = app_product_has_orders.orders_order_id_id
+                    JOIN app_products ON app_product_has_orders.products_product_id_id = app_products.id
+                    WHERE app_orders.seller_id = %s AND app_orders.statues_status_id LIKE %s
+                    GROUP BY app_orders.id
+                    ORDER BY app_orders.order_date DESC;
+                """, [owner_id, status])
+                allegro_data = cursor.fetchall()
+        if status == 'READY_FOR_SHIPMENT':
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    SELECT app_orders.id as order_id, app_customers.first_name as customer_name, app_customers.email as customer_email,
+                    GROUP_CONCAT(CONCAT(app_products.name, ' (', app_product_has_orders.quantity, ')') SEPARATOR ', ') as products,
+                    SUM(app_products.price * app_product_has_orders.quantity) as total_price,
+                    app_orders.statues_status_id as status,
+                    app_orders.delivery as delivery,
+                    app_orders.order_date as order_date
+                    FROM app_orders 
+                    JOIN app_customers ON app_orders.customer_id = app_customers.id
+                    JOIN app_custumers_addresses ON app_custumers_addresses.custumer_id_id = app_customers.id
+                    JOIN app_product_has_orders ON app_orders.id = app_product_has_orders.orders_order_id_id
+                    JOIN app_products ON app_product_has_orders.products_product_id_id = app_products.id
+                    WHERE app_orders.seller_id = %s AND app_orders.statues_status_id LIKE %s
+                    GROUP BY app_orders.id
+                    ORDER BY app_orders.order_date DESC;
+                """, [owner_id, status])
+                allegro_data = cursor.fetchall()
+        if status == 'SUSPENDED' or 'CANCELLED':
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    SELECT app_orders.id as order_id, app_customers.first_name as customer_name, app_customers.email as customer_email,
+                    GROUP_CONCAT(CONCAT(app_products.name, ' (', app_product_has_orders.quantity, ')') SEPARATOR ', ') as products,
+                    SUM(app_products.price * app_product_has_orders.quantity) as total_price,
+                    app_orders.statues_status_id as status,
+                    app_orders.delivery as delivery,
+                    app_orders.order_date as order_date
+                    FROM app_orders 
+                    JOIN app_customers ON app_orders.customer_id = app_customers.id
+                    JOIN app_custumers_addresses ON app_custumers_addresses.custumer_id_id = app_customers.id
+                    JOIN app_product_has_orders ON app_orders.id = app_product_has_orders.orders_order_id_id
+                    JOIN app_products ON app_product_has_orders.products_product_id_id = app_products.id
+                    WHERE app_orders.seller_id = %s AND app_orders.statues_status_id LIKE %s
+                    GROUP BY app_orders.id
+                    ORDER BY app_orders.order_date DESC;
+                """, [owner_id, status])
+                allegro_data = cursor.fetchall()
+        if status is None:
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    SELECT app_orders.id as order_id, app_customers.first_name as customer_name, app_customers.email as customer_email,
+                    GROUP_CONCAT(CONCAT(app_products.name, ' (', app_product_has_orders.quantity, ')') SEPARATOR ', ') as products,
+                    SUM(app_products.price * app_product_has_orders.quantity) as total_price,
+                    app_orders.statues_status_id as status,
+                    app_orders.delivery as delivery,
+                    app_orders.order_date as order_date
+                    FROM app_orders 
+                    JOIN app_customers ON app_orders.customer_id = app_customers.id
+                    JOIN app_custumers_addresses ON app_custumers_addresses.custumer_id_id = app_customers.id
+                    JOIN app_product_has_orders ON app_orders.id = app_product_has_orders.orders_order_id_id
+                    JOIN app_products ON app_product_has_orders.products_product_id_id = app_products.id
+                    WHERE app_orders.seller_id = %s
+                    GROUP BY app_orders.id
+                    ORDER BY app_orders.order_date DESC;
+                """, [owner_id])
+
+                allegro_data = cursor.fetchall()
+             
         #Paginacja strony
         paginator = Paginator(allegro_data,5)
         page = request.GET.get('page')
@@ -457,29 +723,11 @@ def orders_list(request):
         except EmptyPage:
             # Jeżeli 'page' jest poza zakresem, pokaż ostatnią stronę
             allegro_data = paginator.page(paginator.num_pages)
-        
-        #Wyszukiwanie
-        search_orders = request.GET.get('search_orders')
-        if search_orders and allegro_data:
-            allegro_data = [event for event in allegro_data if search_orders.lower() in event.get('order', {}).get('buyer', {}).get('email', '').lower()]
-        
-       # Filtrowanie po statusie
-        status_filters = {
-            'SENT': ['SENT', 'PICKED_UP', 'READY_FOR_PICKUP'],
-            'NEW': ['NEW', 'PROCESSING'],
-            'READY_FOR_SHIPMENT': ['READY_FOR_SHIPMENT'],
-            'CANCELLED': ['SUSPENDED', 'CANCELLED']
-            }
-        status = request.GET.get('status')
-        print(status)
-        if status in status_filters:
-            allowed_statuses = status_filters[status]
-            allegro_data = [event for event in allegro_data if event['order']['checkoutForms'][0]['fulfillment']['status'] in allowed_statuses]
-
         context = {
             'account_data': account_data,
             'user_type': user_type,
             'allegro_data': allegro_data
+            # 'allegro_data': result
         }
 
         return render(request,'orders/orders-list.html',context)
