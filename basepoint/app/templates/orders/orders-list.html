@@ -99,7 +99,8 @@ Lista zamówień - BASEPOINT
                             <td>
                                 {{ event.7|date:"Y-m-d H:m" }} 
                             </td>
-                            <td><a href="#" style="color: black;"><i class="fa fa-download"></i></a></td>
+                            <td><a href="{% url 'details_orders' pk=event.0 %}" style="color: black;"><i class="fa fa-download"></i></a></td>
+
                         </tr>
                         {% endfor %}
                     </tbody>

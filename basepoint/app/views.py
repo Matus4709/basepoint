@@ -481,7 +481,7 @@ def orders_list(request):
                 seller_id = order_details['seller']['id']
                 checkout_forms = order_details['checkoutForms']
                 for form in checkout_forms:
-                     
+                    messageToSeller = form['messageToSeller']
                     buyer_details = order_details['buyer']
                     buyer_id = buyer_details['id']
                     buyer_email = buyer_details['email']
@@ -511,9 +511,9 @@ def orders_list(request):
                 #             print('Order already exists')
                 #         else:
                 #             cursor.execute("""
-                #                 INSERT INTO app_orders (id, order_date, amount_products, summary_price, statues_status_id, seller_id, customer_id)
+                #                 INSERT INTO app_orders (id, order_date, amount_products, summary_price, statues_status_id, seller_id, customer_id, messageToSeller)
                 #                 VALUES (%s,%s,%s,%s,%s,%s,%s);
-                #                 """,[event_id,event_occurred_at,amount_products,total_amount,status,owner_id,buyer_id])
+                #                 """,[event_id,event_occurred_at,amount_products,total_amount,status,owner_id,buyer_id,messageToSeller])
                             
                 # Pozycje zamówienia
                 line_items = order_details['lineItems']
@@ -734,6 +734,63 @@ def orders_list(request):
     else:
         return redirect('welcome')
 
+def details_orders(request,pk):
+    if request.user.is_authenticated:
+        user_type = request.user.user_type
+        user_id = request.user.id
+        if user_type == 'employee':
+              with connection.cursor() as cursor:
+                 cursor.execute("SELECT owner_id_id FROM app_account WHERE id = %s", [user_id])
+                 rows = cursor.fetchall()
+                 columns = [col[0] for col in cursor.description]
+                 owner_id = [dict(zip(columns, row)) for row in rows]
+        else:
+            owner_id = user_id
+
+
+        with connection.cursor() as cursor:
+                    
+                    cursor.execute("SELECT * FROM app_account WHERE id = %s", [user_id])
+                    rows = cursor.fetchall()
+                    # Konwersja wyników z krotki na listę słowników
+                    columns = [col[0] for col in cursor.description]
+                    account_data = [dict(zip(columns, row)) for row in rows]
+        
+        pk=pk
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT app_orders.id as order_id, app_customers.first_name as customer_name, app_customers.email as customer_email,
+                GROUP_CONCAT(CONCAT(app_products.name, ' (', app_product_has_orders.quantity, ')') SEPARATOR ', ') as products,
+                SUM(app_products.price * app_product_has_orders.quantity) as total_price,
+                app_orders.statues_status_id as status,
+                app_orders.delivery as delivery,
+                app_orders.order_date as order_date,
+                app_custumers_addresses.*,
+                app_customers.*,
+                app_products.*,
+                app_orders.messageToSeller
+                FROM app_orders 
+                JOIN app_customers ON app_orders.customer_id = app_customers.id
+                JOIN app_custumers_addresses ON app_custumers_addresses.custumer_id_id = app_customers.id
+                JOIN app_product_has_orders ON app_orders.id = app_product_has_orders.orders_order_id_id
+                JOIN app_products ON app_product_has_orders.products_product_id_id = app_products.id
+                WHERE app_orders.seller_id = %s AND app_orders.id = %s;
+            """, [owner_id, pk])
+
+            rows = cursor.fetchall()
+            columns = [col[0] for col in cursor.description]
+            allegro_data = [dict(zip(columns, row)) for row in rows]
+            print(allegro_data)
+
+        context = {
+            'account_data': account_data,
+            'user_type': user_type,
+            'allegro_data':allegro_data
+            
+        }
+        return render(request, 'orders/details_orders.html',context)
+    else:
+       return redirect('welcome')
 def invoices(request):
     if request.user.is_authenticated:
         user_type = request.user.user_type

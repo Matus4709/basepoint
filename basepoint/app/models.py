@@ -105,6 +105,7 @@ class Orders(models.Model):
     seller = models.ForeignKey(Account,on_delete=models.DO_NOTHING)
     customer = models.ForeignKey(Customers, on_delete=models.CASCADE)
     delivery = models.CharField(max_length=100)
+    messageToSeller = models.CharField(max_length=255)
     
     def __str__(self):
         return str(self.documents_document_id)

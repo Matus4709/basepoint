@@ -20,6 +20,7 @@ urlpatterns = [
     path('statistics/', views.statistics, name='statistics'),
     path('', views.welcome, name='welcome'),
     path('orders-list/', views.orders_list, name='orders_list'),
+    path('details-orders/<int:pk>/', views.details_orders, name='details_orders'),
 
 
     # Inne ścieżki URL dla innych widoków

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %} 
+Szczegóły zamówienia - BASEPOINT 
+{% endblock title %}
+{% block content %}
+
+<div class="container">
+    <div class="content mt-5 col-md-10 offset-1 bg-light rounded">
+        <div class="row p-5">
+            <div class="col-md-5 offset-1">
+                <h2>Dane Klienta:</h2>
+                {% for event in allegro_data %}
+                <b>Imię i nazwisko:</b> {{ event.first_name }} {{ event.last_name }} <br>
+                <b>Email:</b> {{ event.email }} <br>
+                <b>Telefon:</b> {{ event.phone }} <br>
+                <b>Kraj:</b> {{ event.country }} <br>
+                <b>Miasto:</b> {{ event.city }} <br>
+                <b>Adres:</b> {{ event.address }} <br>
+                <b>Kod pocztowy:</b> {{ event.postal_code }} <br>
+                <b>ID:</b> {{ event.custumer_id_id }} <br>
+                {% endfor %}
+            </div>
+            <div class="col-md-5 offset-1">
+                <h2>Zamówienie:</h2>
+                {% for event in allegro_data %}
+                <b>ID:</b> {{ event.order_id }}  <br>
+                <b>Produkty:</b> {{ event.products }}  <br>
+                <b>Dostawa:</b> {{ event.delivery }}  <br>
+                <b>Kwota:</b> {{ event.total_price }} PLN <br>
+                <b>Wiadomość od kupującego:</b> {{ event.messageToSeller }} PLN <br>
+                
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
