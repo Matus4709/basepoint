@@ -69,10 +69,10 @@ Lista zamówień - BASEPOINT
                                 <div class="dropdown">
                                     <button class="btn btn-success dropdown-toggle" type="button" id="statusDropdown" data-bs-toggle="dropdown" aria-expanded="false">Status</button>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item text-success" href="#">Nowe</a></li>
-                                        <li><a class="dropdown-item text-success" href="#">Do wysłania</a></li>
-                                        <li><a class="dropdown-item text-success" href="#">Wysłane</a></li>
-                                        <li><a class="dropdown-item text-success" href="#">Anulowane</a></li>
+                                        <li><a class="dropdown-item2 text-success" href="#" data-status-update="NEW" order-id-status="{{event.0}}">Nowe</a></li>
+                                        <li><a class="dropdown-item2 text-success" href="#" data-status-update="READY_FOR_SHIPMENT" order-id-status="{{event.0}}">Do wysłania</a></li>
+                                        <li><a class="dropdown-item2 text-success" href="#" data-status-update="SENT" order-id-status="{{event.0}}">Wysłane</a></li>
+                                        <li><a class="dropdown-item2 text-success" href="#" data-status-update="CANCELLED" order-id-status="{{event.0}}">Anulowane</a></li>
                                     </ul>
                                 </div>
                             </td>
@@ -90,7 +90,7 @@ Lista zamówień - BASEPOINT
                                   Nowe
                               {% elif event.5 == 'READY_FOR_SHIPMENT' %}
                                   Do wysłania
-                              {% elif event.5 == 'SUSPENDED' %}
+                              {% elif event.5 == 'SUSPENDED' or event.5 == 'CANCELLED' %}
                                   Anulowane
                               {% endif %}
                             </td>
@@ -160,6 +160,7 @@ Lista zamówień - BASEPOINT
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     const dropdownItems = document.querySelectorAll('.dropdown-item');
+    const dropdownItems2 = document.querySelectorAll('.dropdown-item2');
 
     dropdownItems.forEach(item => {
         item.addEventListener('click', function(event) {
@@ -167,6 +168,14 @@ Lista zamówień - BASEPOINT
             const filterValues = event.target.getAttribute('data-status').split(',');
             const filterStatus = filterValues.join('&status=');
             window.location.href = `/orders-list/?status=${filterStatus}`;
+        });
+    });
+    dropdownItems2.forEach(item => {
+        item.addEventListener('click', function(event) {
+            event.preventDefault();
+            const filterValues = event.target.getAttribute('data-status-update');
+            const filterValuesID = event.target.getAttribute('order-id-status');
+            window.location.href = `/orders-list/?data-status-update=${filterValues}&order_id_update=${filterValuesID}`;
         });
     });
 });

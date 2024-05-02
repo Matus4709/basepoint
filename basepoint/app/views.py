@@ -614,7 +614,6 @@ def orders_list(request):
             'CANCELLED': ['SUSPENDED', 'CANCELLED']
             }
         status = request.GET.get('status')
-        print(status)
         if status == 'SENT' or 'PICKED_UP' or 'READY_FOR_PICKUP':
             with connection.cursor() as cursor:
                 cursor.execute("""
@@ -712,6 +711,16 @@ def orders_list(request):
 
                 allegro_data = cursor.fetchall()
              
+        # Aktualizacja statusu
+        update_status = request.GET.get('data-status-update')
+        order_id_update = request.GET.get('order_id_update')
+        if update_status is not None and order_id_update is not None:
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    UPDATE app_orders SET statues_status_id= %s WHERE id = %s
+                """, [update_status, order_id_update])
+            
+                
         #Paginacja strony
         paginator = Paginator(allegro_data,5)
         page = request.GET.get('page')
@@ -727,7 +736,6 @@ def orders_list(request):
             'account_data': account_data,
             'user_type': user_type,
             'allegro_data': allegro_data
-            # 'allegro_data': result
         }
 
         return render(request,'orders/orders-list.html',context)
@@ -780,7 +788,6 @@ def details_orders(request,pk):
             rows = cursor.fetchall()
             columns = [col[0] for col in cursor.description]
             allegro_data = [dict(zip(columns, row)) for row in rows]
-            print(allegro_data)
 
         context = {
             'account_data': account_data,
