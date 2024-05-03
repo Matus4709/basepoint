@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db import connection
@@ -13,7 +13,8 @@ from sendgrid.helpers.mail import Mail
 from django.conf import settings
 import json
 from datetime import datetime
-
+from .models import *
+#from .forms import *
 
 def login_view(request):
     if request.method == 'POST':
@@ -530,3 +531,101 @@ def welcome(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
     return render(request, 'welcome.html')
+
+
+#################################################################
+
+def getAllCategory(request):
+    getAllCategoryNames = Categories.objects.all()
+    return HttpResponse(getAllCategoryNames)
+
+
+def getOneCategory(request, id):
+    getCategoryName = Categories.objects.get(pk=id)
+    return HttpResponse(getCategoryName.name)
+
+
+def getAllProducts(request):
+    allProducts = Products.objects.all()
+    data = {'produkty': allProducts}
+    return render(request, 'products/allProductsView.html', data)
+
+
+def getOneProduct(request, id):
+    getProduct = Products.objects.get(pk=id)
+    data = {'getProduct': getProduct}
+    return render(request, 'products/specificProduct.html', data)
+
+
+def addNewProduct(request): #id
+    allCategories = Categories.objects.all()
+    data = {'kategorie': allCategories}
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        quantity = request.POST.get('quantity')
+        price = request.POST.get('price')
+        category = request.POST.get('category')
+        user_id = request.user.id
+
+        newProduct = Products(name=name, description=description, quantity=quantity, price=price,
+                              accounts_account_id_id=user_id, category_id=category)
+        newProduct.save()
+
+    return render(request, 'products/addNewProduct.html', data)
+
+
+
+
+
+def editProduct(request, id):
+    allCategories = Categories.objects.all()
+    product = get_object_or_404(Products, pk=id)
+
+
+    context = {
+        'produkt': product,
+        'kategorie': allCategories
+    }
+
+    if request.method == 'POST':
+        product.name = request.POST.get('name')
+        product.description = request.POST.get('description')
+        product.quantity = request.POST.get('quantity')
+        product.price = request.POST.get('price')
+        product.category = request.POST.get('Categories.name')
+        category_id = request.POST.get('category')
+        product.category_id = category_id
+        user_id = request.user.id
+
+        product.save()
+
+    return render(request, 'products/editProduct.html', context)
+
+
+
+
+
+
+
+
+def deleteProduct(request):
+    product = get_object_or_404(Products, pk=id)
+    if request.method == 'POST':
+        product.delete()
+        return redirect(getAllProducts)
+
+    return render(request, 'deleteDefinitely.html')
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import login_view, register_view,logout_view,create_worker,dashboard,activate,reset_password_view,reset_password,workers_list,delete_worker, my_account,delete_account,edit_account
+from .views import * #login_view, register_view,logout_view,create_worker,dashboard,activate,reset_password_view,reset_password,workers_list,delete_worker, my_account,delete_account,edit_account
 from . import views
+
 urlpatterns = [
     path('login/', login_view, name='login'),
     path('register/', register_view, name='register'),
@@ -20,7 +21,16 @@ urlpatterns = [
     path('statistics/', views.statistics, name='statistics'),
     path('', views.welcome, name='welcome'),
     path('orders-list/', views.orders_list, name='orders_list'),
-
+###########################################
+    path('dashboard/produkty/', getAllProducts, name="getAllProducts"),
+    path('dashboard/produkty/<id>', getOneProduct, name="getOneProduct"),
+    path('dashboard/edytujProdukt/<id>', editProduct, name="editProduct"),
+    path('kategorie/', getAllCategory),
+    path('kategorie/<id>', getOneCategory),
+    path('dashboard/dodajProdukt', addNewProduct),
+    #path('dashboard/edytujProdukt', editProductProduct),
+    path('usun/<id>', deleteProduct, name="deleteProduct"),
+    path('kat/', getAllCategory),
 
     # Inne ścieżki URL dla innych widoków
 ]
