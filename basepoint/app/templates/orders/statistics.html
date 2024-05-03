@@ -10,27 +10,45 @@ Lista zamówień - BASEPOINT
         <div class="col-md-10 offset-1 rounded shadow bg-light mt-5" >
             <div class="row mt-3">
                 <div class="col-md-8 offset-2">
-                    <select class="form-select" aria-label="Default select example">
+                    <div class="container mt-5">
+                        <p class="text-danger">{% for event in error %} {{ event.0 }}{% endfor %}</p>
+                        <form method="POST">
+                            {% csrf_token %}
+                          <div class="form-group">
+                            <label for="selected_date">Zakres od:</label>
+                            <input type="date" class="form-control" id="selected_date" name="selected_date_from">
+                          </div>
+                      </div>
+
+                    {% comment %} <select class="form-select" aria-label="Default select example">
                         <option selected>Zakres</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
                         <option value="3">Three</option>
-                      </select>
+                      </select> {% endcomment %}
                 </div>
             </div>
             <div class="row mt-1">
                 <div class="col-md-8 offset-2">
-                    <select class="form-select" aria-label="Default select example">
+                    <div class="container mt-1">
+                          <div class="form-group">
+                            <label for="selected_date">Zakres do:</label>
+                            <input type="date" class="form-control" id="selected_date" name="selected_date_to">
+                          </div>
+                        
+                      </div>
+
+                    {% comment %} <select class="form-select" aria-label="Default select example">
                         <option selected>Zakres</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
                         <option value="3">Three</option>
-                      </select>
+                      </select> {% endcomment %}
                 </div>
             </div>
             <div class="row mt-3 mb-3">
                 <div class="col-md-8 offset-2">
-                    <button class="btn btn-success w-100">Pokaż</button>
+                    <button class="btn btn-success w-100" type="submit">Pokaż</button></form>
                 </div>
             </div>
         </div>
@@ -62,14 +80,14 @@ Lista zamówień - BASEPOINT
             <p class="fw-normal" style="opacity: 50%; margin-top: -20px;">
                 w określonym czasie
             </p>
-            <p class="fw-bold text-success fs-1 pt-2 text-center">0</p>
+            <p class="fw-bold text-success fs-1 pt-2 text-center">{% for event in data %} {{ event.ilosc_zamowien }}{% endfor %}</p>
         </div>
         <div class="col-md-4 offset-2 rounded shadow bg-light mt-5" >
             <p class="fw-bold fw-1 pt-3" style="opacity: 50%;">
                 Podsumowanie
             </p>
             <p class="fw-normal " style="opacity: 50%;">
-                Łączna wartość: <span class="ms-5 ps-5">0,00 PLN</span>
+                Łączna wartość: <span class="ms-5 ps-5">{% for event in data %} {{ event.wartosc_zamowien }}{% endfor %} PLN</span>
             </p>
         </div>
     </div>

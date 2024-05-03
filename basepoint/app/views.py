@@ -930,6 +930,7 @@ def statistics(request):
     if request.user.is_authenticated:
         user_type = request.user.user_type
         user_id = request.user.id
+        
         if user_type == 'owner':
             with connection.cursor() as cursor:
                     
@@ -938,10 +939,58 @@ def statistics(request):
                     # Konwersja wyników z krotki na listę słowników
                     columns = [col[0] for col in cursor.description]
                     account_data = [dict(zip(columns, row)) for row in rows]
-        context = {
-            'account_data': account_data,
-            'user_type': user_type
-        }
+                    owner_id = request.user.id
+
+        if user_type == 'employee':
+            with connection.cursor() as cursor:
+                    cursor.execute("SELECT * FROM app_account WHERE id = %s", [user_id])
+                    rows = cursor.fetchall()
+                    # Konwersja wyników z krotki na listę słowników
+                    columns = [col[0] for col in cursor.description]
+                    account_data = [dict(zip(columns, row)) for row in rows]
+                    email = request.user.email
+                    owner_id = get_owner_id(email)
+        if user_type == 'owner' or 'employee':
+            selected_date_from = request.POST.get('selected_date_from')
+            selected_date_to = request.POST.get('selected_date_to')
+            if selected_date_from is None or selected_date_to is None:
+                with connection.cursor() as cursor:
+                        cursor.execute("""
+                            SELECT COUNT(*) as ilosc_zamowien,
+                            SUM(summary_price) as wartosc_zamowien
+                            FROM app_orders
+                            WHERE seller_id = %s ;
+                        """, [owner_id])
+                        rows = cursor.fetchall()
+                        columns = [col[0] for col in cursor.description]
+                        data = [dict(zip(columns, row)) for row in rows]
+            elif selected_date_from and selected_date_to:
+                 with connection.cursor() as cursor:
+                        cursor.execute("""
+                            SELECT COUNT(*) as ilosc_zamowien,
+                            SUM(summary_price) as wartosc_zamowien
+                            FROM app_orders
+                            WHERE seller_id = %s AND order_date BETWEEN %s AND %s;
+                        """, [owner_id, selected_date_from, selected_date_to])
+                        rows = cursor.fetchall()
+                        columns = [col[0] for col in cursor.description]
+                        data = [dict(zip(columns, row)) for row in rows]
+            else:
+                 with connection.cursor() as cursor:
+                        cursor.execute("""
+                            SELECT COUNT(*) as ilosc_zamowien,
+                            SUM(summary_price) as wartosc_zamowien
+                            FROM app_orders
+                            WHERE seller_id = %s ;
+                        """, [owner_id])
+                        rows = cursor.fetchall()
+                        columns = [col[0] for col in cursor.description]
+                        data = [dict(zip(columns, row)) for row in rows]
+            context = {
+                'account_data': account_data,
+                'user_type': user_type,
+                'data':data,  
+            }
         return render(request, 'orders/statistics.html',context)
     else:
         return redirect('welcome')
