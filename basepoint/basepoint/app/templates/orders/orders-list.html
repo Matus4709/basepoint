@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %} 
+Lista zamówień - BASEPOINT 
+{% endblock title %}
+{% block content %}
+
+<div class="container">
+    <div class="content mt-5 col-md-10 offset-1 bg-light rounded">
+        <div class="row ">
+            <div class="col-md-3 offset-1 pt-2">
+                <p class="fw-bold fw-1" style="opacity: 50%;">
+                  <li class="nav-item dropdown " style="list-style-type: none;">
+                    <a class="nav-link dropdown-toggle fw-bold fw-1" style="opacity: 50%;" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Zamówienia</a>
+                    <ul class="dropdown-menu text-center">
+                        <li><a class="dropdown-item" href="#" data-status="NEW">Nowe</a></li>
+                        <li><a class="dropdown-item" href="#" data-status="READY_FOR_SHIPMENT">Do wysłania</a></li>
+                        <li><a class="dropdown-item" href="#" data-status="SENT">Wysłane</a></li>
+                        <li><a class="dropdown-item" href="#" data-status="CANCELLED">Anulowane</a></li>
+                        <li><a class="dropdown-item" href="#" data-status="CANCELLED">Kosz</a></li>
+                    </ul>
+                </li>                
+                </p>
+            </div>
+            <div class="col-md-6 offset-1">
+                <form action="" method="GET">
+                    <div class="form-group row mt-3">
+                      <label for="text" class="col-3 col-form-label"></label> 
+                      <div class="col-8 ">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <div class="input-group-text"><form >
+                              <button type="submit" style="border:none;"><i class="fa fa-search p-1"></i></button>
+                            </div>
+                          </div>
+                           <input id="text" type="search" name="search_orders" placeholder="Szukaj..." type="text" class="form-control">
+                        </div>
+                      </div>
+                    </div> 
+                </form>
+            </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <hr style="opacity: 25%;">
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12 ">
+                  <table class="table table-responsive text-center">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            {% comment %} <th>Numer</th> {% endcomment %}
+                            <th>E-Mail</th>
+                            <th>Przedmioty</th>
+                            <th>Status</th>
+                            <th>Kwota</th>
+                            <th>Wysyłka</th>
+                            <th>Data</th>
+                            <th>PDF</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for event in allegro_data %}
+                        <tr>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-success dropdown-toggle" type="button" id="statusDropdown" data-bs-toggle="dropdown" aria-expanded="false">Status</button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item text-success" href="#">Nowe</a></li>
+                                        <li><a class="dropdown-item text-success" href="#">Do wysłania</a></li>
+                                        <li><a class="dropdown-item text-success" href="#">Wysłane</a></li>
+                                        <li><a class="dropdown-item text-success" href="#">Anulowane</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                            {% comment %} <td>{{ event.id }}</td> {% endcomment %}
+                            <td>{{ event.order.buyer.email }}</td>
+                            <td>
+                                <ul>
+                                    {% for item in event.order.lineItems %}
+                                        {{ item.offer.name }}, 
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>
+                              {% comment %} {% if event.order.checkoutForms.0.fulfillment.status == 'SENT' or event.order.checkoutForms.0.fulfillment.status == 'PICKED_UP' or event.order.checkoutForms.0.fulfillment.status == 'READY_FOR_PICKUP' %}
+                                  Wysłane
+                              {% elif event.order.checkoutForms.0.fulfillment.status == 'NEW' or event.order.checkoutForms.0.fulfillment.status == 'PROCESSING' %}
+                                  Nowe
+                              {% elif event.order.checkoutForms.0.fulfillment.status == 'READY_FOR_SHIPMENT' %}
+                                  Do wysłania
+                              {% elif event.order.checkoutForms.0.fulfillment.status == 'SUSPENDED' %}
+                                  Anulowane
+                              {% endif %} {% endcomment %}
+                              {{event.order.checkoutForms.0.fulfillment.status}}
+                            </td>
+                            <td>{{ event.total_amount }} PLN</td>
+                            <td>{{ event.order.checkoutForms.0.delivery.method.name }}</td>
+                            <td>
+                              {{ event.occurredAt }}
+                            </td>
+                            <td><a href="#" style="color: black;"><i class="fa fa-download"></i></a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <nav aria-label="Page navigation example">
+                  <ul class="pagination justify-content-center">
+                      {% if allegro_data.has_previous %}
+                          <li class="page-item">
+                              <a class="page-link text-dark" href="?page=1" aria-label="First">
+                                  <span aria-hidden="true">&laquo;</span>
+                                  <span class="sr-only">Pierwsza</span>
+                              </a>
+                          </li>
+                          <li class="page-item">
+                              <a class="page-link text-dark" href="?page={{ allegro_data.previous_page_number }}" aria-label="Previous">
+                                  <span aria-hidden="true">&lsaquo;</span>
+                                  <span class="sr-only">Poprzednia</span>
+                              </a>
+                          </li>
+                      {% else %}
+                          <li class="page-item disabled">
+                              <span class="page-link text-dark">&laquo;</span>
+                          </li>
+                      {% endif %}
+              
+                      <li class="page-item disabled">
+                          <span class="page-link">
+                              Strona {{ allegro_data.number }} z {{ allegro_data.paginator.num_pages }}
+                          </span>
+                      </li>
+              
+                      {% if allegro_data.has_next %}
+                          <li class="page-item">
+                              <a class="page-link text-dark" href="?page={{ allegro_data.next_page_number }}" aria-label="Next">
+                                  <span aria-hidden="true">&rsaquo;</span>
+                                  <span class="sr-only">Następna</span>
+                              </a>
+                          </li>
+                          <li class="page-item">
+                              <a class="page-link text-dark" href="?page={{ allegro_data.paginator.num_pages }}" aria-label="Last">
+                                  <span aria-hidden="true">&raquo;</span>
+                                  <span class="sr-only">Ostatnia</span>
+                              </a>
+                          </li>
+                      {% else %}
+                          <li class="page-item disabled">
+                              <span class="page-link text-dark">&raquo;</span>
+                          </li>
+                      {% endif %}
+                  </ul>
+              </nav>
+                </div>
+            </div>
+        
+    </div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', function(event) {
+            event.preventDefault();
+            const filterValues = event.target.getAttribute('data-status').split(',');
+            const filterStatus = filterValues.join('&status=');
+            window.location.href = `/orders-list/?status=${filterStatus}`;
+        });
+    });
+});
+</script>
+{% endblock content %}

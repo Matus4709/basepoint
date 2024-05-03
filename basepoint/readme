@@ -1,7 +1,0 @@
-
-#uruchamianie
-
-docker build -t basepoint .
-docker run -p 8000:8000 basepoint
-
-http://localhost:8000

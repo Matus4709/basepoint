@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Oferty z Allegro</title>
+</head>
+<body>
+    <h1>Oferty z Allegro</h1>
+    
+    <ul>
+    {% for event in events %}
+        <li>
+            {{ event }}
+        </li>
+    {% endfor %}
+    </ul>
+</body>
+</html>

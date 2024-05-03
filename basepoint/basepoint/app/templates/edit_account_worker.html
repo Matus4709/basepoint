@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %} 
+Edytuj konto - BASEPOINT 
+{% endblock title %}
+{% block content %}
+
+{% if user_type == 'employee' %}
+
+<div class="container col-md-6">  
+    <div class="jumbotron jumbotron-fluid rounded mt-5 p-5" style="background-color: white;">
+      <div class="container">
+        <form method="post">
+          {% csrf_token %}
+            {% for account in account_data %}
+            <div class="form-group">
+                <div class="row">
+                <label class="col-md-4 control-label p-2 fs-6 fw-bolder" for="textinput">Imię</label>  
+                <input id="textinput" name="name" value="{{ account.name }}" class="col-md-8 border rounded p-2">
+
+                <label class="col-md-4 control-label p-2 fs-6 fw-bolder mt-3" for="textinput">Nazwisko</label>  
+                <input id="textinput" name="last_name" value="{{ account.last_name }}" class="col-md-8 border rounded p-2 mt-3">
+
+
+
+                <button type="submit" class="btn btn-success mt-3 col-md-2 offset-4">Zapisz</button>
+                
+                </div>
+            
+            </div>
+
+            {% endfor %}
+        </form>
+      </div>
+    </div>
+  </div>
+
+{% endif %}
+    
+
+
+{% endblock content %}
