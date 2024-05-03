@@ -189,7 +189,63 @@ def dashboard(request):
                 columns = [col[0] for col in cursor.description]
                 account_data = [dict(zip(columns, row)) for row in rows]
 
-            return render(request, 'dashboard.html', {'user_type': user_type,'account_data':account_data})
+            #Dashboard statystyki
+            today = datetime.now()
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    SELECT COUNT(*) as ilosc
+                    FROM app_orders 
+                    WHERE app_orders.seller_id = %s AND app_orders.order_date = %s;
+                """, [user_id, today])
+                rows = cursor.fetchall()
+                columns = [col[0] for col in cursor.description]
+                orders_today = [dict(zip(columns, row)) for row in rows]
+
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    SELECT COUNT(*) as ilosc,
+                    app_orders.summary_price as wartosc,
+                    MONTHNAME(app_orders.order_date) as miesiac
+                    FROM app_orders 
+                    WHERE app_orders.seller_id = %s
+                    GROUP BY miesiac
+                    ORDER BY app_orders.order_date ASC;
+                """, [user_id])
+                allegro_data = cursor.fetchall()
+
+                with connection.cursor() as cursor:
+                    cursor.execute("""
+                        SELECT COUNT(*) as ilosc_produktow
+                        FROM app_products 
+                        WHERE accounts_account_id_id = %s ;
+                    """, [user_id])
+                rows = cursor.fetchall()
+                columns = [col[0] for col in cursor.description]
+                products_count = [dict(zip(columns, row)) for row in rows]
+
+                with connection.cursor() as cursor:
+                    cursor.execute("""
+                        SELECT COUNT(*) as ilosc_zamowien,
+                        SUM(summary_price) as wartosc_zamowien
+                        FROM app_orders
+                        WHERE seller_id = %s ;
+                    """, [user_id])
+                rows = cursor.fetchall()
+                columns = [col[0] for col in cursor.description]
+                orders_count = [dict(zip(columns, row)) for row in rows]
+                print(orders_count)
+                #Dashboard statystyki KONIEC
+
+            context = {
+                'user_type': user_type,
+                'account_data':account_data,
+                'allegro_data':allegro_data, 
+                'orders_today':orders_today,
+                'products_count':products_count,
+                'orders_count':orders_count
+            }
+
+            return render(request, 'dashboard.html', context)
         
         elif user_type == 'employee':
             email = request.user.email
@@ -202,11 +258,63 @@ def dashboard(request):
                 # Konwersja wyników z krotki na listę słowników
                 columns = [col[0] for col in cursor.description]
                 account_data = [dict(zip(columns, row)) for row in rows]
-            
+            #Dashboard statystyki
+            today = datetime.now()
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    SELECT COUNT(*) as ilosc
+                    FROM app_orders 
+                    WHERE app_orders.seller_id = %s AND app_orders.order_date = %s;
+                """, [user_id, today])
+                rows = cursor.fetchall()
+                columns = [col[0] for col in cursor.description]
+                orders_today = [dict(zip(columns, row)) for row in rows]
 
-            return render(request, 'dashboard.html', {'user_type': user_type,'account_data':account_data})
-        else:
-            pass
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    SELECT COUNT(*) as ilosc,
+                    app_orders.summary_price as wartosc,
+                    MONTHNAME(app_orders.order_date) as miesiac
+                    FROM app_orders 
+                    WHERE app_orders.seller_id = %s
+                    GROUP BY miesiac
+                    ORDER BY app_orders.order_date ASC;
+                """, [user_id])
+                allegro_data = cursor.fetchall()
+
+                with connection.cursor() as cursor:
+                    cursor.execute("""
+                        SELECT COUNT(*) as ilosc_produktow
+                        FROM app_products 
+                        WHERE accounts_account_id_id = %s ;
+                    """, [user_id])
+                rows = cursor.fetchall()
+                columns = [col[0] for col in cursor.description]
+                products_count = [dict(zip(columns, row)) for row in rows]
+
+                with connection.cursor() as cursor:
+                    cursor.execute("""
+                        SELECT COUNT(*) as ilosc_zamowien,
+                        SUM(summary_price) as wartosc_zamowien
+                        FROM app_orders
+                        WHERE seller_id = %s ;
+                    """, [user_id])
+                rows = cursor.fetchall()
+                columns = [col[0] for col in cursor.description]
+                orders_count = [dict(zip(columns, row)) for row in rows]
+                print(orders_count)
+                #Dashboard statystyki KONIEC
+
+            context = {
+                'user_type': user_type,
+                'account_data':account_data,
+                'allegro_data':allegro_data, 
+                'orders_today':orders_today,
+                'products_count':products_count,
+                'orders_count':orders_count
+            }
+
+            return render(request, 'dashboard.html', context)
     else:
         # Kod dla niezalogowanych użytkowników
         return redirect('login')
