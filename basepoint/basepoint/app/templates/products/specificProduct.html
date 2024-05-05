@@ -1,8 +1,0 @@
-{% extends 'base.html'%}
-{% block content%}
-<h4>{{getProduct.name}}</h4>
-<p><b>Opis:</b> {{getProduct.description}}</p>
-<p><b>Ilość:</b> {{getProduct.price}}</p>
-<p><b>Stan:</b> {{getProduct.quantity}}</p>
-<a href="{% url 'deleteProduct' getProduct.id%}">Usuń</a>
-{% endblock content%}
