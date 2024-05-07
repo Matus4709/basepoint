@@ -632,16 +632,18 @@ def editProduct(request, id):
 
 
 
-
-
-
-def deleteProduct(request):
+def deleteProduct(request, id):
     product = get_object_or_404(Products, pk=id)
+
+    context = {
+        'product': product
+    }
+
     if request.method == 'POST':
         product.delete()
         return redirect(getAllProducts)
 
-    return render(request, 'deleteDefinitely.html')
+    return render(request, 'products/deleteDefinitely.html',  context)
 
 
 

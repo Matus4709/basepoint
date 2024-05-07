@@ -1,0 +1,7 @@
+{% extends 'base.html'%}
+{% block content%}
+<h4>Jesteś pewien, że chcesz usunąć {{product.name}}</h4>
+<form class="text-end" method="post">{% csrf_token %}
+    <button name="submit" type="submit" class="btn btn-success mb-5">Usuń</button>
+</form>
+{% endblock content%}

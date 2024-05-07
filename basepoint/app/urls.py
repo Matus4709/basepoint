@@ -27,7 +27,7 @@ urlpatterns = [
     path('dashboard/edytujProdukt/<id>', editProduct, name="editProduct"),
     path('kategorie/', getAllCategory),
     path('kategorie/<id>', getOneCategory),
-    path('dashboard/dodajProdukt', addNewProduct),
+    path('dashboard/dodajProdukt', addNewProduct, name="addNewProduct"),
     #path('dashboard/edytujProdukt', editProductProduct),
     path('usun/<id>', deleteProduct, name="deleteProduct"),
     path('kat/', getAllCategory),
