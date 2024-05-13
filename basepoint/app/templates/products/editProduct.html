@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content%}
+<body style="background-color: #DDDDDD;">
+<div> <!--class="container col-md-5"> -->
+
+  <div class="jumbotron jumbotron-fluid rounded mt-5" style="background-color: white;">
+    <div class="container">
+      <h1 class="h5 p-2 opacity-50">Edytuj produkt</h1>
+
+      <form class="text-end" method="post">
+        {% csrf_token %}
+        <div class="form-group row m-2">
+          <label for="name" class="col-4 col-form-label">Nazwa</label>
+          <div class="col-5">
+            <input id="name" name="name" type="text" class="form-control" value="{{produkt.name}}">
+          </div>
+        </div>
+        <div class="form-group row m-2">
+          <label for="description" class="col-4 col-form-label">Opis</label>
+          <div class="col-5">
+            <input id="description" name="description" type="text" class="form-control" value="{{produkt.description}}">
+          </div>
+        </div>
+        <div class="form-group row m-2">
+          <label for="quantity" class="col-4 col-form-label">Stan na magazynie</label>
+          <div class="col-5">
+            <input id="quantity" name="quantity" type="text" class="form-control" value="{{produkt.quantity}}">
+          </div>
+        </div>
+        <div class="form-group row m-2">
+          <label for="price" class="col-4 col-form-label ">cena (szt.)</label>
+          <div class="col-5 text-start">
+            <input id="price" name="price" type="text" class="form-control" value="{{produkt.price}}">
+          </div>
+        </div>
+        <div class="form-group row m-2">
+         <label class="col-4 col-form-label ">Kategoria</label>
+          <select for="category" name="category" class="col-4 col-form-label">
+            <div class="col-5 text-start">
+              {%for p in kategorie%}
+              <option value="{{p.id}}">{{p.name}}</option>
+              {%endfor%}
+            </div>
+          </select>
+        </div>
+        <div class="form-group row m-2">
+          <label for="price" class="col-4 col-form-label ">IMG</label>
+          <div class="col-5 text-start">
+            <input id="graphic" name="graphic" type="file" class="form-control" value="{{produkt.graphic}}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="offset-4 col-5 text-start">
+            <button name="submit" type="submit" class="btn btn-success mb-5">Zaktualizuj</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+{% endblock content%}

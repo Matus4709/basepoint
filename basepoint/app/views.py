@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db import connection
@@ -13,6 +13,8 @@ from sendgrid.helpers.mail import Mail
 from django.conf import settings
 import json
 from datetime import datetime
+from .models import Products
+from django.http import JsonResponse
 
 
 def login_view(request):
@@ -857,9 +859,11 @@ def details_orders(request,pk):
         if user_type == 'employee':
               with connection.cursor() as cursor:
                  cursor.execute("SELECT owner_id_id FROM app_account WHERE id = %s", [user_id])
-                 rows = cursor.fetchall()
-                 columns = [col[0] for col in cursor.description]
-                 owner_id = [dict(zip(columns, row)) for row in rows]
+
+                 rows = cursor.fetchall() #pobierz wszystko z kursora 
+                 columns = [col[0] for col in cursor.description] # przypisuje nazwe do każdej zmiennej, (coś jak format)
+                 owner_id = [dict(zip(columns, row)) for row in rows] 
+
         else:
             owner_id = user_id
 
@@ -999,3 +1003,112 @@ def welcome(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
     return render(request, 'welcome.html')
+
+
+
+
+def addNewProduct(request):
+     
+     token = ""
+
+     tokenProduct = secrets.token_hex(20)
+     with connection.cursor() as cursor:
+        cursor.execute("SELECT id FROM app_products")
+        rows = cursor.fetchall()  # Pobierz wszystkie wiersze z wyniku zapytania
+        ids = [row[0] for row in rows]   # Pobierz pierwszy element (id) z każdego wiersza
+
+        # Pętla porównująca zawartość każdego elementu zmiennego do zmiennej a
+        for id in ids:
+            if id != tokenProduct:
+                token = tokenProduct
+                break
+            else:
+                tokenProduct = secrets.token_hex(20)
+
+
+        allCategories = ['Książki i komiksy', 'Zdrowie', 'Sport i turystyka', 'Motoryzacja', 'Dom i ogród', 'Moda', 'Uroda', 'Dziecko', 'Buty', 'Elektronika', 'Kolekcje i sztuka']
+        # form = ProductsForm(request.POST or None, request.FILES or None)
+        data = {
+                'kategorie': allCategories,
+            }
+
+        if request.method == 'POST':
+            name = request.POST.get('name')
+            description = request.POST.get('description')
+            quantity = request.POST.get('quantity')
+            price = request.POST.get('price')
+            category = request.POST.get('category')
+            user_id = request.user.id
+            graphic_url = request.POST.get('graphic_url')
+
+
+            newProduct = Products(id=token, name=name, description=description, quantity=quantity, price=price,
+                                  accounts_account_id_id=user_id, category=category, graphic_url=graphic_url)
+            
+            newProduct.save()
+            redirect(allProducts)
+            
+
+     return render(request, 'products/addNewProduct.html', data)
+
+
+
+
+
+
+def editProduct(request, id):
+    product = get_object_or_404(Products, pk=id)
+    allCategories = ['Książki i komiksy', 'Zdrowie', 'Sport i turystyka', 'Motoryzacja', 'Dom i ogród', 'Moda', 'Uroda', 'Dziecko', 'Buty', 'Elektronika', 'Kolekcje i sztuka']
+
+
+    context = {
+        'produkt': product,
+        'kategorie': allCategories
+    }
+
+    if request.method == 'POST':
+        product.name = request.POST.get('name')
+        product.description = request.POST.get('description')
+        product.quantity = request.POST.get('quantity')
+        product.price = request.POST.get('price')
+        product.category = request.POST.get('category')
+        category = request.POST.get('category')
+        product.graphic_url = request.POST.get('graphic_url')
+        user_id = request.user.id
+
+        product.save()
+
+        redirect(allProducts)
+
+    return render(request, 'products/editProduct.html', context)
+
+
+
+
+def allProducts(request):
+    allProducts = Products.objects.all()
+    data = {'produkty': allProducts}
+    return render(request, 'products/allProducts.html', data)
+
+
+
+
+def oneProduct(request, id):
+    getProduct = Products.objects.get(pk=id)
+    data = {'getProduct': getProduct}
+    return render(request, 'products/oneProduct.html', data)
+
+
+
+def deleteProduct(request, id):
+    product = get_object_or_404(Products, pk=id)
+
+    context = {
+        'product': product
+    }
+
+    if request.method == 'POST':
+        product.delete()
+        return redirect(allProducts)
+
+    return render(request, 'products/deleteProduct.html',  context)

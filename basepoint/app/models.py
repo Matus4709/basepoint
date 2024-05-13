@@ -48,6 +48,7 @@ class Actions(models.Model):
     action_time = models.DateTimeField(auto_now_add=True)
     action_result = models.CharField(max_length=100)
 
+
 class Products(models.Model):
     id = models.CharField(max_length=100, unique=True, null=False, primary_key=True)
     name = models.CharField(max_length=100)
@@ -57,7 +58,6 @@ class Products(models.Model):
     category = models.CharField(max_length=100)
     graphic_url = models.CharField(max_length=1000)
     accounts_account_id = models.ForeignKey(Account, on_delete=models.CASCADE)
-
     def __str__(self):
         return self.name
     
