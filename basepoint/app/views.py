@@ -188,18 +188,27 @@ def dashboard(request):
                 # Konwersja wyników z krotki na listę słowników
                 columns = [col[0] for col in cursor.description]
                 account_data = [dict(zip(columns, row)) for row in rows]
-
+            
             #Dashboard statystyki
-            today = datetime.now()
+            # Użycie proceduty do zliczenia zamówień dnia dzisiejszego
             with connection.cursor() as cursor:
-                cursor.execute("""
-                    SELECT COUNT(*) as ilosc
-                    FROM app_orders 
-                    WHERE app_orders.seller_id = %s AND app_orders.order_date = %s;
-                """, [user_id, today])
-                rows = cursor.fetchall()
-                columns = [col[0] for col in cursor.description]
-                orders_today = [dict(zip(columns, row)) for row in rows]
+                cursor.execute(
+                    "CALL CountTodayOrders(%s, @order_count)",
+                    [user_id]
+                )
+                cursor.execute("SELECT @order_count")
+                result = cursor.fetchone()
+                orders_today = result[0]
+
+            # with connection.cursor() as cursor:
+            #     cursor.execute("""
+            #         SELECT COUNT(*) as ilosc
+            #         FROM app_orders 
+            #         WHERE app_orders.seller_id = %s AND app_orders.order_date = %s;
+            #     """, [user_id, today])
+            #     rows = cursor.fetchall()
+            #     columns = [col[0] for col in cursor.description]
+            #     orders_today = [dict(zip(columns, row)) for row in rows]
 
             with connection.cursor() as cursor:
                 cursor.execute("""
@@ -233,7 +242,6 @@ def dashboard(request):
                 rows = cursor.fetchall()
                 columns = [col[0] for col in cursor.description]
                 orders_count = [dict(zip(columns, row)) for row in rows]
-                print(orders_count)
                 #Dashboard statystyki KONIEC
 
             context = {
@@ -555,34 +563,37 @@ def orders_list(request):
                     buyer_post_code = buyer_details_in_form['address']['postCode']
                     buyer_country_code = buyer_details_in_form['address']['countryCode']
 
-                    # #Dodawnie do app_customers
-                    # with connection.cursor() as cursor:
-                    #     cursor.execute("""
-                    #         SELECT id FROM app_customers WHERE id = %s
-                    #         """, [buyer_id])
-                    #     result = cursor.fetchone()
-                    #     if result:
-                    #         print('Customer already exists')
-                    #     else:
-                    #         cursor.execute("""
-                    #             INSERT INTO app_customers (id, first_name, last_name, email, phone)
-                    #             VALUES (%s, %s, %s, %s, %s);
-                    #             """,[buyer_id, buyer_first_name, buyer_last_name, buyer_email_in_form, buyer_phone_number])
+                    #Dodawnie do app_customers
+                    with connection.cursor() as cursor:
+                        cursor.execute("""
+                            SELECT id FROM app_customers WHERE id = %s
+                            """, [buyer_id])
+                        result = cursor.fetchone()
+                        if result:
+                            pass
+                        else:
+                            cursor.execute("""
+                                INSERT INTO app_customers (id, first_name, last_name, email, phone)
+                                VALUES (%s, %s, %s, %s, %s);
+                                """,[buyer_id, buyer_first_name, buyer_last_name, buyer_email_in_form, buyer_phone_number])
                             
-                    # # Dodawnie do app_custumer_addreses
-                    # with connection.cursor() as cursor:
-                    #     cursor.execute("""
-                    #         SELECT id FROM app_custumers_addresses WHERE custumer_id_id = %s
-                    #         """, [buyer_id])
-                    #     result = cursor.fetchone()
-                    #     if result:
-                    #         print('Customer already exists')
-                    #     else:
-                    #         with connection.cursor() as cursor:
-                    #             cursor.execute("""
-                    #                 INSERT INTO app_custumers_addresses (country, city, address, postal_code, custumer_id_id)
-                    #                 VALUES (%s, %s, %s, %s, %s);
-                    #                 """, [buyer_country_code, buyer_city, buyer_street, buyer_post_code, buyer_id])
+                    # Dodawnie do app_custumer_addreses
+                    with connection.cursor() as cursor:
+                        cursor.execute("""
+                            SELECT custumer_id_id FROM app_custumers_addresses WHERE custumer_id_id = %s
+                            """, [buyer_id])
+                        result = cursor.fetchone()
+                        if result:
+                             with connection.cursor() as cursor:
+                                cursor.execute("""
+                                    UPDATE app_custumers_addresses SET country = %s, city = %s, address = %s, postal_code = %s WHERE custumer_id_id = %s;
+                                    """, [buyer_country_code, buyer_city, buyer_street, buyer_post_code, buyer_id])
+                        else:
+                            with connection.cursor() as cursor:
+                                cursor.execute("""
+                                    INSERT INTO app_custumers_addresses (country, city, address, postal_code, custumer_id_id)
+                                    VALUES (%s, %s, %s, %s, %s);
+                                    """, [buyer_country_code, buyer_city, buyer_street, buyer_post_code, buyer_id])
                 
                 # Szczegóły zamówienia
                 order_details = event['order']
@@ -609,19 +620,19 @@ def orders_list(request):
                     total_amount = round(total_amount,2)
                     event_occurred_at = datetime.strptime(event_occurred_at, '%Y-%m-%dT%H:%M:%SZ').strftime('%Y-%m-%d %H:%M:%S')
                     
-                # # Dodawanie app_orders
-                # with connection.cursor() as cursor:
-                #         cursor.execute("""
-                #             SELECT id FROM app_orders WHERE id = %s
-                #             """, [event_id])
-                #         result = cursor.fetchone()
-                #         if result:
-                #             print('Order already exists')
-                #         else:
-                #             cursor.execute("""
-                #                 INSERT INTO app_orders (id, order_date, amount_products, summary_price, statues_status_id, seller_id, customer_id, messageToSeller)
-                #                 VALUES (%s,%s,%s,%s,%s,%s,%s);
-                #                 """,[event_id,event_occurred_at,amount_products,total_amount,status,owner_id,buyer_id,messageToSeller])
+                # Dodawanie app_orders
+                with connection.cursor() as cursor:
+                        cursor.execute("""
+                            SELECT id FROM app_orders WHERE id = %s
+                            """, [event_id])
+                        result = cursor.fetchone()
+                        if result:
+                            pass
+                        else:
+                            cursor.execute("""
+                                INSERT INTO app_orders (id, order_date, amount_products, summary_price, statues_status_id, seller_id, customer_id, messageToSeller)
+                                VALUES (%s,%s,%s,%s,%s,%s,%s);
+                                """,[event_id,event_occurred_at,amount_products,total_amount,status,owner_id,buyer_id,messageToSeller])
                             
                 # Pozycje zamówienia
                 line_items = order_details['lineItems']
@@ -648,28 +659,35 @@ def orders_list(request):
 
                     amount_products = amount_products + quantity
                     
-                    # # Dodawanie app_products
-                    # with connection.cursor() as cursor:
-                    #     cursor.execute("""
-                    #         SELECT id FROM app_products WHERE id = %s
-                    #         """, [id_item])
-                    #     result = cursor.fetchone()
-                    #     if result:
-                    #         print('Product already exists')
-                    #     else:
-                    #         cursor.execute("""
-                    #             INSERT INTO app_products (id,name, description, price, quantity, category, graphic_url, accounts_account_id_id)
-                    #             VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
-                    #             """, [id_item,item_name,item_description,item_price,item_quantity,item_category,item_graphic_url,owner_id])
+                    # Dodawanie app_products
+                    with connection.cursor() as cursor:
+                        cursor.execute("""
+                            SELECT id FROM app_products WHERE id = %s
+                            """, [id_item])
+                        result = cursor.fetchone()
+                        if result:
+                             pass
+                            # print('Product already exists')
+                        else:
+                            cursor.execute("""
+                                INSERT INTO app_products (id,name, description, price, quantity, category, graphic_url, accounts_account_id_id)
+                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
+                                """, [id_item,item_name,item_description,item_price,item_quantity,item_category,item_graphic_url,owner_id])
                 
-                
-                    # # Dodawnie do app_product_has_orders
-                    # with connection.cursor() as cursor:
-                    #      cursor.execute("""
-                    #                     INSERT INTO app_product_has_orders (orders_order_id_id, products_product_id_id,quantity)
-                    #                     VALUES (%s, %s, %s);
-                    #                     """, [event_id,id_item,quantity])
-                    
+                    # Dodawnie do app_product_has_orders
+                    with connection.cursor() as cursor:
+                        cursor.execute("""
+                            SELECT id FROM app_product_has_orders WHERE orders_order_id_id = %s AND products_product_id_id = %s AND quantity = %s
+                            """, [event_id, id_item, quantity])
+                        result = cursor.fetchone()
+                        if result:
+                                pass
+                        else:
+                         cursor.execute("""
+                                        INSERT INTO app_product_has_orders (orders_order_id_id, products_product_id_id,quantity)
+                                        VALUES (%s, %s, %s);
+                                        """, [event_id,id_item,quantity])
+
         with connection.cursor() as cursor:
             cursor.execute("""
                 SELECT app_orders.id as order_id, app_customers.first_name as customer_name, app_customers.email as customer_email,
@@ -688,39 +706,11 @@ def orders_list(request):
                 ORDER BY app_orders.order_date DESC;
             """, [owner_id])
 
-            allegro_data = cursor.fetchall()
-                                                                        
-    #Wyszukiwanie
-    search_orders = request.GET.get('search_orders')
-    search_orders = str(search_orders) if search_orders else '%'  # Jeśli nie ma wartości, ustaw na dowolny ciąg
-
-    if search_orders and allegro_data:
-        with connection.cursor() as cursor:
-            cursor.execute("""
-                SELECT app_orders.id as order_id, app_customers.first_name as customer_name, app_customers.email as customer_email,
-                GROUP_CONCAT(CONCAT(app_products.name, ' (', app_product_has_orders.quantity, ')') SEPARATOR ', ') as products,
-                SUM(app_products.price * app_product_has_orders.quantity) as total_price,
-                app_orders.statues_status_id as status,
-                app_orders.delivery as delivery,
-                app_orders.order_date as order_date
-                FROM app_orders 
-                JOIN app_customers ON app_orders.customer_id = app_customers.id
-                JOIN app_custumers_addresses ON app_custumers_addresses.custumer_id_id = app_customers.id
-                JOIN app_product_has_orders ON app_orders.id = app_product_has_orders.orders_order_id_id
-                JOIN app_products ON app_product_has_orders.products_product_id_id = app_products.id
-                WHERE app_orders.seller_id = %s AND app_customers.email LIKE %s
-                GROUP BY app_orders.id
-                ORDER BY app_orders.order_date DESC;
-            """, [owner_id, f"%{search_orders}%"])
-            allegro_data = cursor.fetchall()
+            row = cursor.fetchall()
+            columns = [col[0] for col in cursor.description]
+            allegro_data = [dict(zip(columns, row)) for row in rows]
+            # print(allegro_data)                     
         
-        # Filtrowanie po statusie
-        status_filters = {
-            'SENT': ['SENT', 'PICKED_UP', 'READY_FOR_PICKUP'],
-            'NEW': ['NEW', 'PROCESSING'],
-            'READY_FOR_SHIPMENT': ['READY_FOR_SHIPMENT'],
-            'CANCELLED': ['SUSPENDED', 'CANCELLED']
-            }
         status = request.GET.get('status')
         if status == 'SENT' or 'PICKED_UP' or 'READY_FOR_PICKUP':
             with connection.cursor() as cursor:
@@ -823,11 +813,35 @@ def orders_list(request):
         update_status = request.GET.get('data-status-update')
         order_id_update = request.GET.get('order_id_update')
         if update_status is not None and order_id_update is not None:
+            with connection.cursor() as cursor: # Tutaj wykonuje się trigger który zapisuję historię zmian w bazie w tabeli app_status_history
+                cursor.execute("""
+                    UPDATE app_orders 
+                               SET statues_status_id = %s 
+                               WHERE id = %s
+                """, [update_status, order_id_update])
+        #Wyszukiwanie
+        search_orders = request.GET.get('search_orders')
+       
+        if search_orders:
+            search_orders = str(search_orders) if search_orders else '%'  # Jeśli nie ma wartości, ustaw na dowolny ciąg
             with connection.cursor() as cursor:
                 cursor.execute("""
-                    UPDATE app_orders SET statues_status_id= %s WHERE id = %s
-                """, [update_status, order_id_update])
-            
+                    SELECT app_orders.id as order_id, app_customers.first_name as customer_name, app_customers.email as customer_email,
+                    GROUP_CONCAT(CONCAT(app_products.name, ' (', app_product_has_orders.quantity, ')') SEPARATOR ', ') as products,
+                    SUM(app_products.price * app_product_has_orders.quantity) as total_price,
+                    app_orders.statues_status_id as status,
+                    app_orders.delivery as delivery,
+                    app_orders.order_date as order_date
+                    FROM app_orders 
+                    JOIN app_customers ON app_orders.customer_id = app_customers.id
+                    JOIN app_custumers_addresses ON app_custumers_addresses.custumer_id_id = app_customers.id
+                    JOIN app_product_has_orders ON app_orders.id = app_product_has_orders.orders_order_id_id
+                    JOIN app_products ON app_product_has_orders.products_product_id_id = app_products.id
+                    WHERE app_orders.seller_id = %s AND app_customers.email LIKE %s
+                    GROUP BY app_orders.id
+                    ORDER BY app_orders.order_date DESC;
+                """, [owner_id, f"%{search_orders}%"])
+                allegro_data = cursor.fetchall()
                 
         #Paginacja strony
         paginator = Paginator(allegro_data,5)
@@ -876,7 +890,6 @@ def details_orders(request,pk):
         with connection.cursor() as cursor:
             cursor.execute("""
                 SELECT app_orders.id as order_id, app_customers.first_name as customer_name, app_customers.email as customer_email,
-                GROUP_CONCAT(CONCAT(app_products.name, ' (', app_product_has_orders.quantity, ')') SEPARATOR ', ') as products,
                 SUM(app_products.price * app_product_has_orders.quantity) as total_price,
                 app_orders.statues_status_id as status,
                 app_orders.delivery as delivery,
@@ -892,20 +905,169 @@ def details_orders(request,pk):
                 JOIN app_products ON app_product_has_orders.products_product_id_id = app_products.id
                 WHERE app_orders.seller_id = %s AND app_orders.id = %s;
             """, [owner_id, pk])
-
             rows = cursor.fetchall()
             columns = [col[0] for col in cursor.description]
-            allegro_data = [dict(zip(columns, row)) for row in rows]
+            allegro_data = [dict(zip(columns, row)) for row in rows]    
+
+            cursor.execute("""
+                SELECT p.name, pho.quantity, p.price
+                FROM app_product_has_orders pho
+                JOIN app_products p ON pho.products_product_id_id = p.id 
+                WHERE orders_order_id_id = %s
+            """, [pk])
+            rows = cursor.fetchall()
+            columns = [col[0] for col in cursor.description]
+            products = [dict(zip(columns, row)) for row in rows]  
+
+            
 
         context = {
             'account_data': account_data,
             'user_type': user_type,
-            'allegro_data':allegro_data
+            'allegro_data':allegro_data,
+            'products':products
             
         }
         return render(request, 'orders/details_orders.html',context)
     else:
        return redirect('welcome')
+    
+from django.http import HttpResponse
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+
+def generate_pdf(request,order_id):
+    order_id = order_id
+    with connection.cursor() as cursor:
+        cursor.execute("""
+                    SELECT c.*, ca.* 
+                       FROM app_orders o 
+                       JOIN app_customers c ON o.customer_id = c.id 
+                       JOIN app_custumers_addresses ca ON c.id = ca.custumer_id_id 
+                       WHERE o.id = %s
+                """, [order_id])
+    rows = cursor.fetchall()
+    columns = [col[0] for col in cursor.description]
+    date = [dict(zip(columns, row)) for row in rows]
+   
+    customer_id = date[0]['custumer_id_id']
+    customer_name = date[0]['first_name']+" "+date[0]['last_name']
+    customer_address = date[0]['address']+", "+date[0]['city']+", "+date[0]['postal_code']+" "+date[0]['country']
+    customer_email = date[0]['email']
+    customer_phone = date[0]['phone']
+
+    # Lista produktów w zamówieniu
+    with connection.cursor() as cursor:
+        cursor.execute("""
+                    SELECT p.name, pho.quantity, p.price
+                    FROM app_product_has_orders pho
+                    JOIN app_products p ON pho.products_product_id_id = p.id 
+                    WHERE orders_order_id_id = %s
+                """, [order_id])
+    rows = cursor.fetchall()
+    columns = [col[0] for col in cursor.description]
+    products = [dict(zip(columns, row)) for row in rows]
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="sample_order.pdf"'
+
+    pdf = SimpleDocTemplate(response, pagesize=letter)
+
+    # Styl dla stopki
+    styles = getSampleStyleSheet()
+    footer_style = styles['Normal']
+    footer_style.alignment = 1  # Wyśrodkowanie tekstu
+
+    # Lista zawierająca elementy stopki
+    
+   
+    # Lista zawierająca wiersze tabeli z produktami
+    table_data = [["Produkt", "Cena (PLN)", "Ilosc"]]
+    for product in products:
+        table_data.append([product["name"], product["price"], product["quantity"]])
+
+    # Utworzenie tabeli
+    table = Table(table_data)
+    table.setStyle(TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.gray),
+                               ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                               ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                               ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                               ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                               ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                               ('GRID', (0, 0), (-1, -1), 1, colors.black)]))
+
+    # Lista zawierająca elementy do dodania do dokumentu PDF
+    content = []
+
+    # Dodanie danych klienta
+    content.append(Paragraph("ID Zamowienia: {}".format(order_id), styles['Normal']))
+    content.append(Paragraph("ID Klienta: {}".format(customer_id), styles['Normal']))
+    content.append(Paragraph("Imie i nazwisko: {}".format(customer_name), styles['Normal']))
+    content.append(Paragraph("Adres: {}".format(customer_address), styles['Normal']))
+    content.append(Paragraph("E-mail: {}".format(customer_email), styles['Normal']))
+    content.append(Paragraph("Telefon: {}".format(customer_phone), styles['Normal']))    
+
+    # Dodanie odstępu między danymi klienta a tabelą
+    content.append(Spacer(1, 12))
+
+    # Dodanie tabeli z produktami
+    content.append(table)
+
+    with connection.cursor() as cursor:
+        cursor.execute("""
+                    SELECT 
+                       a.email,
+                       a.country, 
+                       a.NIP, 
+                       a.company_name, 
+                       a.phone_number, 
+                       a.name_contact, 
+                       a.city, 
+                       a.address, 
+                       a.postcode
+                       FROM app_orders o 
+                       JOIN app_account a ON o.seller_id = a.id 
+                       WHERE o.id = %s
+                """, [order_id])
+    rows = cursor.fetchall()
+    columns = [col[0] for col in cursor.description]
+    seller_data = [dict(zip(columns, row)) for row in rows]
+    phone = seller_data[0]['phone_number']
+    email = seller_data[0]['email']
+    adres = seller_data[0]['address']+" "+seller_data[0]['postcode']+" "+seller_data[0]['city']+" "+seller_data[0]['country']
+    nip = seller_data[0]['NIP']
+    company_name = seller_data[0]['company_name']
+    name_contact = seller_data[0]['name_contact']
+
+    # Dodanie stopki
+    footer_content = [
+        
+        Paragraph("==================", footer_style),
+        Paragraph("Sprzedający ", footer_style),
+        Paragraph("==================", footer_style),
+        Paragraph("Numer telefonu: {}".format(phone), footer_style),
+        Paragraph("Email: {}".format(email), footer_style),
+        Paragraph("Adres: {}".format(adres), footer_style),
+        Paragraph("NIP: {}".format(nip), footer_style),
+        Paragraph("Firma: {}".format(company_name), footer_style),
+        Paragraph("Wlasciciel: {}".format(name_contact), footer_style),
+        
+    ]
+    content.append(Spacer(1, 12))
+    
+    for item in footer_content:
+        content.append(item)
+    
+
+    # Wygenerowanie dokumentu PDF
+    pdf.build(content)
+
+    return response
+
+
+
 def invoices(request):
     if request.user.is_authenticated:
         user_type = request.user.user_type

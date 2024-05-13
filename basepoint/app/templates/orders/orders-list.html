@@ -54,7 +54,7 @@ Lista zamówień - BASEPOINT
                             <th></th>
                             {% comment %} <th>Numer</th> {% endcomment %}
                             <th>E-Mail</th>
-                            <th>Przedmioty</th>
+                            {% comment %} <th>Przedmioty</th> {% endcomment %}
                             <th>Status</th>
                             <th>Kwota</th>
                             <th>Wysyłka</th>
@@ -78,11 +78,7 @@ Lista zamówień - BASEPOINT
                             </td>
                             {% comment %} <td>{{ event.id }}</td> {% endcomment %}
                             <td>{{ event.2}}</td>
-                            <td>
-                                <ul>
-                                    {{ event.3}}
-                                </ul>
-                            </td>
+                            
                             <td>
                             {% if event.5 == 'SENT' or event.5 == 'PICKED_UP' or event.5 == 'READY_FOR_PICKUP' %}
                                   Wysłane
@@ -154,7 +150,6 @@ Lista zamówień - BASEPOINT
               </nav>
                 </div>
             </div>
-        
     </div>
 </div>
 <script>

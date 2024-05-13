@@ -8,7 +8,7 @@ DASHBOARD - BASEPOINT
 <div class="container">
     <div class="row mt-5 ">
         <div class="col-md-3 offset-2 bg-light rounded shadow text-center" style="height: 150px;">
-            <p class="fw-bold text-success fs-1 pt-4">{% for event in orders_today %} {{ event.ilosc }}{% endfor %}</p>
+            <p class="fw-bold text-success fs-1 pt-4">{{orders_today}}</p>
             <p class="mb-5" style="opacity: 50%;">Zamówienia dzisiaj</p>
         </div>
         <div class="col-md-4 offset-1 bg-light rounded shadow" style="height: 150px;">
