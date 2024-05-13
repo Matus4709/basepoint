@@ -25,13 +25,21 @@ Szczegóły zamówienia - BASEPOINT
                 <h2>Zamówienie:</h2>
                 {% for event in allegro_data %}
                 <b>ID:</b> {{ event.order_id }}  <br>
-                <b>Produkty:</b> {{ event.products }}  <br>
+                <b>Produkty:</b> 
+                {% for item in products %}
+                <ul>
+                    <li>{{item.name}} | sztuk: {{item.quantity}} | {{item.price}} PLN </li>
+                </ul>
+                    
+                 {% endfor %}  <br>
                 <b>Dostawa:</b> {{ event.delivery }}  <br>
                 <b>Status:</b> {{ event.status }}  <br>
                 <b>Kwota:</b> {{ event.total_price }} PLN <br>
                 <b>Wiadomość od kupującego:</b> {{ event.messageToSeller }} PLN <br>
                 
                 {% endfor %}
+                
+                <a href="#" class="btn btn-primary mt-3">Pobierz zamówienie PDF</a>
             </div>
         </div>
     </div>

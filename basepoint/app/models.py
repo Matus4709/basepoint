@@ -75,10 +75,7 @@ class Documents(models.Model):
         return self.document_number
 
 
-class Status_history(models.Model):
-    date_of_change = models.DateTimeField(auto_now_add=True)
-    status = models.ForeignKey(Statues, on_delete=models.CASCADE)
-    who_changed = models.ForeignKey(Account, on_delete=models.CASCADE)
+
 
 
 class Customers(models.Model):
@@ -109,6 +106,11 @@ class Orders(models.Model):
     
     def __str__(self):
         return str(self.documents_document_id)
+    
+class Status_history(models.Model):
+    date_of_change = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=100)
+    id_order = models.ForeignKey(Orders, on_delete=models.CASCADE)
     
 class Product_has_orders(models.Model):
     products_product_id = models.ForeignKey(Products, on_delete=models.CASCADE)
