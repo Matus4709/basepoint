@@ -11,7 +11,7 @@
   <tbody>
   {%for p in produkty%}
     <tr>
-      <td><a href="{% url 'getOneProduct' p.id %}" style="text-decoration:none; color: black;">{{p.name}}</a></td>
+      <td><a href="{% url 'oneProduct' p.id %}" style="text-decoration:none; color: black;">{{p.name}}</a></td>
       <td>{{p.quantity}} szt.</td>
       <td>{{p.price}} zł.</td>
     </tr>

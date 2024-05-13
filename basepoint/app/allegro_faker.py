@@ -19,7 +19,21 @@ def generate_order_event(event_id):
             'offer': {
                 'id': str(offer_id),
                 'name': fake.word(ext_word_list=['Koszulka', 'Spodnie', 'Buty', 'Kurtka', 'Rękawiczki']),
-                'external': {
+                'description': fake.sentence(),
+                'graphic_url': fake.image_url(),
+                'category': random.choice([
+                    'Elektronika',
+                    'Moda',
+                    'Dom i ogród',
+                    'Motoryzacja',
+                    'Sport i turystyka',
+                    'Książki i komiksy',
+                    'Uroda',
+                    'Zdrowie',
+                    'Dziecko',
+                    'Kolekcje i sztuka'
+                ]),
+                                'external': {
                     'id': "AH-" + str(random.randint(10000, 99999))
                 }
             },

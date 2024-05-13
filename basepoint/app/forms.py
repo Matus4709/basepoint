@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from .models import Account
 from django.forms import ModelForm
-from .models import Account, Products, Categories
+from .models import Products
 
 class UserRegisterForm(UserCreationForm):
     pass
@@ -19,29 +20,22 @@ class UserRegisterForm(UserCreationForm):
     
 # from django import forms
 # from .models import Worker
-#
-# class WorkerForm(ModelForm):
+
+# class WorkerForm(forms.ModelForm):
 #     password = forms.CharField(widget=forms.PasswordInput())
-#
+
 #     class Meta:
 #         model = Worker
 #         fields = ['email', 'password', 'name', 'last_name']
 
 
-class MyProduct(ModelForm):
+
+class ProductsForm(ModelForm):
     class Meta:
         model = Products
-        fields = ['name','description','price','quantity','banner', 'category', 'accounts_account_id']
-
-
-
-
-
-
-
-
-
-
-
-
-
+        fields = ['name','description','price','quantity','graphic', 'category'] # 'id', 'accounts_account_id'
+        
+# class UpdateForm(ModelForm):
+#     class Meta:
+#         model = Products
+#         fields = ['graphic']
