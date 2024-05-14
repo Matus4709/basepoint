@@ -225,11 +225,12 @@ def generate_order_event(event_id):
 
 # Generowanie 10 obiektów
 events = []
-for i in range(10):
+for i in range(1000):
     events.append(generate_order_event(i))
 
-# Zapisanie wynikowego JSON do pliku
+# Otwarcie pliku w trybie do dodawania ('a') jako obiekt pliku
 with open('sample_order_events.json', 'w', encoding='utf-8') as f:
-    json.dump({'events': events}, f, ensure_ascii=False, indent=4)
+    # Użyj metody json.dump(), aby zapisać dane do pliku
+    json.dump({'events':events}, f, ensure_ascii=False, indent=4)
 
 print("Wygenerowano 10 obiektów i zapisano je do pliku 'sample_order_events.json'")

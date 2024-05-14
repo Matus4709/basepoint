@@ -3,8 +3,8 @@
 {% block title %} 
 Lista zamówień - BASEPOINT 
 {% endblock title %}
-{% block content %}
 
+{% block content %}
 <div class="container">
     <div class="row">
         <div class="col-md-10 offset-1 rounded shadow bg-light mt-5" >
@@ -15,82 +15,97 @@ Lista zamówień - BASEPOINT
                         <form method="POST">
                             {% csrf_token %}
                           <div class="form-group">
-                            <label for="selected_date">Zakres od:</label>
-                            <input type="date" class="form-control" id="selected_date" name="selected_date_from">
+                            <label for="selected_date_from">Zakres od:</label>
+                            <input type="date" class="form-control" id="selected_date_from" name="selected_date_from">
                           </div>
                       </div>
-
-                    {% comment %} <select class="form-select" aria-label="Default select example">
-                        <option selected>Zakres</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                      </select> {% endcomment %}
                 </div>
             </div>
             <div class="row mt-1">
                 <div class="col-md-8 offset-2">
                     <div class="container mt-1">
                           <div class="form-group">
-                            <label for="selected_date">Zakres do:</label>
-                            <input type="date" class="form-control" id="selected_date" name="selected_date_to">
+                            <label for="selected_date_to">Zakres do:</label>
+                            <input type="date" class="form-control" id="selected_date_to" name="selected_date_to">
                           </div>
-                        
                       </div>
-
-                    {% comment %} <select class="form-select" aria-label="Default select example">
-                        <option selected>Zakres</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                      </select> {% endcomment %}
                 </div>
             </div>
             <div class="row mt-3 mb-3">
                 <div class="col-md-8 offset-2">
-                    <button class="btn btn-success w-100" type="submit">Pokaż</button></form>
+                    <button class="btn btn-success w-100" type="submit">Pokaż</button>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-10 offset-1 rounded shadow bg-light mt-5" style="height: 200px;">
-           <div class="row">
-                <p class="fw-bold fw-1 pt-3" style="opacity: 50%;">
-                    Ilość i wartość zamówień
-                </p>
-           </div>
-           <div class="row">
-            <div class="col-md-6">
-                PyCharts_1
-            </div>
-            <div class="col-md-6">
-                PyCharts_2
-            </div>
-           </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-4 offset-1 rounded shadow bg-light mt-5" style="height: 200px;">
-            <p class="fw-bold fw-1 pt-3" style="opacity: 50%;">
-                Zamówień
-            </p>
-            <p class="fw-normal" style="opacity: 50%; margin-top: -20px;">
-                w określonym czasie
-            </p>
-            <p class="fw-bold text-success fs-1 pt-2 text-center">{% for event in data %} {{ event.ilosc_zamowien }}{% endfor %}</p>
-        </div>
-        <div class="col-md-4 offset-2 rounded shadow bg-light mt-5" >
-            <p class="fw-bold fw-1 pt-3" style="opacity: 50%;">
-                Podsumowanie
-            </p>
-            <p class="fw-normal " style="opacity: 50%;">
-                Łączna wartość: <span class="ms-5 ps-5">{% for event in data %} {{ event.wartosc_zamowien }}{% endfor %} PLN</span>
-            </p>
-        </div>
+        </form>
     </div>
 </div>
+
+<div class="row">
+    <div class="col-md-10 offset-1 rounded shadow bg-light mt-5" style="height: 200px;">
+       <div class="row">
+            <p class="fw-bold fw-1 pt-3" style="opacity: 50%;">
+                Ilość i wartość zamówień
+            </p>
+       </div>
+       <div class="row">
+        <div class="col-md-6">
+            PyCharts_1
+        </div>
+        <div class="col-md-6">
+            PyCharts_2
+        </div>
+       </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 offset-1 rounded shadow bg-light mt-5" style="height: 200px;">
+        <p class="fw-bold fw-1 pt-3" style="opacity: 50%;">
+            Zamówień
+        </p>
+        <p class="fw-normal" style="opacity: 50%; margin-top: -20px;">
+            w określonym czasie
+        </p>
+        <p class="fw-bold text-success fs-1 pt-2 text-center">{% for event in data %} {{ event.ilosc_zamowien }}{% endfor %}</p>
+    </div>
+    <div class="col-md-4 offset-2 rounded shadow bg-light mt-5" >
+        <p class="fw-bold fw-1 pt-3" style="opacity: 50%;">
+            Podsumowanie
+        </p>
+        <p class="fw-normal " style="opacity: 50%;">
+            Łączna wartość: <span class="ms-5 ps-5">{% for event in data %} {{ event.wartosc_zamowien }}{% endfor %} PLN</span>
+        </p>
+    </div>
+</div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var fromDateInput = document.getElementById('selected_date_from');
+        var toDateInput = document.getElementById('selected_date_to');
+
+        // Sprawdź, czy wartości są zapisane w localstorage
+        var storedFromDate = localStorage.getItem('selected_date_from');
+        var storedToDate = localStorage.getItem('selected_date_to');
+
+        // Jeśli istnieją, ustaw je jako wartości domyślne pól formularza
+        if (storedFromDate) {
+            fromDateInput.value = storedFromDate;
+        }
+
+        if (storedToDate) {
+            toDateInput.value = storedToDate;
+        }
+
+        // Obsługa zapisu dat do localstorage po zmianie
+        fromDateInput.addEventListener('change', function() {
+            localStorage.setItem('selected_date_from', fromDateInput.value);
+        });
+
+        toDateInput.addEventListener('change', function() {
+            localStorage.setItem('selected_date_to', toDateInput.value);
+        });
+    });
+</script>
 
 {% endblock content %}

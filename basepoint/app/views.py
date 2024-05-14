@@ -633,7 +633,7 @@ def orders_list(request):
                         else:
                             cursor.execute("""
                                 INSERT INTO app_orders (id, order_date, amount_products, summary_price, statues_status_id, seller_id, customer_id, messageToSeller)
-                                VALUES (%s,%s,%s,%s,%s,%s,%s);
+                                VALUES (%s,%s,%s,%s,%s,%s,%s,%s);
                                 """,[event_id,event_occurred_at,amount_products,total_amount,status,owner_id,buyer_id,messageToSeller])
                             
                 # Pozycje zamówienia
@@ -846,7 +846,7 @@ def orders_list(request):
                 allegro_data = cursor.fetchall()
                 
         #Paginacja strony
-        paginator = Paginator(allegro_data,5)
+        paginator = Paginator(allegro_data,20)
         page = request.GET.get('page')
         try:
             allegro_data = paginator.page(page)
