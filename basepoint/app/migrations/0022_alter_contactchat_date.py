@@ -15,4 +15,17 @@ class Migration(migrations.Migration):
             name='date',
             field=models.DateTimeField(auto_now_add=True),
         ),
+        migrations.RunSQL('''
+            DELIMITER //
+
+            CREATE PROCEDURE GetUserType(IN user_id INT, OUT type VARCHAR(10))
+            BEGIN
+                SELECT user_type INTO type 
+                          FROM app_account 
+                          WHERE id = user_id;
+            END //
+
+            DELIMITER ;
+                          
+        '''),
     ]

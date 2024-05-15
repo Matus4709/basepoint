@@ -1453,22 +1453,31 @@ def contact_chat(request, id):
     return render(request,'contact/contact_chat.html',context)
 
 def support_view(request):
-    user_type = request.user.user_type
-    if user_type == 'support':
+    if request.user.is_authenticated:
         user_id = request.user.id
         with connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM app_contacts WHERE NOT status = 'END' ")
-                rows = cursor.fetchall()
-                columns = [col[0] for col in cursor.description]
-                contacts_data = [dict(zip(columns, row)) for row in rows]
+            cursor.execute(
+                 "CALL GetUserType(%s, @type)",  # procedura do pobierania user_type po id użytkownika
+                 [user_id])
+            cursor.execute("SELECT @type")
+            result = cursor.fetchone()
+            user_type = result[0]
 
-        
-        context = {
-            'contacts_data': contacts_data,
-        }
-        return render(request, 'support/support_template.html',context)
-    else:
-        return redirect('login')
+        if user_type == 'support':
+            user_id = request.user.id
+            with connection.cursor() as cursor:
+                    cursor.execute("SELECT * FROM app_contacts WHERE NOT status = 'END' ")
+                    rows = cursor.fetchall()
+                    columns = [col[0] for col in cursor.description]
+                    contacts_data = [dict(zip(columns, row)) for row in rows]
+
+            
+            context = {
+                'contacts_data': contacts_data,
+            }
+            return render(request, 'support/support_template.html',context)
+        else:
+            return redirect('login')
     
 def contact_chat_support(request, id):
     user_type = request.user.user_type
@@ -1538,6 +1547,9 @@ def end_contact(request, id):
             return redirect('support_view')
                 
 def delete_chat(request, id):
+    if request.user.is_authenticated:
+     user_id = request.user.id
+
      id = id
      user_type = request.user.user_type
      if user_type == 'owner' or 'employee':
@@ -1552,3 +1564,5 @@ def delete_chat(request, id):
             with connection.cursor() as cursor:
                 cursor.execute("ROLLBACK")
         return redirect('support_view')
+     else: 
+          return redirect('login')
