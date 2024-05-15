@@ -34,8 +34,8 @@ Szczegóły zamówienia - BASEPOINT
                  {% endfor %}  <br>
                 <b>Dostawa:</b> {{ event.delivery }}  <br>
                 <b>Status:</b> {{ event.status }}  <br>
-                <b>Kwota:</b> {{ event.total_price }} PLN <br>
-                <b>Wiadomość od kupującego:</b> {{ event.messageToSeller }} PLN <br>
+                <b>Podsumowanie:</b> {{ event.total_price }} PLN <br>
+                <b>Wiadomość od kupującego:</b> {{ event.messageToSeller }} <br>
                 <a href="{% url 'generate_pdf' order_id=event.order_id %}" class="btn btn-primary mt-3">Pobierz zamówienie PDF</a>
 
                 {% endfor %}

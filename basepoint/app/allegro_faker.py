@@ -224,13 +224,15 @@ def generate_order_event(event_id):
     return event
 
 # Generowanie 10 obiektów
+import secrets
 events = []
 for i in range(1000):
-    events.append(generate_order_event(i))
+    token = secrets.token_hex(20)
+    events.append(generate_order_event(token))
 
 # Otwarcie pliku w trybie do dodawania ('a') jako obiekt pliku
 with open('sample_order_events.json', 'w', encoding='utf-8') as f:
     # Użyj metody json.dump(), aby zapisać dane do pliku
     json.dump({'events':events}, f, ensure_ascii=False, indent=4)
 
-print("Wygenerowano 10 obiektów i zapisano je do pliku 'sample_order_events.json'")
+print("Wygenerowano obiekty i zapisano je do pliku 'sample_order_events.json'")

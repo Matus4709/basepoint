@@ -83,12 +83,8 @@ Lista zamówień - BASEPOINT
     document.addEventListener("DOMContentLoaded", function() {
         var fromDateInput = document.getElementById('selected_date_from');
         var toDateInput = document.getElementById('selected_date_to');
-
-        // Sprawdź, czy wartości są zapisane w localstorage
         var storedFromDate = localStorage.getItem('selected_date_from');
         var storedToDate = localStorage.getItem('selected_date_to');
-
-        // Jeśli istnieją, ustaw je jako wartości domyślne pól formularza
         if (storedFromDate) {
             fromDateInput.value = storedFromDate;
         }
@@ -97,7 +93,6 @@ Lista zamówień - BASEPOINT
             toDateInput.value = storedToDate;
         }
 
-        // Obsługa zapisu dat do localstorage po zmianie
         fromDateInput.addEventListener('change', function() {
             localStorage.setItem('selected_date_from', fromDateInput.value);
         });

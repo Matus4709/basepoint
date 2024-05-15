@@ -21,8 +21,8 @@ urlpatterns = [
     path('statistics/', views.statistics, name='statistics'),
     path('', views.welcome, name='welcome'),
     path('orders-list/', views.orders_list, name='orders_list'),
-    path('details-orders/<int:pk>/', views.details_orders, name='details_orders'),
-    path('generate-pdf/<int:order_id>', views.generate_pdf, name='generate_pdf'),
+    path('details-orders/<str:pk>/', views.details_orders, name='details_orders'),
+    path('generate-pdf/<str:order_id>', views.generate_pdf, name='generate_pdf'),
 
     path('addNewProduct/', addNewProduct, name='addNewProduct'),
     path('editProduct/<id>', editProduct, name='editProduct'),

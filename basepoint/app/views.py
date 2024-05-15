@@ -510,9 +510,13 @@ def edit_account(request):
         return render(request, 'edit_account_worker.html', {'account_data':account_data, 'user_type':user_type})
     else:    
         return HttpResponse('Brak dostępu!')
-    
+import subprocess 
 def orders_list(request):
     if request.user.is_authenticated:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        python_script_path = os.path.join(current_dir, 'allegro_faker.py')
+        
+
         user_type = request.user.user_type
         user_id = request.user.id
         if user_type == 'employee':
@@ -688,8 +692,7 @@ def orders_list(request):
                          cursor.execute("""
                                         INSERT INTO app_product_has_orders (orders_order_id_id, products_product_id_id,quantity)
                                         VALUES (%s, %s, %s);
-                                        """, [event_id,id_item,quantity])
-
+                                        """, [event_id,id_item,quantity])  
         with connection.cursor() as cursor:
             cursor.execute("""
                 SELECT app_orders.id as order_id, app_customers.first_name as customer_name, app_customers.email as customer_email,
@@ -709,9 +712,10 @@ def orders_list(request):
             """, [owner_id])
 
             row = cursor.fetchall()
+            
             columns = [col[0] for col in cursor.description]
             allegro_data = [dict(zip(columns, row)) for row in rows]
-            # print(allegro_data)                     
+            print(allegro_data)          
         
         status = request.GET.get('status')
         if status == 'SENT' or 'PICKED_UP' or 'READY_FOR_PICKUP':
@@ -823,7 +827,6 @@ def orders_list(request):
                 """, [update_status, order_id_update])
         #Wyszukiwanie
         search_orders = request.GET.get('search_orders')
-       
         if search_orders:
             search_orders = str(search_orders) if search_orders else '%'  # Jeśli nie ma wartości, ustaw na dowolny ciąg
             with connection.cursor() as cursor:
@@ -856,12 +859,13 @@ def orders_list(request):
         except EmptyPage:
             # Jeżeli 'page' jest poza zakresem, pokaż ostatnią stronę
             allegro_data = paginator.page(paginator.num_pages)
+        
         context = {
             'account_data': account_data,
             'user_type': user_type,
             'allegro_data': allegro_data
         }
-
+        
         return render(request,'orders/orders-list.html',context)
     else:
         return redirect('welcome')
