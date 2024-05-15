@@ -22,23 +22,23 @@
           <a class="nav-link" style="margin-right: 2rem;" href="/">Strona Główna</a>
         </li>
 
-        <li class="nav-item dropdown "style="margin-right: 2rem;">
+        {% comment %} <li class="nav-item dropdown "style="margin-right: 2rem;">
           <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Zamówienia</a>
           <ul class="dropdown-menu text-center">
             <li><a class="dropdown-item " href="/orders-list/">Lista zamówień</a></li>
             <li><a class="dropdown-item" href="/invoices/">Faktury</a></li>
             <li><a class="dropdown-item" href="/statistics/">Statystyki</a></li>
           </ul>
-        </li>
+        </li> {% endcomment %}
 
         <li class="nav-item">
-          <a class="nav-link" style="margin-right: 2rem;" href="/allProducts">Produkty</a>
+          {% comment %} <a class="nav-link" style="margin-right: 2rem;" href="/allProducts">Produkty</a> {% endcomment %}
         </li>
         <li class="nav-item">
-          <a class="nav-link" style="margin-right: 2rem;" href="#">Integracje</a>
+          {% comment %} <a class="nav-link" style="margin-right: 2rem;" href="#">Integracje</a> {% endcomment %}
         </li>
         <li class="nav-item">
-            <a class="nav-link" style="margin-right: 2rem;"  href="/contact/contact-list">Pomoc i kontakt</a>
+            {% comment %} <a class="nav-link" style="margin-right: 2rem;"  href="/contact/contact-list">Pomoc i kontakt</a> {% endcomment %}
         </li>
     </div>
     <div class="col-md-1"style="background-color: #fff;"></div>
@@ -46,7 +46,7 @@
         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">{% for account in account_data %}{{ account.email }}{% endfor %}</a>
         <ul class="dropdown-menu text-center" style='list-style-type:none;'>
           <li><a class="dropdown-item" href="/my-account/">Moje Konto</a></li>
-          <li><a class="dropdown-item" href="/workers-list/">Profile Pracowników</a></li>
+
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" href="/logout">Wyloguj</a></li>
         </ul>
@@ -58,14 +58,39 @@
   <div class="col-md-2" style="background-color: #fff;"></div>
 </div>
 
-<div class="container">
+<div class="container col-md-8">  
+    <div class="jumbotron jumbotron-fluid rounded mt-5" style="background-color: white;">
+      <div class="container">
+        <div class="table-responsive">
+            <table class="table ">
+              <thead>
+                <tr>
+                  <th class="px-3 w-25" scope="col">Tytuł</th>
+                  <th class="px-3 w-25" scope="col">Status</th>
+                  <th class="px-3 w-25" scope="col">Data</th>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
 
-    {% block content %}
-        
-    {% endblock %}
-
-</div>
-
+                {% for event in contacts_data %}
+                    <tr>
+                    <td class="px-3 w-25">{{event.report_title}}</td>
+                    <td class="px-3 w-25">{{event.status}}</td>
+                    <td class="px-3 w-25">{{event.created_at}}</td>
+                    <td class="px-3 w-25"><a href="{% url 'contact_chat_support' id=event.id %}"><button type="submit" class="btn btn-warning float-end">Podgląd</button></a></td>
+                    <td class="px-3 w-25"><a href="{% url 'end_contact' id=event.id %}"><button type="submit" class="btn btn-danger float-end">Zakończ</button></a></td>
+                    </tr>
+                {% endfor %}
+                
+              </tbody>
+          
+            </table>
+          </div>
+      </div>
+    </div>
+  
+  </div>
 
 <!-- Skrypty JavaScript Bootstrapa -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %} 
+Chat support - BASEPOINT 
+{% endblock title %}
+
+{% block content %}
+
+<div class="container col-md-8">
+    <div class="jumbotron jumbotron-fluid rounded mt-5" style="background-color: white;">
+        <div class="container pt-4">
+            <div class="chat-container border rounded p-3" style="max-height: 300px; overflow-y: auto;">
+                {% for event in contact_chat %}
+                    <div class="message p-4 border-bottom">
+                        <span class="fw-bold">
+                            {% if event.email == 'admin@admin.pl' %}
+                            SUPPORT
+                            {% else %}
+                            {{ event.email }}
+                            {% endif %}
+                            :</span>
+                        <span class="fw-light">{{ event.message }}</span>
+                        <span style="font-size:9px;" class="fw-lighter float-end">{{ event.date }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="input-group mb-3 pb-3 pt-3">
+                <div class="row w-100">
+                    <div class="col-md-10">
+                        <form method='post' class="">
+                            {% csrf_token %}
+                            <input type="text" class="form-control" name='message' id='message' placeholder="Napisz wiadomość..." aria-label="Type your message here" aria-describedby="button-send">
+                    </div>
+                    <div class="col-md-2">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary float-end" type="submit" id="button-send">Wyślij</button>
+                        </div>
+                        </form> 
+                    </div>
+                </div>
+            </div>
+            
+
+            
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock%}

@@ -83,7 +83,7 @@ Lista zamówień - BASEPOINT
     document.addEventListener("DOMContentLoaded", function() {
         var fromDateInput = document.getElementById('selected_date_from');
         var toDateInput = document.getElementById('selected_date_to');
-        var storedFromDate = localStorage.getItem('selected_date_from');
+            var storedFromDate = localStorage.getItem('selected_date_from');
         var storedToDate = localStorage.getItem('selected_date_to');
         if (storedFromDate) {
             fromDateInput.value = storedFromDate;

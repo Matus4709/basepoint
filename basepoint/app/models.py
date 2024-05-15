@@ -118,12 +118,20 @@ class Product_has_orders(models.Model):
     quantity = models.IntegerField()
 
 class Contacts(models.Model):
-    report_title = models.CharField(max_length=100)
-    email = models.CharField(max_length=100)
-    report_description = models.TextField(max_length=300)
-    attachment = models.CharField(max_length=255)
-    accounts_account_id = models.ForeignKey(Account, on_delete=models.CASCADE)
-    customers_customer_id = models.ForeignKey(Customers, on_delete=models.CASCADE)
+    report_title = models.CharField(max_length=100, null=True)
+    email = models.CharField(max_length=100, null=True)
+    report_description = models.TextField(max_length=300, null=True)
+    status = models.CharField(max_length=50, null=True)
+    created_at = models.DateField(auto_now_add=False, null=True)
+    answer_at = models.DateField(auto_now_add=False, null=True)
+    account_id = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='contacts_as_account')
+    owner = models.ForeignKey(Account, on_delete=models.DO_NOTHING, related_name='contacts_as_owner')
+
+class ContactChat(models.Model):
+    contact = models.ForeignKey(Contacts, on_delete=models.CASCADE, related_name='contact_chat_as_contact')
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='contact_chat_as_account')
+    message = models.TextField(max_length=300, null=True)
+    date = models.DateTimeField(auto_now_add=True)
 
 class integrations(models.Model):
     name = models.CharField(max_length=100)

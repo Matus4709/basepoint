@@ -29,6 +29,15 @@ urlpatterns = [
     path('allProducts/', allProducts, name='allProducts'),
     path('oneProducts/<id>', oneProduct, name='oneProduct'),
     path('deleteProduct/<id>', deleteProduct, name='deleteProduct'),
+
+    path('contact/contact-list', views.contact_list, name="contact_list"),
+    path('contact/contact-add', views.contact_add, name="contact_add"),
+    path('contact/contact-chat/<int:id>', views.contact_chat, name="contact_chat"),
+
+    path('support/',views.support_view, name="support_view"),
+    path('support/contact-chat-support/<int:id>',views.contact_chat_support, name="contact_chat_support"),
+    path('support/contact-end/<int:id>',views.end_contact, name="end_contact"),
+    path('support/delete-chat/<int:id>',views.delete_chat, name="delete_chat"),
     
 
 

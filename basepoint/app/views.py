@@ -182,6 +182,8 @@ def dashboard(request):
     user_type = None
     if request.user.is_authenticated:
         user_type = request.user.user_type
+        if user_type == 'support':
+             return redirect('support_view')
         if user_type == 'owner':
             with connection.cursor() as cursor:
                 
@@ -201,16 +203,6 @@ def dashboard(request):
                 cursor.execute("SELECT @order_count")
                 result = cursor.fetchone()
                 orders_today = result[0]
-
-            # with connection.cursor() as cursor:
-            #     cursor.execute("""
-            #         SELECT COUNT(*) as ilosc
-            #         FROM app_orders 
-            #         WHERE app_orders.seller_id = %s AND app_orders.order_date = %s;
-            #     """, [user_id, today])
-            #     rows = cursor.fetchall()
-            #     columns = [col[0] for col in cursor.description]
-            #     orders_today = [dict(zip(columns, row)) for row in rows]
 
             with connection.cursor() as cursor:
                 cursor.execute("""
@@ -312,7 +304,6 @@ def dashboard(request):
                 rows = cursor.fetchall()
                 columns = [col[0] for col in cursor.description]
                 orders_count = [dict(zip(columns, row)) for row in rows]
-                print(orders_count)
                 #Dashboard statystyki KONIEC
 
             context = {
@@ -673,7 +664,7 @@ def orders_list(request):
                         result = cursor.fetchone()
                         if result:
                              pass
-                            # print('Product already exists')
+                            
                         else:
                             cursor.execute("""
                                 INSERT INTO app_products (id,name, description, price, quantity, category, graphic_url, accounts_account_id_id)
@@ -714,8 +705,7 @@ def orders_list(request):
             row = cursor.fetchall()
             
             columns = [col[0] for col in cursor.description]
-            allegro_data = [dict(zip(columns, row)) for row in rows]
-            print(allegro_data)          
+            allegro_data = [dict(zip(columns, row)) for row in rows]         
         
         status = request.GET.get('status')
         if status == 'SENT' or 'PICKED_UP' or 'READY_FOR_PICKUP':
@@ -1278,3 +1268,287 @@ def deleteProduct(request, id):
         return redirect(allProducts)
 
     return render(request, 'products/deleteProduct.html',  context)
+
+
+def contact_list(request):
+    if request.user.is_authenticated:
+        user_type = request.user.user_type
+        if user_type != 'owner' and user_type != 'employee':
+            return render(request, 'login.html')
+        if user_type == 'owner':
+            user_id = request.user.id
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM app_account WHERE id = %s", [user_id])
+                rows = cursor.fetchall()
+                # Konwersja wyników z krotki na listę słowników
+                columns = [col[0] for col in cursor.description]
+                account_data = [dict(zip(columns, row)) for row in rows]
+                owner_id = user_id
+
+
+
+        if user_type == 'employee':
+            user_id = request.user.id
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM app_account WHERE id = %s", [user_id])
+                rows = cursor.fetchall()
+                # Konwersja wyników z krotki na listę słowników
+                columns = [col[0] for col in cursor.description]
+                account_data = [dict(zip(columns, row)) for row in rows]
+
+                cursor.execute("SELECT owner_id_id FROM app_account WHERE id = %s", [user_id])
+                rows = cursor.fetchall()
+                # Konwersja wyników z krotki na listę słowników
+                columns = [col[0] for col in cursor.description]
+                owner_id = [dict(zip(columns, row)) for row in rows]
+
+    with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM app_contacts WHERE account_id = %s", [user_id])
+                rows = cursor.fetchall()
+                columns = [col[0] for col in cursor.description]
+                contacts_data = [dict(zip(columns, row)) for row in rows]
+    
+    context = {
+         'contacts_data': contacts_data,
+         'account_data': account_data
+    }
+    return render(request, 'contact/contact_list.html', context)
+
+        
+def contact_add(request):
+    if request.user.is_authenticated:
+        user_type = request.user.user_type
+        if user_type != 'owner' and user_type != 'employee':
+            return render(request, 'login.html')
+        if user_type == 'owner':
+            user_id = request.user.id
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM app_account WHERE id = %s", [user_id])
+                rows = cursor.fetchall()
+                # Konwersja wyników z krotki na listę słowników
+                columns = [col[0] for col in cursor.description]
+                account_data = [dict(zip(columns, row)) for row in rows]
+                owner_id = user_id
+                context = {
+                    'account_data': account_data
+                }
+
+        if user_type == 'employee':
+            user_id = request.user.id
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM app_account WHERE id = %s", [user_id])
+                rows = cursor.fetchall()
+                # Konwersja wyników z krotki na listę słowników
+                columns = [col[0] for col in cursor.description]
+                account_data = [dict(zip(columns, row)) for row in rows]
+
+                cursor.execute("SELECT owner_id_id FROM app_account WHERE id = %s", [user_id])
+                rows = cursor.fetchall()
+                # Konwersja wyników z krotki na listę słowników
+                columns = [col[0] for col in cursor.description]
+                owner_id = [dict(zip(columns, row)) for row in rows]
+
+                context = {
+                    'account_data': account_data,
+                    'owner_id': owner_id
+                }
+
+        if request.method == 'POST':
+            title = request.POST.get('title')
+            desc = request.POST.get('desc')
+            email = request.user.email
+            date = datetime.now()
+
+            try:
+                with connection.cursor() as cursor:
+                    cursor.execute("START TRANSACTION") 
+
+                    cursor.execute("""
+                        INSERT INTO app_contacts(report_title, email, report_description, account_id, account_id_id, answer_at, created_at, owner_id, status) 
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    """, [title, email, desc, user_id, user_id, date, date, owner_id, 'Nowe'])
+
+                    contact_id = cursor.lastrowid  
+
+                    cursor.execute("""
+                        INSERT INTO app_contactchat(message, account_id, contact_id, date) VALUES (%s, %s, %s, %s)
+                    """, [desc, user_id, contact_id, date])
+
+                    cursor.execute("COMMIT")  
+                return redirect(contact_list) 
+            except Exception as e:
+                print("Błąd:", e) 
+                with connection.cursor() as cursor:
+                    cursor.execute("ROLLBACK") 
+
+                    
+    return render(request, 'contact/contact_add.html', context)
+
+def contact_chat(request, id):
+    id = id
+    if request.user.is_authenticated:
+        user_type = request.user.user_type
+        if user_type != 'owner' and user_type != 'employee':
+            return render(request, 'login.html')
+        if user_type == 'owner':
+            user_id = request.user.id
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM app_account WHERE id = %s", [user_id])
+                rows = cursor.fetchall()
+                # Konwersja wyników z krotki na listę słowników
+                columns = [col[0] for col in cursor.description]
+                account_data = [dict(zip(columns, row)) for row in rows]
+                owner_id = user_id
+
+        if user_type == 'employee':
+            user_id = request.user.id
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM app_account WHERE id = %s", [user_id])
+                rows = cursor.fetchall()
+                # Konwersja wyników z krotki na listę słowników
+                columns = [col[0] for col in cursor.description]
+                account_data = [dict(zip(columns, row)) for row in rows]
+
+                cursor.execute("SELECT owner_id_id FROM app_account WHERE id = %s", [user_id])
+                rows = cursor.fetchall()
+                # Konwersja wyników z krotki na listę słowników
+                columns = [col[0] for col in cursor.description]
+                owner_id = [dict(zip(columns, row)) for row in rows]  
+                  
+    with connection.cursor() as cursor:
+                cursor.execute("""SELECT cc.message, cc.id, DATE_FORMAT(cc.date, '%%Y-%%m-%%d %%H:%%i') AS date, a.email
+                                FROM app_contactchat cc
+                                            JOIN app_contacts c ON c.id = cc.contact_id 
+                                            JOIN app_account a ON a.id = cc.account_id
+                                            WHERE cc.contact_id = %s
+                                            ORDER BY DATE_FORMAT(cc.date, '%%Y-%%m-%%d %%H:%%i') ASC
+                               """, [id])
+                rows = cursor.fetchall()
+                # Konwersja wyników z krotki na listę słowników
+                columns = [col[0] for col in cursor.description]
+                contact_chat = [dict(zip(columns, row)) for row in rows]
+              
+    if request.method == 'POST':
+        message = request.POST.get('message')
+        time = datetime.now()
+        try: 
+            with connection.cursor() as cursor:
+                    cursor.execute("START TRANSACTION") 
+                    cursor.execute("""
+                                INSERT INTO app_contactchat(message, account_id, contact_id, date) VALUES (%s, %s, %s, %s)
+                            """, [message, user_id, id, time])
+                    cursor.execute("""
+                                        UPDATE app_contacts SET answer_at=NOW() WHERE id = %s 
+                                    """, [id])
+                    cursor.execute("COMMIT") 
+        except Exception as e:
+                    print("Blad: ",str(e))
+                    with connection.cursor() as cursor:
+                        cursor.execute("ROLLBACK")
+
+    context = {
+         'account_data': account_data,
+         'contact_chat':contact_chat
+    }
+    return render(request,'contact/contact_chat.html',context)
+
+def support_view(request):
+    user_type = request.user.user_type
+    if user_type == 'support':
+        user_id = request.user.id
+        with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM app_contacts WHERE NOT status = 'END' ")
+                rows = cursor.fetchall()
+                columns = [col[0] for col in cursor.description]
+                contacts_data = [dict(zip(columns, row)) for row in rows]
+
+        
+        context = {
+            'contacts_data': contacts_data,
+        }
+        return render(request, 'support/support_template.html',context)
+    else:
+        return redirect('login')
+    
+def contact_chat_support(request, id):
+    user_type = request.user.user_type
+    if user_type == 'support':
+        user_id = request.user.id
+
+        with connection.cursor() as cursor:
+                cursor.execute("""SELECT cc.message, cc.id, DATE_FORMAT(cc.date, '%%Y-%%m-%%d %%H:%%i') AS date, a.email
+                                FROM app_contactchat cc
+                                            JOIN app_contacts c ON c.id = cc.contact_id 
+                                            JOIN app_account a ON a.id = cc.account_id
+                                            WHERE cc.contact_id = %s
+                                            ORDER BY DATE_FORMAT(cc.date, '%%Y-%%m-%%d %%H:%%i') ASC
+                               """, [id])
+                rows = cursor.fetchall()
+                # Konwersja wyników z krotki na listę słowników
+                columns = [col[0] for col in cursor.description]
+                contact_chat = [dict(zip(columns, row)) for row in rows]
+        if request.method == 'POST':
+            message = request.POST.get('message')
+            if message:
+                time = datetime.now()
+                try:
+                    with connection.cursor() as cursor:
+                        cursor.execute("START TRANSACTION") 
+                        cursor.execute("""
+                                    INSERT INTO app_contactchat(message, account_id, contact_id, date) VALUES (%s, %s, %s, %s)
+                                """, [message, user_id, id, time])
+                        cursor.execute("""
+                                            UPDATE app_contacts SET answer_at=NOW() WHERE id = %s 
+                                        """, [id])
+                        cursor.execute("COMMIT") 
+                except Exception as e:
+                    print("Blad: ",str(e))
+                    with connection.cursor() as cursor:
+                        cursor.execute("ROLLBACK")
+            else:
+                context = {
+                    'contact_chat':contact_chat
+                }
+                return render(request, 'support/contact_chat_support.html',context)
+                
+        context = {
+            'contact_chat':contact_chat
+        }
+        return render(request, 'support/contact_chat_support.html',context)
+    
+def end_contact(request, id):
+     id = id
+     user_type = request.user.user_type
+     if user_type == 'support':
+            user_id = request.user.id
+            try:
+                with connection.cursor() as cursor:
+                    cursor.execute("START TRANSACTION") 
+                    cursor.execute("""
+                                    UPDATE app_contacts SET status="END", answer_at=NOW() WHERE id = %s 
+                                    """, [id])
+                    cursor.execute("""
+                                    UPDATE app_contacts SET answer_at=NOW() WHERE id = %s 
+                                    """, [id])
+                    cursor.execute("COMMIT") 
+            except Exception as e:
+                print("Blad: ",str(e))
+                with connection.cursor() as cursor:
+                    cursor.execute("ROLLBACK")
+            return redirect('support_view')
+                
+def delete_chat(request, id):
+     id = id
+     user_type = request.user.user_type
+     if user_type == 'owner' or 'employee':
+        try: 
+            with connection.cursor() as cursor:
+                cursor.execute("START TRANSACTION")
+                cursor.execute("DELETE FROM app_contactchat WHERE contact_id = %s ",[id])
+                cursor.execute("DELETE FROM app_contacts WHERE id = %s ",[id])
+                cursor.execute("COMMIT")
+        except Exception as e:
+            print("Blad: ",str(e))
+            with connection.cursor() as cursor:
+                cursor.execute("ROLLBACK")
+        return redirect('support_view')

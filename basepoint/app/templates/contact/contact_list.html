@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %} 
+Kontakt - BASEPOINT 
+{% endblock title %}
+
+{% block content %}
+<div class="container col-md-8">  
+    <div class="jumbotron jumbotron-fluid rounded mt-5" style="background-color: white;">
+      <div class="container">
+        <div class="table-responsive">
+            <table class="table ">
+              <thead>
+                <tr>
+                  <th class="px-3 w-25" scope="col">Tytuł</th>
+                  <th class="px-3 w-25" scope="col">Status</th>
+                  <th class="px-3 w-25" scope="col">Data</th>
+                  <th class="w-25"  scope="col"><a href="{% url 'contact_add' %}"><button type="button" class="btn btn-success float-end">Wyślij zgłoszenie</button></a>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+
+                {% for event in contacts_data %}
+                    <tr>
+                    <td class="px-3 w-25">{{event.report_title}}</td>
+                    <td class="px-3 w-25">{{event.status}}</td>
+                    <td class="px-3 w-25">{{event.created_at}}</td>
+                    <td class="px-3 w-25"><a href="{% url 'contact_chat' id=event.id %}"><button type="submit" class="btn btn-warning float-end">Podgląd</button></a></td>
+                    <td class="px-3 w-25"><a href="{% url 'delete_chat' id=event.id %}"><button type="submit" class="btn btn-danger float-end">Usuń</button></a></td>
+                    </tr>
+                {% endfor %}
+                
+              </tbody>
+          
+            </table>
+          </div>
+      </div>
+    </div>
+  
+  </div>
+{% endblock%}
