@@ -1124,6 +1124,21 @@ def statistics(request):
                         rows = cursor.fetchall()
                         columns = [col[0] for col in cursor.description]
                         data = [dict(zip(columns, row)) for row in rows]
+
+                        cursor.execute("""
+                            SELECT COUNT(*) as ilosc,
+                            SUM(app_orders.summary_price) as wartosc,
+                            MONTHNAME(app_orders.order_date) as miesiac,
+                            YEAR(app_orders.order_date) as rok
+                            FROM app_orders 
+                            WHERE app_orders.seller_id = %s
+                            GROUP BY miesiac
+                            ORDER BY app_orders.order_date ASC;
+                        """, [owner_id])
+                        rows = cursor.fetchall()
+                        columns = [col[0] for col in cursor.description]
+                        orders_count = [dict(zip(columns, row)) for row in rows]
+
             elif selected_date_from and selected_date_to:
                  with connection.cursor() as cursor:
                         cursor.execute("""
@@ -1135,6 +1150,22 @@ def statistics(request):
                         rows = cursor.fetchall()
                         columns = [col[0] for col in cursor.description]
                         data = [dict(zip(columns, row)) for row in rows]
+
+                        cursor.execute("""
+                            SELECT COUNT(*) as ilosc,
+                            SUM(app_orders.summary_price) as wartosc,
+                            MONTHNAME(app_orders.order_date) as miesiac,
+                            YEAR(app_orders.order_date) as rok
+                            FROM app_orders 
+                            WHERE app_orders.seller_id = %s
+                            GROUP BY miesiac
+                            ORDER BY app_orders.order_date ASC;
+                        """, [owner_id])
+                        rows = cursor.fetchall()
+                        columns = [col[0] for col in cursor.description]
+                        orders_count = [dict(zip(columns, row)) for row in rows]
+            
+
             else:
                  with connection.cursor() as cursor:
                         cursor.execute("""
@@ -1146,10 +1177,25 @@ def statistics(request):
                         rows = cursor.fetchall()
                         columns = [col[0] for col in cursor.description]
                         data = [dict(zip(columns, row)) for row in rows]
+                        
+                        cursor.execute("""
+                            SELECT COUNT(*) as ilosc,
+                            SUM(app_orders.summary_price) as wartosc,
+                            MONTHNAME(app_orders.order_date) as miesiac,
+                            YEAR(app_orders.order_date) as rok
+                            FROM app_orders 
+                            WHERE app_orders.seller_id = %s
+                            GROUP BY miesiac
+                            ORDER BY app_orders.order_date ASC;
+                        """, [owner_id])
+                        rows = cursor.fetchall()
+                        columns = [col[0] for col in cursor.description]
+                        orders_count = [dict(zip(columns, row)) for row in rows]
             context = {
                 'account_data': account_data,
                 'user_type': user_type,
                 'data':data,  
+                'orders_count':orders_count
             }
         return render(request, 'orders/statistics.html',context)
     else:

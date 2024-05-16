@@ -42,7 +42,7 @@ DASHBOARD - BASEPOINT
       var myChart = new Chart(ctx, {
           type: 'bar',
           data: {
-              labels: [{% for event in allegro_data %} '{{ event.2 }}',{% endfor %}],
+              labels: [{% for event in allegro_data %} '{{ event.2 }}  ({{event.0}})',{% endfor %}],
               datasets: [{
                   label: 'Ilość zamówień',
                   data: [{% for event in allegro_data %} '{{ event.0 }}',{% endfor %}],

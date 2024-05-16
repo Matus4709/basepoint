@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% block title %} 
 Lista zamówień - BASEPOINT 
 {% endblock title %}
@@ -41,7 +40,7 @@ Lista zamówień - BASEPOINT
 </div>
 
 <div class="row">
-    <div class="col-md-10 offset-1 rounded shadow bg-light mt-5" style="height: 200px;">
+    <div class="col-md-10 offset-1 rounded shadow bg-light mt-5" style="height: 230px;">
        <div class="row">
             <p class="fw-bold fw-1 pt-3" style="opacity: 50%;">
                 Ilość i wartość zamówień
@@ -49,10 +48,10 @@ Lista zamówień - BASEPOINT
        </div>
        <div class="row">
         <div class="col-md-6">
-            PyCharts_1
+            <canvas id="myChart" class='center mx-auto'></canvas>
         </div>
         <div class="col-md-6">
-            PyCharts_2
+            <canvas id="myChart2" class='center mx-auto'></canvas>
         </div>
        </div>
     </div>
@@ -101,6 +100,79 @@ Lista zamówień - BASEPOINT
             localStorage.setItem('selected_date_to', toDateInput.value);
         });
     });
+
+    
 </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var labels = [
+            {% for event in orders_count|slice:"-5:" %} '{{ event.miesiac }} {{event.rok}}',{% endfor %}
+        ];
+        var data = [
+            {% for event in orders_count|slice:"-5:" %} '{{ event.ilosc }}',{% endfor %}
+        ];
+
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Ilość zamówień',
+                    data: data,
+                    backgroundColor: 'rgba(0, 0, 0, 0)', 
+                    borderColor: 'rgba(255, 0, 0, 1)', 
+                    borderWidth: 2 
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var ctx = document.getElementById('myChart2').getContext('2d');
+        var labels = [
+            {% for event in orders_count|slice:"-5:" %} '{{ event.miesiac }} {{event.rok}}',{% endfor %}
+        ];
+        var data = [
+            {% for event in orders_count|slice:"-5:" %} '{{ event.wartosc }}',{% endfor %}
+        ];
+
+        var myChart2 = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Wartość zamówień (PLN)',
+                    data: data,
+                    backgroundColor: 'rgba(0, 0, 0, 0)', 
+                    borderColor: 'rgba(0, 161, 255, 1)', 
+                    borderWidth: 2 
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    });
+</script>
+
+
+
 
 {% endblock content %}

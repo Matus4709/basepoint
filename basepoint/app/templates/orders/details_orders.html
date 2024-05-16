@@ -33,7 +33,17 @@ Szczegóły zamówienia - BASEPOINT
                     
                  {% endfor %}  <br>
                 <b>Dostawa:</b> {{ event.delivery }}  <br>
-                <b>Status:</b> {{ event.status }}  <br>
+                <b>Status:</b> 
+                {% if event.status == 'SENT' or event.status == 'PICKED_UP' or event.status == 'READY_FOR_PICKUP' %}
+                Wysłane
+                {% elif event.status == 'NEW' or event.status == 'PROCESSING' %}
+                    Nowe
+                {% elif event.status == 'READY_FOR_SHIPMENT' %}
+                    Do wysłania
+                {% elif event.status == 'SUSPENDED' or event.status == 'CANCELLED' %}
+                    Anulowane
+                {% endif %}
+                <br>
                 <b>Podsumowanie:</b> {{ event.total_price }} PLN <br>
                 <b>Wiadomość od kupującego:</b> {{ event.messageToSeller }} <br>
                 <a href="{% url 'generate_pdf' order_id=event.order_id %}" class="btn btn-primary mt-3">Pobierz zamówienie PDF</a>

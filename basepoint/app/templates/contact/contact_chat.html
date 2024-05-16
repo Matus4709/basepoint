@@ -9,7 +9,7 @@ Chat support - BASEPOINT
 <div class="container col-md-8">
     <div class="jumbotron jumbotron-fluid rounded mt-5" style="background-color: white;">
         <div class="container pt-4">
-            <div class="chat-container border rounded p-3" style="max-height: 300px; overflow-y: auto;">
+            <div class="chat-container border rounded p-3" id="chat" style="max-height: 500px; overflow-y: auto;">
                 {% for event in contact_chat %}
                     <div class="message p-4 border-bottom">
                         <span class="fw-bold">
@@ -46,5 +46,10 @@ Chat support - BASEPOINT
         </div>
     </div>
 </div>
-
+<script>
+    window.addEventListener('load', function() {
+    var chat = document.getElementById('chat'); // Znajdujemy element chatu
+    chat.scrollTop = chat.scrollHeight; // Ustawiamy scrollTop na wartość scrollHeight, aby przewinąć do dołu
+});
+</script>
 {% endblock%}
