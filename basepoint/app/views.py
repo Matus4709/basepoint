@@ -1441,6 +1441,17 @@ def contact_chat(request, id):
                                         UPDATE app_contacts SET answer_at=NOW() WHERE id = %s 
                                     """, [id])
                     cursor.execute("COMMIT") 
+                    cursor.execute("""SELECT cc.message, cc.id, DATE_FORMAT(cc.date, '%%Y-%%m-%%d %%H:%%i') AS date, a.email
+                                FROM app_contactchat cc
+                                            JOIN app_contacts c ON c.id = cc.contact_id 
+                                            JOIN app_account a ON a.id = cc.account_id
+                                            WHERE cc.contact_id = %s
+                                            ORDER BY DATE_FORMAT(cc.date, '%%Y-%%m-%%d %%H:%%i') ASC
+                               """, [id])
+                    rows = cursor.fetchall()
+                    # Konwersja wyników z krotki na listę słowników
+                    columns = [col[0] for col in cursor.description]
+                    contact_chat = [dict(zip(columns, row)) for row in rows]
         except Exception as e:
                     print("Blad: ",str(e))
                     with connection.cursor() as cursor:
@@ -1510,6 +1521,17 @@ def contact_chat_support(request, id):
                                             UPDATE app_contacts SET answer_at=NOW() WHERE id = %s 
                                         """, [id])
                         cursor.execute("COMMIT") 
+                        cursor.execute("""SELECT cc.message, cc.id, DATE_FORMAT(cc.date, '%%Y-%%m-%%d %%H:%%i') AS date, a.email
+                                FROM app_contactchat cc
+                                            JOIN app_contacts c ON c.id = cc.contact_id 
+                                            JOIN app_account a ON a.id = cc.account_id
+                                            WHERE cc.contact_id = %s
+                                            ORDER BY DATE_FORMAT(cc.date, '%%Y-%%m-%%d %%H:%%i') ASC
+                               """, [id])
+                        rows = cursor.fetchall()
+                        # Konwersja wyników z krotki na listę słowników
+                        columns = [col[0] for col in cursor.description]
+                        contact_chat = [dict(zip(columns, row)) for row in rows]
                 except Exception as e:
                     print("Blad: ",str(e))
                     with connection.cursor() as cursor:
