@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import addNewProduct, editProduct, allProducts, oneProduct, deleteProduct, login_view, register_view,logout_view,create_worker,dashboard,activate,reset_password_view,reset_password,workers_list,delete_worker, my_account,delete_account,edit_account
+from .views import generateInvoice, addNewProduct, editProduct, allProducts, oneProduct, deleteProduct, login_view, register_view,logout_view,create_worker,dashboard,activate,reset_password_view,reset_password,workers_list,delete_worker, my_account,delete_account,edit_account
 from . import views
 
 urlpatterns = [
@@ -39,7 +39,7 @@ urlpatterns = [
     path('support/contact-end/<int:id>',views.end_contact, name="end_contact"),
     path('support/delete-chat/<int:id>',views.delete_chat, name="delete_chat"),
     
-
+    path('generateInvoice/<id>', views.generateInvoice, name="generateInvoice")
 
 
     # Inne ścieżki URL dla innych widoków

@@ -1,12 +1,11 @@
 {% extends "base.html" %}
-
 {% block title %} 
 Lista zamówień - BASEPOINT 
 {% endblock title %}
 {% block content %}
 
 <div class="container">
-    <div class="content mt-5 col-md-10 offset-1 bg-light rounded">
+    <div class="content mt-5 col-md-12 offset-1 bg-light rounded">
             <div class="row ">
                     <div class="col-md-3 offset-1 pt-2">
                         <p class="fw-bold fw-1 pt-3" style="opacity: 50%;">
@@ -21,25 +20,30 @@ Lista zamówień - BASEPOINT
             </div>
             
             <div class="row">
-                <div class="col-md-10 offset-1">
+                <div class="col-md-12 offset-1">
                     <table class="table text-center">
                         <thead>
                           <tr>
-                            <th scope="col">Numer</th>
-                            <th scope="col">Zamówienie</th>
+                            <th scope="col-1">Numer</th>
+                            <th scope="col-4">Zamówienie</th>
                             <th scope="col">Nabywca</th>
                             <th scope="col">Suma brutto</th>
                             <th scope="col">Data</th>
+                            <th scope="col">Podgląd</th>
                           </tr>
                         </thead>
+                        
+                        {%for order in orderData%}
                         <tbody>
-                            <td>Numer</td>
-                            <td>Zamówienie</td>
-                            <td>Nabywca</td>
-                            <td>Suma brutto</td>
-                            <td>Data</td>
+                            <td></td>
+                            <td>{{order.id}}</td>
+                            <td>{{order.email}}</td>
+                            <td>{{order.summary_price}}</td>
+                            <td>{{order.order_date}}</td>
+                            <td><button class="btn btn-success" type="button"><a href="{% url 'generateInvoice' id=order.id %}" style="text-decoration: none; color: white;">Faktura</a></button></td>
                           </tr>
                         </tbody>
+                        {%endfor%}
                       </table>
                 </div>
             </div>

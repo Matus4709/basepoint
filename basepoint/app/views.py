@@ -1066,6 +1066,7 @@ def generate_pdf(request,order_id):
 
 
 
+
 def invoices(request):
     if request.user.is_authenticated:
         user_type = request.user.user_type
@@ -1078,14 +1079,40 @@ def invoices(request):
                     # Konwersja wyników z krotki na listę słowników
                     columns = [col[0] for col in cursor.description]
                     account_data = [dict(zip(columns, row)) for row in rows]
+        
+
+            with connection.cursor() as cursor:
+                    
+                    #pobieramy dane tylko do wyświetlenia na liście faktur
+                    cursor.execute("""
+                                        SELECT app_orders.id, app_customers.email, app_orders.summary_price, 
+                                            DATE_FORMAT(app_orders.order_date, '%Y-%m-%d') AS order_date 
+                                        FROM app_orders JOIN app_customers ON app_orders.customer_id = app_customers.id; 
+
+                                   """) 
+                    
+                    rows = cursor.fetchall()
+                    # Konwersja wyników z krotki na listę słowników
+                    columns = [col[0] for col in cursor.description]
+                    orderData = [dict(zip(columns, row)) for row in rows]
+        
+        
+        
+        
+        
+        
         context = {
             'account_data': account_data,
-            'user_type': user_type
+            'user_type': user_type,
+            'orderData': orderData
         }
         return render(request, 'orders/invoices.html',context)
     else:
        return redirect('welcome')
    
+
+
+
 def statistics(request):
     if request.user.is_authenticated:
         user_type = request.user.user_type
@@ -1634,3 +1661,18 @@ def delete_chat(request, id):
         return redirect('support_view')
      else: 
           return redirect('login')
+     
+
+
+
+# def getInvoiceData(request, idOrder):
+#      pass
+
+
+def generateInvoice(request, id):
+     
+    lista = ["a","b","c"]
+    idki = id
+    data = {'idki': idki}
+
+    return render(request, 'orders/generateInvoice.html', data)
