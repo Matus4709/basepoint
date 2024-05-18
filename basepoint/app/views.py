@@ -1665,14 +1665,41 @@ def delete_chat(request, id):
 
 
 
-# def getInvoiceData(request, idOrder):
-#      pass
-
 
 def generateInvoice(request, id):
      
-    lista = ["a","b","c"]
-    idki = id
-    data = {'idki': idki}
+    with connection.cursor() as cursor:  
+        cursor.execute("""
+                        SELECT 
+                        company_name AS nazwa_firmy,
+                        CONCAT(address, ', ', city, ', ', country, ', ', postcode) AS adres,
+                        NIP AS account_nip,
+                        phone_number AS numer_telefonu,
+                        email AS email_firmowy
+                        FROM 
+                        app_account
+                        LIMIT 1;
+                        """)
+    rows = cursor.fetchall()
+    # Konwersja wyników z krotki na listę słowników
+    columns = [col[0] for col in cursor.description]
+    ownerInvoiceData = [dict(zip(columns, row)) for row in rows]
+
+    with connection.cursor() as cursor:
+        cursor.execute("""
+                        SELECT SUBSTRING(o.id, 1, 6) AS order_id, o.order_date, o.delivery, 
+                        CONCAT(a.first_name, ' ', a.last_name) AS customer_name,
+                        CONCAT(ca.address, ', ', ca.city, ', ', ca.country, ', ', ca.postal_code) AS customer_address 
+                        FROM app_orders o JOIN app_customers a ON o.customer_id = a.id 
+                        JOIN app_custumers_addresses ca ON a.id = ca.custumer_id_id; 
+                        """)
+
+
+    with connection.cursor() as cursor: # WHERE id = %s 
+        cursor.execute("""
+ 
+                        """, [id])
+
+    data = {}
 
     return render(request, 'orders/generateInvoice.html', data)

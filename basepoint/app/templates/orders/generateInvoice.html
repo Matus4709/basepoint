@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Faktura</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-6">
+                <h1>Logo</h1>
+            </div>
+            <div class="col-6 text-right">
+                <h2>Faktura</h2>
+                <p>Numer faktury: {{ numer_faktury }}</p>
+                <p>Data i miejsce wystawienia: {{ data_wystawienia }} {{ miejsce_wystawienia }}</p>
+                <p>Data zakończenia dostawy: {{ data_zakonczenia_dostawy }}</p>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-6">
+                <h3>Sprzedawca</h3>
+                <p>Nazwa firmy: {{ sprzedawca_nazwa }}</p>
+                <p>Adres: {{ sprzedawca_adres }}</p>
+                <p>Nr NIP: {{ sprzedawca_nip }}</p>
+                <p>Telefon: {{ sprzedawca_telefon }}</p>
+                <p>Email: {{ sprzedawca_email }}</p>
+            </div>
+            <div class="col-6">
+                <h3>Nabywca</h3>
+                <p>Nazwa osoby lub firmy: {{ nabywca_nazwa }}</p>
+                <p>Adres: {{ nabywca_adres }}</p>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <h3>Sposób opłacenia</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Lp.</th>
+                            <th>Nazwa towaru/usługi</th>
+                            <th>Jednostka miary</th>
+                            <th>Ilość</th>
+                            <th>Cena netto</th>
+                            <th>Wartość netto</th>
+                            <th>VAT</th>
+                            <th>Kwota VAT</th>
+                            <th>Wartość brutto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ item.nazwa }}</td>
+                            <td>{{ item.jednostka_miary }}</td>
+                            <td>{{ item.ilosc }}</td>
+                            <td>{{ item.cena_netto }}</td>
+                            <td>{{ item.wartosc_netto }}</td>
+                            <td>{{ item.vat }}</td>
+                            <td>{{ item.kwota_vat }}</td>
+                            <td>{{ item.wartosc_brutto }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="5"></td>
+                            <td>Razem</td>
+                            <td>{{ suma_vat }}%</td>
+                            <td>{{ suma_kwota_vat }}</td>
+                            <td>{{ suma_wartosc_brutto }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Do zapłaty: {{ do_zaplaty }}</p>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-6">
+                <p>Podpis osoby upoważnionej do odbioru faktur</p>
+            </div>
+            <div class="col-6 text-right">
+                <p>Podpis osoby uprawnionej do wystawienia faktury</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
