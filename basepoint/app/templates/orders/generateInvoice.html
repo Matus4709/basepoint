@@ -13,31 +13,41 @@
             </div>
             <div class="col-6 text-right">
                 <h2>Faktura</h2>
-                <p>Numer faktury: {{ numer_faktury }}</p>
-                <p>Data i miejsce wystawienia: {{ data_wystawienia }} {{ miejsce_wystawienia }}</p>
-                <p>Data zakończenia dostawy: {{ data_zakonczenia_dostawy }}</p>
+                <p><b>Numer faktury:</b> sxxasxasxas</p>
+                <p><b>Data i miejsce wystawienia:</b> dadasdasdsd</p>
+                <p><b>Data zakończenia dostawy:</b> dsafdasdadsda</p>
             </div>
         </div>
 
         <div class="row mt-4">
             <div class="col-6">
                 <h3>Sprzedawca</h3>
-                <p>Nazwa firmy: {{ sprzedawca_nazwa }}</p>
-                <p>Adres: {{ sprzedawca_adres }}</p>
-                <p>Nr NIP: {{ sprzedawca_nip }}</p>
-                <p>Telefon: {{ sprzedawca_telefon }}</p>
-                <p>Email: {{ sprzedawca_email }}</p>
+                <p><b>Nazwa firmy:</b> {%for i in ownerData%} {{ i.nazwa_firmy }} {%endfor%}</p>
+                {% for owner in ownerData %}
+                <p><b>Adres:</b> {{owner.adres}}</p>
+                {% endfor %}
+                {% for owner in ownerData %}
+                <p><b>Numer NIP:</b> {{ owner.account_nip }}</p>
+                {% endfor %}
+                {% for owner in ownerData %}
+                <p><b>Telefon:</b> {{owner.numer_telefonu}}</p>
+                {% endfor %}
+                {% for owner in ownerData %}
+                <p><b>Email:</b> {{owner.email_firmowy}}</p>
+                {% endfor %}
             </div>
             <div class="col-6">
                 <h3>Nabywca</h3>
-                <p>Nazwa osoby lub firmy: {{ nabywca_nazwa }}</p>
-                <p>Adres: {{ nabywca_adres }}</p>
+                <p><b>Nazwa osoby lub firmy:</b>{%for j in orderData%}   {% if forloop.counter == 1 %} {{j.first_name}} {{j.last_name}} {% endif %} {%endfor%}</p>
+                <p><b>Adres:</b>{%for j in orderData%} {% if forloop.counter == 1 %} {{j.custumer_address}} {% endif %} {%endfor%} </p>
             </div>
         </div>
 
         <div class="row mt-4">
             <div class="col-12">
-                <h3>Sposób opłacenia</h3>
+                <h4>Sposób opłacenia</h4>
+                <p>gotówka</p>
+            </br>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -45,53 +55,56 @@
                             <th>Nazwa towaru/usługi</th>
                             <th>Jednostka miary</th>
                             <th>Ilość</th>
+                            <th>Cena jednostkowa</th>
                             <th>Cena netto</th>
-                            <th>Wartość netto</th>
                             <th>VAT</th>
                             <th>Kwota VAT</th>
                             <th>Wartość brutto</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for item in items %}
+                        {% for p in orderData %}
                         <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{ item.nazwa }}</td>
-                            <td>{{ item.jednostka_miary }}</td>
-                            <td>{{ item.ilosc }}</td>
-                            <td>{{ item.cena_netto }}</td>
-                            <td>{{ item.wartosc_netto }}</td>
-                            <td>{{ item.vat }}</td>
-                            <td>{{ item.kwota_vat }}</td>
-                            <td>{{ item.wartosc_brutto }}</td>
+                            <td>{{forloop.counter}}.</td>
+                            <td>{{p.product_name}}</td>
+                            <td>szt.</td>
+                            <td>{{p.product_quantity}}</td>
+                            <td>{{p.product_price}} zł</td>
+                            <td></td>
+                            <td>23%</td>
+                            <td></td>
+                            <td>{{brutto}}</td>
                         </tr>
                         {% endfor %}
                         <tr>
-                            <td colspan="5"></td>
+                            <td colspan="4"></td>
+                            <td><b>Razem</b></td>
                             <td>Razem</td>
-                            <td>{{ suma_vat }}%</td>
-                            <td>{{ suma_kwota_vat }}</td>
-                            <td>{{ suma_wartosc_brutto }}</td>
+                            <td>23 %</td>
+                            <td>suma vat</td>
+                            <td>suma brutto</td>
                         </tr>
                     </tbody>
                 </table>
-                <p>Do zapłaty: {{ do_zaplaty }}</p>
+                <p><b>Do zapłaty:</b>  </p>
             </div>
         </div>
 
         <div class="row mt-4">
             <div class="col-6">
-                <p>Podpis osoby upoważnionej do odbioru faktur</p>
+                <p><b>Podpis osoby upoważnionej do odbioru faktur</b></p>
             </div>
             <div class="col-6 text-right">
-                <p>Podpis osoby uprawnionej do wystawienia faktury</p>
+                <p><b>Podpis osoby uprawnionej do wystawienia faktury</b></p>
             </div>
         </div>
     </div>
-
+    </br>
+    </br>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
 </body>
 </html>
 

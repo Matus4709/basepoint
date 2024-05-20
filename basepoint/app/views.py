@@ -1683,23 +1683,37 @@ def generateInvoice(request, id):
     rows = cursor.fetchall()
     # Konwersja wyników z krotki na listę słowników
     columns = [col[0] for col in cursor.description]
-    ownerInvoiceData = [dict(zip(columns, row)) for row in rows]
-
-    with connection.cursor() as cursor:
-        cursor.execute("""
-                        SELECT SUBSTRING(o.id, 1, 6) AS order_id, o.order_date, o.delivery, 
-                        CONCAT(a.first_name, ' ', a.last_name) AS customer_name,
-                        CONCAT(ca.address, ', ', ca.city, ', ', ca.country, ', ', ca.postal_code) AS customer_address 
-                        FROM app_orders o JOIN app_customers a ON o.customer_id = a.id 
-                        JOIN app_custumers_addresses ca ON a.id = ca.custumer_id_id; 
-                        """)
-
+    ownerData = [dict(zip(columns, row)) for row in rows]
 
     with connection.cursor() as cursor: # WHERE id = %s 
         cursor.execute("""
- 
+                        SELECT ao.id AS order_id, ao.order_date, ac.first_name, ac.last_name,
+                        CONCAT(aca.address, ', ', aca.city, ', ', aca.country, ', ', aca.postal_code) AS custumer_address,
+                        apo.quantity AS product_quantity, ap.name AS product_name, ap.price AS product_price
+                        FROM app_orders ao 
+                        JOIN app_customers ac ON ao.customer_id = ac.id
+                        JOIN app_custumers_addresses aca ON ac.id = aca.custumer_id_id 
+                        JOIN app_product_has_orders apo ON ao.id = apo.orders_order_id_id 
+                        JOIN app_products ap ON apo.products_product_id_id = ap.id
+                        WHERE ao.id = %s; 
                         """, [id])
+    rows = cursor.fetchall()
+    # Konwersja wyników z krotki na listę słowników
+    columns = [col[0] for col in cursor.description]
+    orderData = [dict(zip(columns, row)) for row in rows]
 
-    data = {}
+
+    brutto = []
+    for row in rows:
+        quantity = row[5]
+        price = row[7]
+        brutto.append(quantity * price)
+                      
+
+    data = {
+        'ownerData': ownerData,
+        'orderData': orderData,
+        'brutto': brutto
+    }
 
     return render(request, 'orders/generateInvoice.html', data)
