@@ -1663,9 +1663,6 @@ def delete_chat(request, id):
           return redirect('login')
      
 
-
-
-
 def generateInvoice(request, id):
      
     with connection.cursor() as cursor:  

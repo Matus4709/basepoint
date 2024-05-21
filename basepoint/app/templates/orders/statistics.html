@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load custom_filters %}
 {% block title %} 
 Lista zamówień - BASEPOINT 
 {% endblock title %}
@@ -72,7 +73,7 @@ Lista zamówień - BASEPOINT
             Podsumowanie
         </p>
         <p class="fw-normal " style="opacity: 50%;">
-            Łączna wartość: <span class="ms-5 ps-5">{% for event in data %} {{ event.wartosc_zamowien }}{% endfor %} PLN</span>
+            Łączna wartość: <span class="ms-5 ps-5">{% for event in data %} {{ event.wartosc_zamowien|format_currency }}{% endfor %} PLN</span>
         </p>
     </div>
 </div>

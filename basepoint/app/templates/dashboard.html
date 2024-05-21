@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load custom_filters %}
 {% block title %} 
 DASHBOARD - BASEPOINT 
 {% endblock title %}
@@ -30,7 +30,7 @@ DASHBOARD - BASEPOINT
                   </tr>
                   <tr>
                     <th scope="row text-start">Wartość zamówień:</th>
-                    <td class="text-end pe-5 me-5">{% for event in orders_count %} {{ event.wartosc_zamowien }}{% endfor %} PLN</td>
+                    <td class="text-end pe-5 me-5">{% for event in orders_count %} {{ event.wartosc_zamowien|format_currency  }}{% endfor %} PLN</td>
                   </tr>
         </div>
     </div>
