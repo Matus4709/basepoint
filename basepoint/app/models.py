@@ -43,12 +43,6 @@ class Account(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-class Actions(models.Model):
-    action_taken = models.CharField(max_length=100)
-    action_time = models.DateTimeField(auto_now_add=True)
-    action_result = models.CharField(max_length=100)
-
-
 class Products(models.Model):
     id = models.CharField(max_length=100, unique=True, null=False, primary_key=True)
     name = models.CharField(max_length=100)
@@ -60,11 +54,6 @@ class Products(models.Model):
     accounts_account_id = models.ForeignKey(Account, on_delete=models.CASCADE)
     def __str__(self):
         return self.name
-    
-class Statues(models.Model):
-    description_status = models.CharField(max_length=100)
-    def __str__(self):
-        return self.description_status
 
 class Documents(models.Model):
     date_of_sale = models.DateTimeField(auto_now_add=True)
@@ -73,10 +62,6 @@ class Documents(models.Model):
 
     def __str__(self):
         return self.document_number
-
-
-
-
 
 class Customers(models.Model):
     id = models.CharField(max_length=100, unique=True, null=False, primary_key=True)

@@ -532,7 +532,6 @@ def orders_list(request):
             # Pętla po wszystkich zdarzeniach
         for event in data['events']:
                 event_id = event['id']
-                event_type = event['type']
                 event_occurred_at = event['occurredAt']
                 order_details = event['order']
                 # Formularze płatności
@@ -541,20 +540,12 @@ def orders_list(request):
                     delivery = form['delivery']['method']['name']
                     buyer_details = order_details['buyer']
                     buyer_id = buyer_details['id']
-                    form_id = form['id']
-                    message_to_seller = form['messageToSeller']
                     
                     buyer_details_in_form = form['buyer']
-                    buyer_id_in_form = buyer_details_in_form['id']
                     buyer_email_in_form = buyer_details_in_form['email']
-                    buyer_login_in_form = buyer_details_in_form['login']
                     buyer_first_name = buyer_details_in_form['firstName']
                     buyer_last_name = buyer_details_in_form['lastName']
-                    buyer_company_name = buyer_details_in_form['companyName']
-                    buyer_is_guest_in_form = buyer_details_in_form['guest']
-                    buyer_personal_identity = buyer_details_in_form['personalIdentity']
                     buyer_phone_number = buyer_details_in_form['phoneNumber']
-                    buyer_language_in_form = buyer_details_in_form['preferences']['language']
                     buyer_street = buyer_details_in_form['address']['street']
                     buyer_city = buyer_details_in_form['address']['city']
                     buyer_post_code = buyer_details_in_form['address']['postCode']
@@ -703,7 +694,6 @@ def orders_list(request):
             """, [owner_id])
 
             row = cursor.fetchall()
-            
             columns = [col[0] for col in cursor.description]
             allegro_data = [dict(zip(columns, row)) for row in rows]         
         
