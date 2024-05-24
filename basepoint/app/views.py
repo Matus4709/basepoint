@@ -109,6 +109,8 @@ def register_view(request):
         city = request.POST.get('city')
         address = request.POST.get('address')
         
+        if not email or not password1 or not password2 or not NIP or not company_name or not country or not phone_number or not name_contact or not postcode or not city or not address:
+            return HttpResponse("Wypełnij poprawnie formularz!")
         # Sprawdzenie, czy hasła są identyczne
         if password1 != password2:
             messages.error(request, 'Hasła nie są identyczne.')
