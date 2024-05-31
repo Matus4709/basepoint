@@ -1,0 +1,9 @@
+1. Przenieś projekt w wybrane miejsce.
+2. Uruchom projekt za pomocą IDE (np. Visual Studio CODE).
+2.1 Upewnij się że masz zainstalowanego python'a, wykonaj polecenie w cmd python --version (zalecana wersja 3.12.1)
+2.2 Upewnij sie że masz zainstalowanego 'pip', wykonaj polecenie w cmd pip --version (zalecana wersja 24.0)
+3. W terminalu będąc w początkowej lokalizacji utwórz wirtualne środowisko poleceniem python -m venv venv (Jeżeli istnieje już taki folder 'venv', usuń go.)
+4. Uruchom środkowisko poleceniem: venv/Scripts/activate
+5. W terminalu przejdź do folderu 'basepoint' cd basepoint a następnie zainstaluj plik requirements.txt poleceniem pip install -r requirements.txt
+6. Uruchom projekt: Przenieś się do folderu 'basepoint' - tam będzie znajdował się plik manage.py - wykonaj polecenie w terminalu 
+   python manage.py runserver, a następnie w przeglądarce uruchom link, który został wyświetlony w terminalu.
