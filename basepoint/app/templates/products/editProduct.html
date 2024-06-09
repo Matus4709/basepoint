@@ -9,6 +9,14 @@
 
       <form class="text-end" method="post">
         {% csrf_token %}
+
+        {% if error %}
+          <div class="alert alert-danger" role="alert">
+            {{ error }}
+          </div>
+        {% endif %}
+
+
         <div class="form-group row m-2">
           <label for="name" class="col-4 col-form-label">Nazwa</label>
           <div class="col-5">
@@ -34,19 +42,19 @@
           </div>
         </div>
         <div class="form-group row m-2">
-         <label class="col-4 col-form-label ">Kategoria</label>
-          <select for="category" name="category" class="col-4 col-form-label">
-            <div class="col-5 text-start">
-              {%for p in kategorie%}
-              <option value="{{p.id}}">{{p.name}}</option>
-              {%endfor%}
-            </div>
-          </select>
-        </div>
-        <div class="form-group row m-2">
           <label for="price" class="col-4 col-form-label ">IMG</label>
           <div class="col-5 text-start">
-            <input id="graphic" name="graphic" type="file" class="form-control" value="{{produkt.graphic}}">
+            <input id="graphic" name="graphic" type="text" class="form-control" value="{{produkt.graphic_url}}">
+          </div>
+        </div>
+        <div class="form-group row m-2">
+          <label for="category" class="col-4 col-form-label">Kategoria</label>
+            <div class="col-5">
+            <select id="category" name="category" class="form-control">
+              {% for kategoria in kategorie %}
+                <option>{{ kategoria }}</option>
+              {% endfor %}
+            </select>
           </div>
         </div>
         <div class="form-group row">

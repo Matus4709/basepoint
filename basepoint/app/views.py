@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db import connection
 from django.contrib.auth.hashers import make_password
-from django.http import HttpResponse,JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 import secrets
 import os
 from dotenv import load_dotenv
@@ -15,6 +15,51 @@ import json
 from datetime import datetime
 from .models import Products
 from django.http import JsonResponse
+from django.core.exceptions import ValidationError
+import re
+from datetime import datetime
+
+def validate_name(name):
+    if not name:
+        raise ValidationError("Nazwa jest wymagana.")
+    if len(name) > 255:
+        raise ValidationError("Nazwa nie może mieć więcej niż 255 znaków.")
+    if Products.objects.filter(name=name).exists():
+        raise ValidationError("Produkt o tej nazwie już istnieje.")
+
+def validate_description(description):
+    if not description:
+        raise ValidationError("Opis jest wymagany.")
+
+def validate_quantity(quantity):
+    if not quantity:
+        raise ValidationError("Ilość jest wymagana.")
+    if not str(quantity).isdigit() or int(quantity) < 0:
+        raise ValidationError("Ilość musi być liczbą całkowitą większą lub równą zero.")
+
+def validate_price(price):
+    if not price:
+        raise ValidationError("Cena jest wymagana.")
+    try:
+        float_price = float(price)
+        if float_price < 0:
+            raise ValidationError("Cena musi być większa lub równa zero.")
+    except ValueError:
+        raise ValidationError("Cena musi być liczbą.")
+
+def validate_category(category):
+    allCategories = ['Książki i komiksy', 'Zdrowie', 'Sport i turystyka', 'Motoryzacja', 'Dom i ogród', 'Moda', 'Uroda', 'Dziecko', 'Buty', 'Elektronika', 'Kolekcje i sztuka']
+    if category not in allCategories:
+        raise ValidationError("Wybrana kategoria jest nieprawidłowa.")
+
+def validate_graphic_url(graphic_url):
+    if not graphic_url:
+        raise ValidationError("URL grafiki jest wymagany.")
+    url_regex = re.compile(r'^(https?|ftp)://[^\s/$.?#].[^\s]*$')
+    if not url_regex.match(graphic_url):
+        raise ValidationError("URL grafiki jest nieprawidłowy.")
+
+
 
 
 def login_view(request):
@@ -1065,43 +1110,36 @@ def invoices(request):
         user_id = request.user.id
         if user_type == 'owner':
             with connection.cursor() as cursor:
-                    
-                    cursor.execute("SELECT * FROM app_account WHERE id = %s", [user_id])
-                    rows = cursor.fetchall()
-                    # Konwersja wyników z krotki na listę słowników
-                    columns = [col[0] for col in cursor.description]
-                    account_data = [dict(zip(columns, row)) for row in rows]
-        
+                cursor.execute("SELECT * FROM app_account WHERE id = %s", [user_id])
+                rows = cursor.fetchall()
+                columns = [col[0] for col in cursor.description]
+                account_data = [dict(zip(columns, row)) for row in rows]
 
             with connection.cursor() as cursor:
-                    
-                    #pobieramy dane tylko do wyświetlenia na liście faktur
-                    cursor.execute("""
-                                        SELECT app_orders.id, app_customers.email, app_orders.summary_price, 
-                                            DATE_FORMAT(app_orders.order_date, '%Y-%m-%d') AS order_date 
-                                        FROM app_orders JOIN app_customers ON app_orders.customer_id = app_customers.id; 
+                cursor.execute("""
+                    SELECT app_orders.id, app_customers.email, app_orders.summary_price, 
+                        DATE_FORMAT(app_orders.order_date, '%Y-%m-%d') AS order_date 
+                    FROM app_orders 
+                    JOIN app_customers ON app_orders.customer_id = app_customers.id
+                """)
+                rows = cursor.fetchall()
+                columns = [col[0] for col in cursor.description]
+                order_data = [dict(zip(columns, row)) for row in rows]
 
-                                   """) 
-                    
-                    rows = cursor.fetchall()
-                    # Konwersja wyników z krotki na listę słowników
-                    columns = [col[0] for col in cursor.description]
-                    orderData = [dict(zip(columns, row)) for row in rows]
-        
-        
-        
-        
-        
-        
-        context = {
-            'account_data': account_data,
-            'user_type': user_type,
-            'orderData': orderData
-        }
-        return render(request, 'orders/invoices.html',context)
+                # Paginate the order data
+                paginator = Paginator(order_data, 100)  
+                page_number = request.GET.get('page')
+                page_obj = paginator.get_page(page_number)
+
+                context = {
+                    'account_data': account_data,
+                    'user_type': user_type,
+                    'page_obj': page_obj
+                }
+                return render(request, 'orders/invoices.html', context)
     else:
-       return redirect('welcome')
-   
+        return redirect('welcome')
+
 
 
 
@@ -1227,110 +1265,194 @@ def welcome(request):
 
 
 
-
 def addNewProduct(request):
-     
-     token = ""
+    data = {}
+    if request.user.is_authenticated:
+        user_type = request.user.user_type
+        user_id = request.user.id
 
-     tokenProduct = secrets.token_hex(20)
-     with connection.cursor() as cursor:
-        cursor.execute("SELECT id FROM app_products")
-        rows = cursor.fetchall()  # Pobierz wszystkie wiersze z wyniku zapytania
-        ids = [row[0] for row in rows]   # Pobierz pierwszy element (id) z każdego wiersza
+        if user_type == 'owner' or user_type == 'employee':
+            if request.method == 'POST':
+                name = request.POST.get('name')
+                description = request.POST.get('description')
+                quantity = request.POST.get('quantity')
+                price = request.POST.get('price')
+                category = request.POST.get('category')
+                user_id = request.user.id
+                graphic_url = request.POST.get('graphic_url')
 
-        # Pętla porównująca zawartość każdego elementu zmiennego do zmiennej a
-        for id in ids:
-            if id != tokenProduct:
-                token = tokenProduct
-                break
-            else:
-                tokenProduct = secrets.token_hex(20)
+                # Prosta walidacja
+                if not name or not description or not quantity or not price or not category:
+                    data['error'] = "Wszystkie pola są wymagane!"
+                else:
+                    try:
+                        quantity = int(quantity)
+                        price = float(price)
+                    except ValueError:
+                        data['error'] = "Stan magazynowy i cena muszą być liczbami!"
 
+                    if 'error' not in data:
+                        # Tworzenie nowego produktu
+                        tokenProduct = secrets.token_hex(20)
+                        with connection.cursor() as cursor:
+                            cursor.execute("SELECT id FROM app_products")
+                            rows = cursor.fetchall()
+                            ids = [row[0] for row in rows]
 
-        allCategories = ['Książki i komiksy', 'Zdrowie', 'Sport i turystyka', 'Motoryzacja', 'Dom i ogród', 'Moda', 'Uroda', 'Dziecko', 'Buty', 'Elektronika', 'Kolekcje i sztuka']
-        # form = ProductsForm(request.POST or None, request.FILES or None)
-        data = {
-                'kategorie': allCategories,
-            }
+                            # Pętla porównująca zawartość każdego elementu zmiennego do zmiennej a
+                            for id in ids:
+                                if id != tokenProduct:
+                                    token = tokenProduct
+                                    break
+                                else:
+                                    tokenProduct = secrets.token_hex(20)
 
-        if request.method == 'POST':
-            name = request.POST.get('name')
-            description = request.POST.get('description')
-            quantity = request.POST.get('quantity')
-            price = request.POST.get('price')
-            category = request.POST.get('category')
-            user_id = request.user.id
-            graphic_url = request.POST.get('graphic_url')
+                            newProduct = Products(id=token, name=name, description=description, quantity=quantity,
+                                                 price=price, accounts_account_id_id=user_id, category=category,
+                                                 graphic_url=graphic_url)
+                            newProduct.save()
+                            return redirect('allProducts')
 
-
-            newProduct = Products(id=token, name=name, description=description, quantity=quantity, price=price,
-                                  accounts_account_id_id=user_id, category=category, graphic_url=graphic_url)
-            
-            newProduct.save()
-            redirect(allProducts)
-            
-
-     return render(request, 'products/addNewProduct.html', data)
-
-
-
+    allCategories = ['Książki i komiksy', 'Zdrowie', 'Sport i turystyka', 'Motoryzacja', 'Dom i ogród', 'Moda',
+                     'Uroda', 'Dziecko', 'Buty', 'Elektronika', 'Kolekcje i sztuka']
+    data['kategorie'] = allCategories
+    return render(request, 'products/addNewProduct.html', data)
 
 
 
 def editProduct(request, id):
-    product = get_object_or_404(Products, pk=id)
-    allCategories = ['Książki i komiksy', 'Zdrowie', 'Sport i turystyka', 'Motoryzacja', 'Dom i ogród', 'Moda', 'Uroda', 'Dziecko', 'Buty', 'Elektronika', 'Kolekcje i sztuka']
+    context = {}
+    if request.user.is_authenticated:
+        user_type = request.user.user_type
 
+        if user_type == 'owner' or user_type == 'employee':
+            product = get_object_or_404(Products, pk=id)
+            allCategories = ['Książki i komiksy', 'Zdrowie', 'Sport i turystyka', 'Motoryzacja', 'Dom i ogród', 'Moda', 'Uroda', 'Dziecko', 'Buty', 'Elektronika', 'Kolekcje i sztuka']
 
-    context = {
-        'produkt': product,
-        'kategorie': allCategories
-    }
+            context = {
+                'produkt': product,
+                'kategorie': allCategories
+            }
 
-    if request.method == 'POST':
-        product.name = request.POST.get('name')
-        product.description = request.POST.get('description')
-        product.quantity = request.POST.get('quantity')
-        product.price = request.POST.get('price')
-        product.category = request.POST.get('category')
-        category = request.POST.get('category')
-        product.graphic_url = request.POST.get('graphic_url')
-        user_id = request.user.id
+            if request.method == 'POST':
+                name = request.POST.get('name')
+                description = request.POST.get('description')
+                quantity = request.POST.get('quantity')
+                price = request.POST.get('price')
+                category = request.POST.get('category')
+                graphic_url = request.POST.get('graphic_url', '')
 
-        product.save()
+                # Prosta walidacja
+                if not name or not description or not quantity or not price or not category:
+                    context['error'] = "Wszystkie pola są wymagane!"
+                else:
+                    try:
+                        quantity = int(quantity)
+                        price = float(price)
+                    except ValueError:
+                        context['error'] = "Stan magazynowy i cena muszą być liczbami!"
 
-        redirect(allProducts)
+                    if 'error' not in context:
+                        # Zapisanie zmian w produkcie
+                        product.name = name
+                        product.description = description
+                        product.quantity = quantity
+                        product.price = price
+                        product.category = category
+                        product.graphic_url = graphic_url
+                        product.save()
+                        return redirect('allProducts')
 
     return render(request, 'products/editProduct.html', context)
+
+
+# def editProduct(request, id):
+#     if request.user.is_authenticated:
+#         user_type = request.user.user_type
+
+#         if user_type == 'owner' or user_type == 'employee':
+#             product = get_object_or_404(Products, pk=id)
+#             allCategories = ['Książki i komiksy', 'Zdrowie', 'Sport i turystyka', 'Motoryzacja', 'Dom i ogród', 'Moda', 'Uroda', 'Dziecko', 'Buty', 'Elektronika', 'Kolekcje i sztuka']
+
+#             context = {
+#                 'produkt': product,
+#                 'kategorie': allCategories
+#             }
+
+#             if request.method == 'POST':
+#                 product.name = request.POST.get('name')
+#                 product.description = request.POST.get('description')
+#                 product.quantity = request.POST.get('quantity')
+#                 product.price = request.POST.get('price')
+#                 product.category = request.POST.get('category')
+#                 product.graphic_url = request.POST.get('graphic_url', '')
+#                 product.save()
+#                 return redirect('allProducts')
+
+#     return render(request, 'products/editProduct.html', context)
+
 
 
 
 
 def allProducts(request):
-    allProducts = Products.objects.all()
-    data = {'produkty': allProducts}
-    return render(request, 'products/allProducts.html', data)
+    if request.user.is_authenticated:
+        user_type = request.user.user_type
+        user_id = request.user.id
+
+        if user_type == 'owner' or user_type == 'employee':
+            allProducts = Products.objects.all()
+
+            # Ustawienie liczby produktów na stronie
+            paginator = Paginator(allProducts, 100)  # 10 produktów na stronie
+
+            page = request.GET.get('page')
+            try:
+                produkty = paginator.page(page)
+            except PageNotAnInteger:
+                # Jeśli numer strony nie jest liczbą całkowitą, przejdź do pierwszej strony
+                produkty = paginator.page(1)
+            except EmptyPage:
+                # Jeśli strona jest pusta, przejdź do ostatniej strony
+                produkty = paginator.page(paginator.num_pages)
+
+            return render(request, 'products/allProducts.html', {'produkty': produkty})
 
 
 
 
 def oneProduct(request, id):
-    getProduct = Products.objects.get(pk=id)
-    data = {'getProduct': getProduct}
+
+    if request.user.is_authenticated:
+        user_type = request.user.user_type
+        user_id = request.user.id
+
+        if user_type == 'owner' or user_type == 'employee':
+
+            getProduct = Products.objects.get(pk=id)
+            data = {'getProduct': getProduct}
+
     return render(request, 'products/oneProduct.html', data)
 
 
 
 def deleteProduct(request, id):
-    product = get_object_or_404(Products, pk=id)
 
-    context = {
-        'product': product
-    }
+    if request.user.is_authenticated:
+        user_type = request.user.user_type
+        user_id = request.user.id
 
-    if request.method == 'POST':
-        product.delete()
-        return redirect(allProducts)
+        if user_type == 'owner' or user_type == 'employee':
+
+            product = get_object_or_404(Products, pk=id)
+
+            context = {
+                'product': product
+            }
+
+            if request.method == 'POST':
+                product.delete()
+                return redirect(allProducts)
 
     return render(request, 'products/deleteProduct.html',  context)
 
@@ -1656,53 +1778,73 @@ def delete_chat(request, id):
      
 
 def generateInvoice(request, id):
-     
-    with connection.cursor() as cursor:  
-        cursor.execute("""
-                        SELECT 
-                        company_name AS nazwa_firmy,
-                        CONCAT(address, ', ', city, ', ', country, ', ', postcode) AS adres,
-                        NIP AS account_nip,
-                        phone_number AS numer_telefonu,
-                        email AS email_firmowy
-                        FROM 
-                        app_account
-                        LIMIT 1;
-                        """)
-    rows = cursor.fetchall()
-    # Konwersja wyników z krotki na listę słowników
-    columns = [col[0] for col in cursor.description]
-    ownerData = [dict(zip(columns, row)) for row in rows]
 
-    with connection.cursor() as cursor: # WHERE id = %s 
-        cursor.execute("""
-                        SELECT ao.id AS order_id, ao.order_date, ac.first_name, ac.last_name,
-                        CONCAT(aca.address, ', ', aca.city, ', ', aca.country, ', ', aca.postal_code) AS custumer_address,
-                        apo.quantity AS product_quantity, ap.name AS product_name, ap.price AS product_price
-                        FROM app_orders ao 
-                        JOIN app_customers ac ON ao.customer_id = ac.id
-                        JOIN app_custumers_addresses aca ON ac.id = aca.custumer_id_id 
-                        JOIN app_product_has_orders apo ON ao.id = apo.orders_order_id_id 
-                        JOIN app_products ap ON apo.products_product_id_id = ap.id
-                        WHERE ao.id = %s; 
-                        """, [id])
-    rows = cursor.fetchall()
-    # Konwersja wyników z krotki na listę słowników
-    columns = [col[0] for col in cursor.description]
-    orderData = [dict(zip(columns, row)) for row in rows]
+    if request.user.is_authenticated:
+        user_type = request.user.user_type
+        user_id = request.user.id
 
+        if user_type == 'owner' or user_type == 'employee':
 
-    brutto = []
-    for row in rows:
-        quantity = row[5]
-        price = row[7]
-        brutto.append(quantity * price)
-                      
+            with connection.cursor() as cursor:  
+                cursor.execute("""
+                                SELECT 
+                                company_name AS nazwa_firmy,
+                                CONCAT(address, ', ', city, ', ', country, ', ', postcode) AS adres,
+                                NIP AS account_nip,
+                                phone_number AS numer_telefonu,
+                                email AS email_firmowy
+                                FROM 
+                                app_account
+                                LIMIT 1;
+                                """)
+            rows = cursor.fetchall()
+            # Konwersja wyników z krotki na listę słowników
+            columns = [col[0] for col in cursor.description]
+            ownerData = [dict(zip(columns, row)) for row in rows]
 
-    data = {
-        'ownerData': ownerData,
-        'orderData': orderData,
-        'brutto': brutto
-    }
+            with connection.cursor() as cursor: # WHERE id = %s 
+                cursor.execute("""
+                                SELECT ao.id AS order_id, ao.order_date, ac.first_name, ac.last_name, 
+                                (apo.quantity*ap.price) AS brutto,
+                                netto(ap.price,apo.quantity) AS netto, 
+                                vatTax(ap.price,apo.quantity) AS vat,
+                                
+                                CONCAT(aca.address, ', ', aca.city, ', ', aca.country, ', ', aca.postal_code) AS custumer_address,
+                                apo.quantity AS product_quantity, ap.name AS product_name, ap.price AS product_price
+                                FROM app_orders ao 
+                                JOIN app_customers ac ON ao.customer_id = ac.id
+                                JOIN app_custumers_addresses aca ON ac.id = aca.custumer_id_id 
+                                JOIN app_product_has_orders apo ON ao.id = apo.orders_order_id_id 
+                                JOIN app_products ap ON apo.products_product_id_id = ap.id
+                                WHERE ao.id = %s; 
+                                """, [id])
+            rows = cursor.fetchall()
+            # Konwersja wyników z krotki na listę słowników
+            columns = [col[0] for col in cursor.description]
+            orderData = [dict(zip(columns, row)) for row in rows]
+
+            with connection.cursor() as cursor: # WHERE id = %s 
+                cursor.execute("""
+                                SELECT SUM(addUpPrice(ap.price,apo.quantity)) AS sumaBrutto,
+                                SUM(vatTax(ap.price,apo.quantity)) AS sumaVat,
+                                SUM(netto(ap.price,apo.quantity)) AS sumaNetto
+                                FROM app_orders ao 
+                                JOIN app_customers ac ON ao.customer_id = ac.id
+                                JOIN app_custumers_addresses aca ON ac.id = aca.custumer_id_id 
+                                JOIN app_product_has_orders apo ON ao.id = apo.orders_order_id_id 
+                                JOIN app_products ap ON apo.products_product_id_id = ap.id
+                                WHERE ao.id = %s; 
+                                """, [id])
+            rows = cursor.fetchall()
+            columns = [col[0] for col in cursor.description]
+            sumOrderData = [dict(zip(columns, row)) for row in rows]
+        
+                            
+
+            data = {
+                'ownerData': ownerData,
+                'orderData': orderData,
+                'sumOrderData': sumOrderData
+            }
 
     return render(request, 'orders/generateInvoice.html', data)
