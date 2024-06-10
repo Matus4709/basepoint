@@ -70,23 +70,26 @@
                             <td>szt.</td>
                             <td>{{p.product_quantity}}</td>
                             <td>{{p.product_price}} zł</td>
-                            <td></td>
+                            <td>{{p.netto}} zł</td>
                             <td>23%</td>
-                            <td></td>
-                            <td>{{brutto}}</td>
+                            <td>{{p.vat}} zł</td>
+                            <td>{{p.brutto}} zł</td>
                         </tr>
                         {% endfor %}
                         <tr>
                             <td colspan="4"></td>
                             <td><b>Razem</b></td>
-                            <td>Razem</td>
+                            {% for i in sumOrderData%}
+                            <td>{{i.sumaNetto}} zł</td>
                             <td>23 %</td>
-                            <td>suma vat</td>
-                            <td>suma brutto</td>
+                            <td>{{i.sumaVat}} zł</td>
+                            <td>{{i.sumaBrutto}} zł</td>
+                            {%endfor%}
                         </tr>
+                        
                     </tbody>
                 </table>
-                <p><b>Do zapłaty:</b>  </p>
+                <p><b>Do zapłaty:</b>{% for i in sumOrderData%} {{i.sumaBrutto}} zł{%endfor%}</p>
             </div>
         </div>
 

@@ -7,8 +7,15 @@
     <div class="container">
       <h1 class="h5 p-2 opacity-50">Dodaj produkt</h1>
 
+
        <form class="text-end" method="post">
         {% csrf_token %}
+
+        {% if error %}
+          <div class="alert alert-danger" role="alert">
+            {{ error }}
+          </div>
+        {% endif %}
 
         <div class="form-group row m-2">
           <label for="name" class="col-4 col-form-label">Nazwa</label>

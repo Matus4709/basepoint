@@ -1,9 +1,17 @@
-{% extends 'base.html'%}
-{% block content%}
-<h4>{{getProduct.name}}</h4>
-<p><b>Opis:</b> {{getProduct.description}}</p>
-<p><b>Ilość:</b> {{getProduct.price}}</p>
-<p><b>Stan:</b> {{getProduct.quantity}}</p>
-<a href="{% url 'deleteProduct' getProduct.id%}">Usuń</a>
-<a href="{% url 'editProduct' getProduct.id%}">Edytuj</a>
-{% endblock content%}
+{% extends 'base.html' %}
+{% block content %}
+<div class="container" style="padding: 5%;">
+    <div class="jumbotron rounded mt-3" style="background-color: white; padding: 10px;">
+        <h4>{{ getProduct.name }}</h4>
+        <p><b>Opis:</b> {{ getProduct.description }}</p>
+        <p><b>Cena:</b> {{ getProduct.price }}</p>
+        <p><b>Stan:</b> {{ getProduct.quantity }}</p>
+        <div style="padding: 5px;">
+            <img src="{{ getProduct.graphic_url }}" alt="Obraz produktu">
+        </div>    
+
+        <a href="{% url 'deleteProduct' getProduct.id %}" class="btn btn-danger">Usuń</a>
+        <a href="{% url 'editProduct' getProduct.id %}" class="btn btn-success">Edytuj</a>
+    </div>
+</div>
+{% endblock content %}
